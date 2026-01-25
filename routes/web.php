@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Artisan;
 
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\Product\ProductController;
+use App\Http\Controllers\Cart\CartController;
 
 
 
@@ -51,20 +52,27 @@ Route::group(['middleware' => ['admin']], function(){
     });
 
     // category routes
-        Route::prefix('category')->group(function () {
-            Route::get('/', [ProductController::class, 'categoryIndex'])->name('category.list');
-            Route::post('/create', [ProductController::class, 'categoryCreate'])->name('category.create');
-            Route::get('/edit/{id}', [ProductController::class, 'categoryEdit'])->name('category.edit');
-            Route::put('/modify/{id}', [ProductController::class, 'categoryModify'])->name('category.modify');
-            Route::delete('/delete/{id}', [ProductController::class, 'categoryDelete'])->name('category.delete');
-        });
-        // sub-category routes
-        Route::prefix('subcategory')->group(function () {
-            Route::get('/', [ProductController::class, 'subcategoryIndex'])->name('subcategory.list');
-            Route::post('/create', [ProductController::class, 'subcategoryCreate'])->name('subcategory.create');
-            Route::get('/edit/{id}', [ProductController::class, 'subcategoryEdit'])->name('subcategory.edit');
-            Route::put('/modify/{id}', [ProductController::class, 'subcategoryModify'])->name('subcategory.modify');
-            Route::delete('/delete/{id}', [ProductController::class, 'subcategoryDelete'])->name('subcategory.delete');
-        });
+    Route::prefix('category')->group(function () {
+        Route::get('/', [ProductController::class, 'categoryIndex'])->name('category.list');
+        Route::post('/create', [ProductController::class, 'categoryCreate'])->name('category.create');
+        Route::get('/edit/{id}', [ProductController::class, 'categoryEdit'])->name('category.edit');
+        Route::put('/modify/{id}', [ProductController::class, 'categoryModify'])->name('category.modify');
+        Route::delete('/delete/{id}', [ProductController::class, 'categoryDelete'])->name('category.delete');
+    });
+    // sub-category routes
+    Route::prefix('subcategory')->group(function () {
+        Route::get('/', [ProductController::class, 'subcategoryIndex'])->name('subcategory.list');
+        Route::post('/create', [ProductController::class, 'subcategoryCreate'])->name('subcategory.create');
+        Route::get('/edit/{id}', [ProductController::class, 'subcategoryEdit'])->name('subcategory.edit');
+        Route::put('/modify/{id}', [ProductController::class, 'subcategoryModify'])->name('subcategory.modify');
+        Route::delete('/delete/{id}', [ProductController::class, 'subcategoryDelete'])->name('subcategory.delete');
+    });
+
+    Route::prefix('sale')->group(function () {
+        Route::get('/cart', [CartController::class, 'cart'])->name('sale.cart');
+        Route::get('/add-cart', [CartController::class, 'addCart'])->name('add.cart');
+        Route::post('/cart/set-qty', [CartController::class, 'updateQty'])->name('cart.updateQty');
+        Route::get('/remove-to-cart/{product_id}/{reg}', [CartController::class, 'removeToCart'])->name('cart.remove');
+    });
 
 });

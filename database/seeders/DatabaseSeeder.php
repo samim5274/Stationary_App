@@ -19,6 +19,8 @@ class DatabaseSeeder extends Seeder
             PdrCategorySeeder::class,
             PdrSubCategorySeeder::class,
             ProductSeeder::class,
+
+            PaymentMethodSeeder::class,
         ]);
     }
 }

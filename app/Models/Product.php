@@ -75,4 +75,9 @@ class Product extends Model
     {
         return $this->hasMany(PdrStock::class);
     }
+
+    public function cart()
+    {
+        return $this->hasMany(Cart::class, 'product_id', 'id');
+    }
 }

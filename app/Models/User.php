@@ -69,4 +69,20 @@ class User extends Authenticatable
         'last_login_at' => 'datetime',
         'is_profile_completed' => 'boolean',
     ];
+
+    public function cart()
+    {
+        return $this->hasMany(Cart::class, 'user_id', 'id');
+    }
+
+    public function order()
+    {
+        return $this->hasMany(Order::class, 'user_id', 'id');
+    }
+
+    public function payment()
+    {
+        return $this->hasMany(PaymentDetail::class, 'user_id', 'id');
+    }
+
 }
