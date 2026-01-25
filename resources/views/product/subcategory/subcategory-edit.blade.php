@@ -24,7 +24,7 @@
                     <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between my-4">
                         {{-- LEFT : Title --}}
                         <h2 class="text-2xl font-semibold text-gray-700 dark:text-gray-200">
-                            Edit {{ $category->name }} Category
+                            Edit {{ $subcategory->name }} Sub-Category
                         </h2>
 
                         {{-- RIGHT : Action Button --}}
@@ -39,44 +39,74 @@
                         </a> -->
                     </div>
 
+
                     @include('layouts.message')
 
                     {{-- Table --}}
                     <div class="grid gap-6 mb-8 md:grid-cols-1">
-                        
-
                         <div class="w-full overflow-hidden rounded-xl bg-white shadow-sm
                                 dark:bg-gray-800 dark:border dark:border-gray-700">
 
                             {{-- Header --}}
                             <div class="px-6 py-4 border-b border-gray-100 dark:border-gray-700">
                                 <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                                    Add a new product category to organize your items.
+                                    Add a new product Sub-category to organize your items.
                                 </p>
                             </div>
 
                             {{-- Form --}}
-                            <form action="{{ route('category.modify', $category->id) }}" method="POST" class="px-6 py-6 space-y-6">
+                            <form action="{{ route('subcategory.modify', $subcategory->id) }}" method="POST"
+                                class="px-6 py-6 space-y-6 bg-white dark:bg-gray-800 rounded-lg">
                                 @csrf
                                 @method('PUT')
-                                
-                                {{-- Category Name --}}
+
+                                {{-- Category --}}
                                 <div>
                                     <label class="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-1">
-                                        Category Name <span class="text-red-500">*</span>
+                                        Category <span class="text-red-500">*</span>
                                     </label>
 
-                                    <input
-                                        type="text"
+                                    <select name="category_id"
+                                            class="block w-full rounded-lg border px-4 py-2.5 text-sm
+                                                bg-white text-gray-700 border-gray-300
+                                                focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-200
+                                                dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600
+                                                dark:focus:ring-purple-900">
+                                        <option value="" disabled>-- Select Category --</option>
+
+                                        @foreach($categories as $category)
+                                            <option value="{{ $category->id }}"
+                                                @selected(old('category_id', $subcategory->category_id) == $category->id)>
+                                                {{ $category->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+
+                                    @error('category_id')
+                                        <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
+                                    @enderror
+                                </div>
+
+                                {{-- Subcategory Name --}}
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-1">
+                                        Sub-Category Name <span class="text-red-500">*</span>
+                                    </label>
+
+                                    <input type="text"
                                         name="name"
-                                        value="{{ old('name', $category->name) }}"
-                                        placeholder="e.g. Stationary"
+                                        value="{{ old('name', $subcategory->name) }}"
+                                        placeholder="e.g. A4 Paper / Stationary / Ink"
                                         required
-                                        class="block w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm
-                                            text-gray-700 placeholder-gray-400
-                                            focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-200
-                                            dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200
-                                            dark:placeholder-gray-400 dark:focus:ring-purple-900">
+                                        class="block w-full rounded-lg border px-4 py-2.5 text-sm
+                                                bg-white text-gray-700 placeholder-gray-400 border-gray-300
+                                                focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-200
+                                                dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600
+                                                dark:placeholder-gray-400 dark:focus:ring-purple-900">
+
+                                    @error('name')
+                                        <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
+                                    @enderror
                                 </div>
 
                                 {{-- Footer --}}
@@ -86,21 +116,20 @@
                                     <a href="{{ url()->previous() }}"
                                     class="inline-flex items-center justify-center rounded-lg px-5 py-2.5 text-sm font-semibold
                                             bg-gray-100 text-gray-700 hover:bg-gray-200
-                                            dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600">
-                                        <i class="fa-solid fa-arrow-left mr-2"></i>
-                                        Back
+                                            dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600 transition">
+                                        <i class="fa-solid fa-arrow-left mr-2"></i> Back
                                     </a>
 
-                                    <button type="submit" onclick="return confirm('Create this category?');"
+                                    <button type="submit" onclick="return confirm('Are you sure you want to update this sub-category?');"
                                             class="inline-flex items-center justify-center rounded-lg px-5 py-2.5 text-sm font-semibold
                                                 text-white bg-purple-600 hover:bg-purple-700
                                                 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2
-                                                dark:focus:ring-offset-gray-800">
-                                        <i class="fa-solid fa-floppy-disk mr-2"></i>
-                                        Update Category
+                                                dark:focus:ring-offset-gray-800 transition">
+                                        <i class="fa-solid fa-floppy-disk mr-2"></i> Update Subcategory
                                     </button>
                                 </div>
                             </form>
+
                         </div>
                     </div>
 

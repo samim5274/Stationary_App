@@ -323,4 +323,67 @@ class ProductController extends Controller
             return redirect()->route('category.list')->with('error', 'Something went wrong while deleting the category.');
         }
     }
+
+    public function subcategoryIndex(){
+        try {
+            $company = Company::first();
+            $categories = PdrCategory::latest()->get();
+            $subcategories = PdrSubCategory::with('category')->latest()->paginate(50);
+            return view('product.subcategory.subcategory-list', compact('company', 'subcategories', 'categories'));
+        } catch (\Throwable $e) {
+            return redirect()->route('product.list')->with('error', 'Something is wrong. Please try again..!');
+        }
+    }
+
+    public function subcategoryCreate(Request $request){
+        try {
+            $validated = $request->validate([
+                'name' => ['required','string','max:255'],
+                'category_id' => ['required','integer', Rule::exists('pdr_categories','id')],
+            ]);
+            PdrSubCategory::create($validated);
+            return redirect()->route('subcategory.list')->with('success', 'Sub-category created successfully!');
+        } catch (\Throwable $e) {
+            return redirect()->route('subcategory.list')->with('error', 'Something is wrong. Please try again..!');
+        }
+    }
+
+    public function subcategoryDelete($id){
+        try {
+            $subcategory = PdrSubCategory::findOrFail($id);
+            $subcategory->delete();
+            return redirect()->route('subcategory.list')->with('success', 'Sub-category deleted successfully!');
+        } catch (ModelNotFoundException $e) {
+            return redirect()->route('subcategory.list')->with('error', 'Sub-category not found.');
+        } catch (\Throwable $e) {
+            return redirect()->route('subcategory.list')->with('error', 'Something went wrong while deleting the sub-category.');
+        }
+    }
+
+    public function subcategoryEdit($id){
+        try {
+            $company = Company::first();
+            $categories = PdrCategory::all();
+            $subcategory = PdrSubCategory::findOrFail($id);
+            return view('product.subcategory.subcategory-edit', compact('company', 'subcategory', 'categories'));
+        } catch (ModelNotFoundException $e) {
+            return redirect()->route('subcategory.list')->with('error', 'Sub-category not found.');
+        }
+    }
+
+    public function subcategoryModify(Request $request, $id){
+        try {
+            $subcategory = PdrSubCategory::findOrFail($id);
+            $validated = $request->validate([
+                'name' => ['required','string','max:255'],
+                'category_id' => ['required','integer', Rule::exists('pdr_categories','id')],
+            ]);
+            $subcategory->update($validated);
+            return redirect()->route('subcategory.list')->with('success', 'Sub-category updated successfully!');
+        } catch (ModelNotFoundException $e) {
+            return redirect()->route('subcategory.list')->with('error', 'Sub-category not found.');
+        } catch (\Throwable $e) {
+            return redirect()->route('subcategory.list')->with('error', 'Something is wrong. Please try again..!');
+        }
+    }
 }

@@ -62,6 +62,7 @@ Route::group(['middleware' => ['admin']], function(){
         Route::prefix('subcategory')->group(function () {
             Route::get('/', [ProductController::class, 'subcategoryIndex'])->name('subcategory.list');
             Route::post('/create', [ProductController::class, 'subcategoryCreate'])->name('subcategory.create');
+            Route::get('/edit/{id}', [ProductController::class, 'subcategoryEdit'])->name('subcategory.edit');
             Route::put('/modify/{id}', [ProductController::class, 'subcategoryModify'])->name('subcategory.modify');
             Route::delete('/delete/{id}', [ProductController::class, 'subcategoryDelete'])->name('subcategory.delete');
         });
