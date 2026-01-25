@@ -41,11 +41,11 @@ Route::group(['middleware' => ['admin']], function(){
     Route::prefix('product')->group(function () {
         Route::get('/', [ProductController::class, 'index'])->name('product.list');
         Route::get('/create', [ProductController::class, 'createView'])->name('product.create.view');
-        Route::get('/get-subcategory/{id}', [ProductController::class, 'getSubcategory'])->name('get.subcategory');
+        Route::get('/get-SubCategory/{id}', [ProductController::class, 'getSubcategory'])->name('get.subcategory');
         Route::post('/create', [ProductController::class, 'create'])->name('product.create');
-        Route::get('/edit/{id}', [ProductController::class, 'edit'])->name('product.edit');
-        Route::post('/modify/{id}', [ProductController::class, 'modify'])->name('product.modify');
-        Route::get('/delete/{id}', [ProductController::class, 'delete'])->name('product.delete');
+        Route::get('/edit/{id}/{sku}/{slug}', [ProductController::class, 'edit'])->name('product.edit');
+        Route::put('/modify/{id}', [ProductController::class, 'modify'])->name('product.modify');
+        Route::delete('/delete/{id}', [ProductController::class, 'delete'])->name('product.delete');
     });
 
 });

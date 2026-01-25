@@ -24,7 +24,7 @@
                     <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between my-4">
                         {{-- LEFT : Title --}}
                         <h2 class="text-2xl font-semibold text-gray-700 dark:text-gray-200">
-                            Create Product
+                            Edit {{ $product->name }} Product
                         </h2>
 
                         {{-- RIGHT : Action Button --}}
@@ -43,10 +43,16 @@
 
                     {{-- PRODUCT CREATE CARD --}}
                     <div class="w-full overflow-hidden rounded-lg shadow-xs bg-white dark:bg-gray-800">
-                        <form action="{{ route('product.create') }}" method="POST" enctype="multipart/form-data"
+                        <form action="{{ route('product.modify', $product->id) }}" method="POST" enctype="multipart/form-data"
                             class="px-6 pb-6 space-y-6"
-                            x-data="productImageUploader()">
+                            x-data="productImageUploader()"
+                            x-init="
+                                @if($product->image)
+                                    setExistingImage('{{ asset('storage/products/'.$product->image) }}', '{{ $product->image }}')
+                                @endif
+                            ">
                             @csrf
+                            @method('PUT')
 
                             {{-- Grid --}}
                             <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
@@ -58,7 +64,7 @@
                                         <label class="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-1">
                                             Product Name <span class="text-red-500">*</span>
                                         </label>
-                                        <input name="name" value="A4 Paper 80gsm"
+                                        <input name="name" value="{{ old('name', $product->name) }}"
                                             class="block w-full px-4 py-2 text-sm border rounded-lg
                                                     bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200
                                                     border-gray-200 dark:border-gray-600
@@ -70,7 +76,7 @@
                                     <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
                                         <div>
                                             <label class="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-1">SKU</label>
-                                            <input name="sku" value="{{ old('sku') }}"
+                                            <input name="sku" value="{{ old('sku', $product->sku) }}"
                                                 class="block w-full px-4 py-2 text-sm border rounded-lg
                                                         bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200
                                                         border-gray-200 dark:border-gray-600
@@ -93,22 +99,18 @@
 
                                                 <option value="" selected disable>-- Select Unit --</option>
 
-                                                {{-- Quantity --}}
-                                                <option value="pcs"  @selected(old('unit','pcs') == 'pcs')>pcs (Piece)</option>
-                                                <option value="box"  @selected(old('unit') == 'box')>box</option>
-                                                <option value="pack" @selected(old('unit') == 'pack')>pack</option>
-                                                <option value="dozen" @selected(old('unit') == 'dozen')>dozen</option>
+                                                <option value="pcs"   @selected(old('unit', $product->unit) == 'pcs')>pcs (Piece)</option>
+                                                <option value="box"   @selected(old('unit', $product->unit) == 'box')>box</option>
+                                                <option value="pack"  @selected(old('unit', $product->unit) == 'pack')>pack</option>
+                                                <option value="dozen" @selected(old('unit', $product->unit) == 'dozen')>dozen</option>
+                                                <option value="g"     @selected(old('unit', $product->unit) == 'g')>gram (g)</option>
+                                                <option value="kg"    @selected(old('unit', $product->unit) == 'kg')>kilogram (kg)</option>
+                                                <option value="ton"   @selected(old('unit', $product->unit) == 'ton')>ton</option>
+                                                <option value="ml"    @selected(old('unit', $product->unit) == 'ml')>milliliter (ml)</option>
+                                                <option value="l"     @selected(old('unit', $product->unit) == 'l')>liter (l)</option>
+                                                <option value="ft"    @selected(old('unit', $product->unit) == 'ft')>feet (ft)</option>
+                                                <option value="m"     @selected(old('unit', $product->unit) == 'm')>meter (m)</option>
 
-                                                {{-- Weight --}}
-                                                <option value="g"   @selected(old('unit') == 'g')>gram (g)</option>
-                                                <option value="kg"  @selected(old('unit') == 'kg')>kilogram (kg)</option>
-                                                <option value="ton" @selected(old('unit') == 'ton')>ton</option>
-
-                                                {{-- Liquid / Length (optional) --}}
-                                                <option value="ml" @selected(old('unit') == 'ml')>milliliter (ml)</option>
-                                                <option value="l"  @selected(old('unit') == 'l')>liter (l)</option>
-                                                <option value="ft" @selected(old('unit') == 'ft')>feet (ft)</option>
-                                                <option value="m"  @selected(old('unit') == 'm')>meter (m)</option>
 
                                             </select>
 
@@ -124,7 +126,7 @@
                                             <label class="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-1">
                                                 Price <span class="text-red-500">*</span>
                                             </label>
-                                            <input type="number" step="0.01" name="price" value="450.00"
+                                            <input type="number" step="0.01" name="price" value="{{ old('price', $product->price) }}"
                                                 class="block w-full px-4 py-2 text-sm border rounded-lg
                                                         bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200
                                                         border-gray-200 dark:border-gray-600
@@ -135,7 +137,7 @@
 
                                         <div>
                                             <label class="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-1">Discount</label>
-                                            <input type="number" step="0.01" name="discount" value="50.00"
+                                            <input type="number" step="0.01" name="discount" value="{{ old('discount', $product->discount) }}"
                                                 class="block w-full px-4 py-2 text-sm border rounded-lg
                                                         bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200
                                                         border-gray-200 dark:border-gray-600
@@ -148,7 +150,7 @@
                                     <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
                                         <div>
                                             <label class="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-1">Stock</label>
-                                            <input type="number" name="stock" value="15"
+                                            <input type="number" name="stock" value="{{ old('stock', $product->stock) }}"
                                                 class="block w-full px-4 py-2 text-sm border rounded-lg
                                                         bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200
                                                         border-gray-200 dark:border-gray-600
@@ -158,7 +160,7 @@
                                         </div>
                                         <div>
                                             <label class="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-1">Min Stock</label>
-                                            <input type="number" name="min_stock" value="5"
+                                            <input type="number" name="min_stock" value="{{ old('min_stock', $product->min_stock) }}"
                                                 class="block w-full px-4 py-2 text-sm border rounded-lg
                                                         bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200
                                                         border-gray-200 dark:border-gray-600
@@ -179,10 +181,9 @@
                                                         focus:border-purple-400 focus:outline-none focus:ring-2 focus:ring-purple-200 dark:focus:ring-purple-900">
                                                 <option disabled selected>-- Select Category --</option>
                                                 @foreach($categories as $c)
-                                                    <option value="{{ $c->id }}">{{ $c->name }}</option>
+                                                    <option value="{{ $c->id }}" @selected(old('category_id', $product->category_id) == $c->id)>{{ $c->name }}</option>
                                                 @endforeach
                                             </select>
-
                                             @error('category_id')<p class="mt-1 text-xs text-red-500">{{ $message }}</p>@enderror
                                         </div>
                                         <span id="loader" class="inline-block h-12 w-12 rounded-full
@@ -193,7 +194,9 @@
                                             </span>
                                         {{-- Subcategory --}}
                                         <div>
-                                            <label class="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-1">Subcategory</label>
+                                            <label class="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-1">
+                                                <span>Subcategory</span>                                                
+                                            </label>
                                             <select name="subcategory_id" id="subCategory" required
                                                     class="block w-full px-4 py-2 text-sm border rounded-lg
                                                         bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200
@@ -202,6 +205,12 @@
                                                         disabled:opacity-60 disabled:cursor-not-allowed">
 
                                                 <option disabled selected>-- Select Sub-Category --</option>
+                                                {{-- initial option for edit --}}
+                                                @if($product->subcategory)
+                                                    <option value="{{ $product->subcategory_id }}" selected>
+                                                        {{ $product->subcategory->name }}
+                                                    </option>
+                                                @endif
                                             </select>
                                             @error('subcategory_id')<p class="mt-1 text-xs text-red-500">{{ $message }}</p>@enderror
                                         </div>
@@ -217,7 +226,7 @@
                                                         bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200
                                                         border-gray-200 dark:border-gray-600
                                                         focus:border-purple-400 focus:outline-none focus:ring-2 focus:ring-purple-200 dark:focus:ring-purple-900"
-                                                placeholder="Write product details...">Printers in the 1500s scrambled the words from Cicero's "De Finibus Bonorum et Malorum'' after mixing the words in each sentence. The familiar "lorem ipsum dolor sit amet" text emerged when 16th-century printers adapted Cicero's original work, beginning with the phrase "dolor sit amet consectetur."</textarea>
+                                                placeholder="Write product details...">{{ old('description', $product->description) }}</textarea>
                                         @error('description')<p class="mt-1 text-xs text-red-500">{{ $message }}</p>@enderror
                                     </div>
 
@@ -225,7 +234,7 @@
                                         <label class="inline-flex items-center">
                                             <input type="checkbox" name="status" value="1"
                                                 class="text-purple-600 border-gray-300 rounded focus:ring-purple-500"
-                                                {{ old('status',1) ? 'checked' : '' }}>
+                                                 {{ old('status', $product->status) ? 'checked' : '' }}>
                                             <span class="ml-2 text-sm font-semibold text-gray-700 dark:text-gray-200">Active</span>
                                         </label>
                                     </div>
@@ -325,10 +334,6 @@
                             </div>
                         </form>
                     </div>
-
-
-
-
                 </div>
             </main>
 
@@ -351,6 +356,12 @@
                 previewUrl: null,
                 fileName: '',
                 fileSizeText: '',
+
+                setExistingImage(url, name) {
+                    this.previewUrl = url;
+                    this.fileName = name || 'Existing image';
+                    this.fileSizeText = 'Existing image';
+                },
 
                 handleFile(e) {
                     const file = e.target.files?.[0];
@@ -410,40 +421,49 @@
         }
 
         $(document).ready(function(){
-            var loader = $('#loader'); 
-            var category = $('#category');
+            const loader = $('#loader');
+            const category = $('#category');
+            const subCategory = $('#subCategory');
 
-            loader.hide();
+            const selectedSubId = "{{ old('subcategory_id', $product->subcategory_id) }}";
 
-            category.change(function(){
-                var categoryId = $(this).val();
-                console.log("Selected Category ID:", categoryId);
-
-                if(!categoryId) {
-                    $("#subCategory").html("<option disabled selected>-- Select Sub-Category --</option>");
-                } else {
-                    loader.show();
-
-                    $.ajax({
-                        url: "/product/get-SubCategory/" + categoryId,
-                        type: "GET",
-                        success: function(data){
-                            var subCategory = data.subCategory;
-                            var html = "<option disabled selected>-- Select Sub Category --</option>";
-
-                            for(let i = 0; i < subCategory.length; i++){
-                                html += `<option value="${subCategory[i].id}">${subCategory[i].name}</option>`;
-                            }
-
-                            $("#subCategory").html(html);
-                            loader.hide();
-                        },
-                        error: function(){
-                            alert('Failed to fetch subcategories.');
-                            loader.hide();
-                        }
-                    });
+            function loadSubcategories(categoryId, selectedId = null) {
+                if (!categoryId) {
+                    subCategory.html('<option value="" disabled selected>-- Select Sub-Category --</option>');
+                    return;
                 }
+
+                loader.removeClass('hidden');
+
+                $.ajax({
+                    url: "/product/get-SubCategory/" + categoryId,
+                    type: "GET",
+                    success: function (data) {
+                        const list = data.subCategory || [];
+                        let html = '<option value="" disabled selected>-- Select Sub-Category --</option>';
+
+                        list.forEach(s => {
+                            const sel = (selectedId && String(selectedId) === String(s.id)) ? 'selected' : '';
+                            html += `<option value="${s.id}" ${sel}>${s.name}</option>`;
+                        });
+
+                        subCategory.html(html);
+                    },
+                    error: function () {
+                        alert('Failed to fetch subcategories.');
+                    },
+                    complete: function () {
+                        loader.addClass('hidden');
+                    }
+                });
+            }
+
+            // ✅ page load: ensure correct subcategory list exists
+            loadSubcategories(category.val(), selectedSubId);
+
+            // ✅ on change
+            category.on('change', function () {
+                loadSubcategories($(this).val(), null);
             });
         });
     </script>

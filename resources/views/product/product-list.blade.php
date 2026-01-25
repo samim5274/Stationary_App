@@ -104,6 +104,38 @@
 
                     {{-- Table --}}
                     <div class="w-full overflow-hidden rounded-lg shadow-xs">
+                        {{-- Search Bar --}}
+                        <form method="GET" action="{{ route('product.list') }}" class="mb-4">
+                            <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                                <div class="relative w-full sm:max-w-md">
+                                    <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+                                        <i class="fa-solid fa-magnifying-glass"></i>
+                                    </span>
+
+                                    <input
+                                        name="q"
+                                        value="{{ request('q') }}"
+                                        placeholder="Search product / sku / category..."
+                                        class="w-full rounded-lg border border-gray-200 bg-white px-10 py-2 text-sm
+                                            text-gray-700 focus:border-purple-400 focus:outline-none focus:ring-2 focus:ring-purple-200
+                                            dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 dark:focus:ring-purple-900"
+                                    />
+
+                                    @if(request('q'))
+                                        <a href="{{ route('product.list') }}"
+                                        class="absolute right-2 top-1/2 -translate-y-1/2 rounded-md px-2 py-1 text-xs
+                                                text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700">
+                                            Clear
+                                        </a>
+                                    @endif
+                                </div>
+
+                                <button class="px-4 py-2 rounded-lg bg-purple-600 text-white text-sm font-semibold hover:bg-purple-700">
+                                    Search
+                                </button>
+                            </div>
+                        </form>
+
                         <div class="w-full overflow-x-auto">
                             <table class="w-full whitespace-nowrap">
                                 <thead>
@@ -118,10 +150,10 @@
                                     </tr>
                                 </thead>
 
-                                <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
+                                <tbody id="productTbody" class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
                                     @forelse($products as $p)
                                         @php
-                                            $stock = (int) ($p->qty ?? 0);
+                                            $stock = (int) ($p->stock ?? 0);
 
                                             $stockClass = $stock <= 0
                                                 ? 'text-red-700 bg-red-100 dark:text-red-100 dark:bg-red-700'
@@ -141,7 +173,7 @@
                                                         @if(!empty($p->image))
                                                             <div class="w-10 h-10 overflow-hidden rounded-lg bg-gray-100 dark:bg-gray-700">
                                                                 <img
-                                                                    src="{{ asset('./public/products/'.$p->image) }}"
+                                                                    src="{{ asset('storage/products/'.$p->image) }}"
                                                                     alt="{{ $p->name }}"
                                                                     class="object-cover w-full h-full"
                                                                     loading="lazy"
@@ -161,6 +193,7 @@
                                                         <p class="text-xs text-gray-600 dark:text-gray-400 group-hover:text-gray-700 dark:group-hover:text-gray-200">{{ $p->name }}</p>
                                                         <p class="text-xs text-gray-600 dark:text-gray-400">
                                                             SKU: <span class="font-semibold">{{ $p->sku }}</span>
+                                                            Slug: <span class="font-semibold">{{ $p->slug }}</span>
                                                         </p>
                                                     </div>
                                                 </div>
@@ -206,10 +239,10 @@
                                             {{-- Action --}}
                                             <td class="px-4 py-3">
                                                 <div class="flex items-center justify-end space-x-2">
-                                                    <a href="#" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700" title="Edit">
+                                                    <a href="{{ route('product.edit', [$p->id, $p->sku, $p->slug]) }}" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700" title="Edit">
                                                         <i class="fa-regular fa-pen-to-square"></i>
                                                     </a>
-                                                    <form action="#" method="POST" onsubmit="return confirm('Delete this product?');">
+                                                    <form action="{{ route('product.delete', $p->id) }}" method="POST" onsubmit="return confirm('Delete this product?');">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="submit"
@@ -255,7 +288,7 @@
 
                                 {{-- RIGHT (Keep your smart pagination here if needed) --}}
                                 <div class="shrink-0 flex items-center justify-end">
-                                    {{ $products->links() }}
+                                    {{ $products->appends(request()->query())->links() }}
                                 </div>
 
                             </div>

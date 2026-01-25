@@ -151,3 +151,12 @@ php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvid
                                 </tbody>
                             </table>
                         </div>
+
+
+try {
+    
+} catch (ModelNotFoundException $e) {
+    return redirect()->route('product.list')->with('error', 'Product not found.');
+} catch (\Throwable $e) {
+    return redirect()->route('product.list')->with('error', 'Something went wrong while deleting the product.');
+}
