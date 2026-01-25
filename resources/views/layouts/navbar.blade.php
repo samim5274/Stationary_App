@@ -95,7 +95,7 @@
                     <li class="px-2 py-1 rounded-md transition-colors duration-150
                                {{ $activeCategory ? 'bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100' : '' }}
                                hover:text-gray-800 dark:hover:text-gray-200">
-                        <a class="w-full block" href="#">
+                        <a class="w-full block" href="{{ route('category.list') }}">
                             Category
                         </a>
                     </li>

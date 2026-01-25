@@ -264,4 +264,63 @@ class ProductController extends Controller
             return redirect()->route('product.list')->with('error', 'Something is wrong. Please try again..!');
         }
     }
+
+    public function categoryIndex(){
+        try {
+            $company = Company::first();
+            $categories = PdrCategory::latest()->paginate(50);
+            return view('product.category.category-list', compact('company', 'categories'));
+        } catch (\Throwable $e) {
+            return redirect()->route('product.list')->with('error', 'Something is wrong. Please try again..!');
+        }
+    }
+
+    public function categoryCreate(Request $request){
+        try {
+            $validated = $request->validate([
+                'name' => ['required','string','max:255','unique:pdr_categories,name'],
+            ]);
+            PdrCategory::create($validated);
+            return redirect()->route('category.list')->with('success', 'Category created successfully!');
+        } catch (\Throwable $e) {
+            return redirect()->route('category.list')->with('error', 'Something is wrong. Please try again..!');
+        }
+    }
+
+    public function categoryEdit($id){
+        try {
+            $company = Company::first();
+            $category = PdrCategory::findOrFail($id);
+            return view('product.category.category-edit', compact('company', 'category'));
+        } catch (ModelNotFoundException $e) {
+            return redirect()->route('category.list')->with('error', 'Category not found.');
+        }
+    }
+
+    public function categoryModify(Request $request, $id){
+        try {
+            $category = PdrCategory::findOrFail($id);
+            $validated = $request->validate([
+                'name' => ['required','string','max:255', Rule::unique('pdr_categories','name')->ignore($category->id)],
+            ]);
+            $category->update($validated);
+            return redirect()->route('category.list')->with('success', 'Category updated successfully!');
+        } catch (ModelNotFoundException $e) {
+            return redirect()->route('category.list')->with('error', 'Category not found.');
+        } catch (\Throwable $e) {
+            return redirect()->route('category.list')->with('error', 'Something is wrong. Please try again..!');
+        }
+    }
+
+    public function categoryDelete($id){
+        try {
+            $category = PdrCategory::findOrFail($id);
+            $category->delete();
+            return redirect()->route('category.list')->with('success', 'Category deleted successfully!');
+        } catch (ModelNotFoundException $e) {
+            return redirect()->route('category.list')->with('error', 'Category not found.');
+        } catch (\Throwable $e) {
+            return redirect()->route('category.list')->with('error', 'Something went wrong while deleting the category.');
+        }
+    }
 }

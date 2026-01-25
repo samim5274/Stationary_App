@@ -39,6 +39,7 @@ Route::group(['middleware' => ['admin']], function(){
     });
 
     Route::prefix('product')->group(function () {
+        // product setting routes
         Route::get('/', [ProductController::class, 'index'])->name('product.list');
         Route::get('/create', [ProductController::class, 'createView'])->name('product.create.view');
         Route::get('/get-SubCategory/{id}', [ProductController::class, 'getSubcategory'])->name('get.subcategory');
@@ -46,6 +47,23 @@ Route::group(['middleware' => ['admin']], function(){
         Route::get('/edit/{id}/{sku}/{slug}', [ProductController::class, 'edit'])->name('product.edit');
         Route::put('/modify/{id}', [ProductController::class, 'modify'])->name('product.modify');
         Route::delete('/delete/{id}', [ProductController::class, 'delete'])->name('product.delete');
+        
     });
+
+    // category routes
+        Route::prefix('category')->group(function () {
+            Route::get('/', [ProductController::class, 'categoryIndex'])->name('category.list');
+            Route::post('/create', [ProductController::class, 'categoryCreate'])->name('category.create');
+            Route::get('/edit/{id}', [ProductController::class, 'categoryEdit'])->name('category.edit');
+            Route::put('/modify/{id}', [ProductController::class, 'categoryModify'])->name('category.modify');
+            Route::delete('/delete/{id}', [ProductController::class, 'categoryDelete'])->name('category.delete');
+        });
+        // sub-category routes
+        Route::prefix('subcategory')->group(function () {
+            Route::get('/', [ProductController::class, 'subcategoryIndex'])->name('subcategory.list');
+            Route::post('/create', [ProductController::class, 'subcategoryCreate'])->name('subcategory.create');
+            Route::put('/modify/{id}', [ProductController::class, 'subcategoryModify'])->name('subcategory.modify');
+            Route::delete('/delete/{id}', [ProductController::class, 'subcategoryDelete'])->name('subcategory.delete');
+        });
 
 });
