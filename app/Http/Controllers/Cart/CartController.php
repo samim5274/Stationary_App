@@ -43,7 +43,19 @@ class CartController extends Controller
             $cart = new Cart();
             $stock = new PdrStock();
             $userId = Auth::guard('admin')->id();
-            $product = Product::where('name', 'like', '%'.$id.'%')->orWhere('id', 'like', '%'.$id.'%')->orWhere('sku', 'like', '%'.$id.'%')->first();
+
+            $search = trim($id);
+            $words = preg_split('/\s+/', $search);
+            $product = Product::where(function ($q) use ($words, $search) {
+                    
+                    if (is_numeric($search)) { $q->orWhere('id', $search); }
+
+                    foreach ($words as $word) {
+                        $q->orWhere('name', 'LIKE', "%{$word}%")
+                        ->orWhere('slug', 'LIKE', "%{$word}%")
+                        ->orWhere('sku', 'LIKE', "%{$word}%");
+                    }
+                })->first();
             
             if(empty($product) || $product->availability == 0) {
                 return redirect()->back()->with('error','This item not availabel righ now');
