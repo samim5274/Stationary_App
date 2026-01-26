@@ -36,7 +36,7 @@
                                 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2
                                 dark:bg-blue-500 dark:hover:bg-blue-600 dark:focus:ring-offset-gray-800">
                             <i class="fa-solid fa-plus mr-2"></i>
-                            Product List
+                            Product's
                         </a>
                     </div>
 
@@ -60,7 +60,23 @@
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
     <script src="{{ asset('assets/js/init-alpine.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js" defer></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script>window.CART_UPDATE_URL = "{{ route('cart.updateQty') }}";</script>
     <script src="{{ asset('assets/js/cart.js') }}"></script>
+    <script src="{{ asset('assets/js/order.js') }}"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const isSuccess = @json(session()->has('success'));
+            const reg = @json(session('reg'));
+
+            if (isSuccess && reg) {
+                const printUrl = "{{ route('order-print', ':reg') }}".replace(':reg', reg);
+                window.open(printUrl, '_blank');
+            }
+        });
+    </script>
 
 </body>
 </html>

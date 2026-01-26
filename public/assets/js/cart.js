@@ -1,110 +1,142 @@
-$(document).ready(function () {
-
+$(function () {
+    // ---- CSRF ----
     $.ajaxSetup({
-        headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
+        headers: { "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content") }
     });
 
-    // ✅ Your correct route
-    const updateUrl = "{{ route('cart.updateQty') }}"; // /sale/cart/set-qty
-
-    // -----------------------------
-    // Plus / Minus Click
-    // -----------------------------
-    $(document).on('click', '.btn-plus, .btn-minus', function () {
-        var id = $(this).data('id');
-        var input = $('input.qty-input[data-id="' + id + '"]');
-        var currentQty = parseInt(input.val()) || 1;
-        var newQty = currentQty;
-
-        if ($(this).hasClass('btn-plus')) {
-            newQty = currentQty + 1;
-        } else if ($(this).hasClass('btn-minus') && currentQty > 1) {
-            newQty = currentQty - 1;
-        }
-
-        if (newQty === currentQty) return;
-        updateQuantity(id, newQty, input);
-    });
-
-    // -----------------------------
-    // Manual typing (Live update)
-    // -----------------------------
-    let typingTimer = null;
-    $(document).on('input', '.qty-input', function () {
-        var input = $(this);
-        var id = input.data('id');
-        var newQty = parseInt(input.val());
-
-        clearTimeout(typingTimer);
-
-        // debounce typing
-        typingTimer = setTimeout(function () {
-            if (isNaN(newQty) || newQty < 1) {
-                input.val(1);
-                newQty = 1;
-            }
-            updateQuantity(id, newQty, input);
-        }, 400);
-    });
-
-    // -----------------------------
-    // Core AJAX update
-    // -----------------------------
-    function updateQuantity(id, newQty, input) {
-        input.prop('disabled', true);
-
-        $.ajax({
-            url: updateUrl,
-            method: "POST",
-            contentType: "application/json",
-            data: JSON.stringify({ id: id, quantity: newQty }),
-            dataType: "json",
-            success: function (response) {
-                if (response.status === 'success') {
-                    input.val(response.quantity);
-
-                    // ✅ Update item subtotal (only inside cart item card)
-                    var card = input.closest('.cart-item-body');
-                    var price = parseFloat(card.find('[data-price]').data('price')) || 0;
-                    var subtotal = price * response.quantity;
-                    card.find('.item-subtotal').text('৳' + subtotal.toFixed(2));
-
-                    // ✅ Update totals
-                    updateCartTotal();
-                } else {
-                    alert(response.message || 'Update failed');
-                }
-            },
-            error: function (xhr) {
-                console.error(xhr.responseText);
-                let msg = 'Something went wrong!';
-                try {
-                    const r = JSON.parse(xhr.responseText);
-                    msg = r.message || r.error || msg;
-                } catch(e) {}
-                alert(msg);
-            },
-            complete: function () {
-                input.prop('disabled', false);
-            }
-        });
+    // ---- URL (from blade) ----
+    const updateUrl = window.CART_UPDATE_URL;
+    if (!updateUrl) {
+        console.error("CART_UPDATE_URL missing!");
+        return;
     }
 
-    // -----------------------------
-    // Total update (ONLY items)
-    // -----------------------------
+    // ---- Helpers ----
+    function clampQty(v) {
+        const n = parseInt(v, 10);
+        if (isNaN(n) || n < 1) return 1;
+        return n;
+    }
+
+    function setMsg(id, msg, type = "info") {
+        const el = $("#qty-msg-" + id);
+        if (!el.length) return;
+
+        el.text(msg || "");
+        el.removeClass("text-red-500 text-emerald-600 dark:text-red-400 dark:text-emerald-400");
+
+        if (type === "error") el.addClass("text-red-500 dark:text-red-400");
+        if (type === "success") el.addClass("text-emerald-600 dark:text-emerald-400");
+    }
+
+    function updateRowSubtotal(row, qty) {
+        const price = parseFloat(row.find("[data-price]").data("price")) || 0;
+        const subtotal = Math.round(price * qty);
+        row.find(".item-subtotal").text("৳" + subtotal + "/-");
+    }
+
     function updateCartTotal() {
         let total = 0;
 
-        $('.cart-item-body').each(function () {
-            const price = parseFloat($(this).find('[data-price]').data('price')) || 0;
-            const qty = parseInt($(this).find('.qty-input').val()) || 0;
+        $('tr[data-cart-row="1"]').each(function () {
+            const row = $(this);
+            const price = parseFloat(row.find("[data-price]").data("price")) || 0;
+            const qty = clampQty(row.find(".qty-input").val());
             total += price * qty;
         });
 
-        $('#cart-subtotal').text(total.toFixed(0));
-        $('#cart-total').text(total.toFixed(0));
-        $('#cart-total-input').val(Math.round(total));
+        total = Math.round(total);
+        $("#cart-subtotal").text(total);
+        $("#cart-total").text(total);
+        $("#cart-total-input").val(total);
     }
 
+    // ---- Core AJAX ----
+    function updateQuantity(id, qty, input) {
+        qty = clampQty(qty);
+
+        // prevent spamming same input
+        if (input.data("loading") === 1) return;
+
+        input.data("loading", 1);
+        input.prop("disabled", true);
+        setMsg(id, "Updating...", "info");
+
+        $.ajax({
+            url: updateUrl,
+            type: "POST",
+            dataType: "json",
+            // ✅ form-data style (most compatible)
+            data: { id: id, quantity: qty },
+
+            success: function (res) {
+                if (res && res.status === "success") {
+                    const finalQty = clampQty(res.quantity ?? qty);
+                    input.val(finalQty);
+
+                    const row = input.closest("tr");
+                    updateRowSubtotal(row, finalQty);
+                    updateCartTotal();
+
+                    setMsg(id, "Updated", "success");
+                    setTimeout(() => setMsg(id, ""), 800);
+                } else {
+                    setMsg(id, (res && res.message) ? res.message : "Update failed", "error");
+                }
+            },
+
+            error: function (xhr) {
+                let msg = "Something went wrong!";
+                try {
+                    const r = JSON.parse(xhr.responseText);
+                    msg = r.message || r.error || msg;
+                } catch (e) {}
+                setMsg(id, msg, "error");
+                console.error(xhr.responseText);
+            },
+
+            complete: function () {
+                input.data("loading", 0);
+                input.prop("disabled", false);
+            }
+        });
+    }
+
+    // ---- Plus / Minus ----
+    $(document).on("click", ".btn-plus, .btn-minus", function () {
+        const id = $(this).data("id");
+        const input = $('.qty-input[data-id="' + id + '"]');
+        if (!input.length) return;
+
+        const current = clampQty(input.val());
+        let next = current;
+
+        if ($(this).hasClass("btn-plus")) next = current + 1;
+        if ($(this).hasClass("btn-minus")) next = Math.max(1, current - 1);
+
+        if (next === current) return;
+        updateQuantity(id, next, input);
+    });
+
+    // ---- Typing (debounce per input) ----
+    $(document).on("input", ".qty-input", function () {
+        const input = $(this);
+        const id = input.data("id");
+
+        clearTimeout(input.data("typingTimer"));
+        input.data("typingTimer", setTimeout(function () {
+            const qty = clampQty(input.val());
+            input.val(qty);
+            updateQuantity(id, qty, input);
+        }, 400));
+    });
+
+    // ---- On blur force update ----
+    $(document).on("blur", ".qty-input", function () {
+        const input = $(this);
+        const id = input.data("id");
+        const qty = clampQty(input.val());
+        input.val(qty);
+        updateQuantity(id, qty, input);
+    });
 });

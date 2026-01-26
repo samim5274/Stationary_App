@@ -44,140 +44,151 @@
 
                 <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold
                             bg-emerald-100 text-emerald-800 border border-emerald-200
-                            dark:bg-emerald-800 dark:!text-white dark:border-emerald-700">
+                            dark:bg-emerald-800 dark:text-white dark:border-emerald-700">
                     {{ $cart->count() }} items
                 </span>
+
             </div>
 
             <!-- Table -->
-            <div class="overflow-x-auto">
-                <table class="min-w-full text-sm">
-                    <thead class="bg-gray-50 dark:bg-gray-900">
-                        <tr class="text-left">
-                            <th class="px-5 py-3 font-semibold text-gray-700 dark:text-gray-100">Product</th>
-                            <th class="px-5 py-3 font-semibold text-gray-700 dark:text-gray-100">Price</th>
-                            <th class="px-5 py-3 font-semibold text-gray-700 dark:text-gray-100">Qty</th>
-                            <th class="px-5 py-3 font-semibold text-gray-700 dark:text-gray-100">Subtotal</th>
-                            <th class="px-5 py-3 w-12"></th>
-                        </tr>
-                    </thead>
-
-                    <tbody class="divide-y divide-gray-200 dark:divide-gray-700 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200">
-
-                        @if($cart->isEmpty())
-                            <tr>
-                                <td colspan="5" class="px-5 py-10 text-center">
-                                    <div class="inline-flex flex-col items-center gap-2">
-                                        <div class="w-12 h-12 rounded-2xl bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
-                                            <i class="fa-solid fa-cart-shopping text-gray-500 dark:text-gray-200"></i>
-                                        </div>
-                                        <p class="font-semibold text-gray-700 dark:text-gray-100">Your cart is empty</p>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400">Search products and add them to cart.</p>
-                                    </div>
-                                </td>
+            <div class="rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 overflow-hidden">
+                <div class="max-h-[835px] overflow-y-auto">
+                    <table class="min-w-full text-sm">
+                        <!-- Head -->
+                        <thead class="bg-gray-100 dark:bg-gray-800">
+                            <tr class="text-left">
+                                <th class="px-5 py-3 font-semibold text-gray-700 dark:text-gray-200">
+                                    Product
+                                </th>
+                                <th class="px-5 py-3 font-semibold text-gray-700 dark:text-gray-200 whitespace-nowrap">
+                                    Price
+                                </th>
+                                <th class="px-5 py-3 font-semibold text-gray-700 dark:text-gray-200">
+                                    Qty
+                                </th>
+                                <th class="px-5 py-3 font-semibold text-gray-700 dark:text-gray-200 whitespace-nowrap">
+                                    Subtotal
+                                </th>
+                                <th class="px-5 py-3 w-12"></th>
                             </tr>
-                        @endif
+                        </thead>
 
-                        @foreach($cart as $item)
-                            <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/30 transition">
-                                <!-- Product -->
-                                <td class="px-5 py-4">
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-9 h-9 rounded-xl bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
-                                            <i class="fa-solid fa-box text-gray-500 dark:text-gray-200 text-sm"></i>
-                                        </div>
-                                        <div>
-                                            <p class="font-semibold text-gray-800 dark:text-gray-100 leading-tight">
-                                                {{ $item->product->name }}
+                        <!-- Body -->
+                        <tbody class="divide-y divide-gray-200 dark:divide-gray-700
+                                    bg-white dark:bg-gray-900
+                                    text-gray-800 dark:text-gray-200">
+
+                            @if($cart->isEmpty())
+                                <tr>
+                                    <td colspan="5" class="px-5 py-12 text-center">
+                                        <div class="inline-flex flex-col items-center gap-3">
+                                            <div class="w-14 h-14 rounded-2xl
+                                                        bg-gray-100 dark:bg-gray-800
+                                                        flex items-center justify-center">
+                                                <i class="fa-solid fa-cart-shopping
+                                                        text-gray-500 dark:text-gray-300 text-lg"></i>
+                                            </div>
+                                            <p class="font-semibold text-gray-800 dark:text-gray-100">
+                                                Your cart is empty
                                             </p>
-                                            @if(!empty($item->product->sku))
-                                                <p class="text-xs text-gray-500 dark:text-gray-400">SKU: {{ $item->product->sku }}</p>
-                                            @endif
+                                            <p class="text-xs text-gray-500 dark:text-gray-400">
+                                                Search products and add them to cart.
+                                            </p>
                                         </div>
-                                    </div>
-                                </td>
+                                    </td>
+                                </tr>
+                            @endif
 
-                                <!-- Price -->
-                                <td class="px-5 py-4 font-semibold text-gray-800 dark:text-gray-100">
-                                    ৳{{ number_format($item->price, 0) }}/-
-                                </td>
+                            @foreach($cart as $item)
+                                <tr class="transition bg-white dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-800" data-cart-row="1">
 
-                                <!-- Qty -->
-                                <td class="px-5 py-4">
-                                    <div class="inline-flex items-center rounded-xl border border-gray-200 dark:border-gray-600 overflow-hidden">
+                                    <!-- Product -->
+                                    <td class="px-5 py-4">
+                                        <div class="flex items-center gap-3">
+                                            
+                                            <div class="min-w-0">
+                                                <p class="font-semibold text-gray-900 dark:text-gray-100 truncate">
+                                                    {{ $item->product->name }}
+                                                </p>
+                                                @if(!empty($item->product->sku))
+                                                    <p class="text-xs text-gray-500 dark:text-gray-400 truncate">
+                                                        SKU: {{ $item->product->sku }}
+                                                    </p>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </td>
 
-                                        <!-- minus -->
-                                        <button type="button"
-                                            onclick="stepQty({{ $item->id }}, -1)"
-                                            class="w-9 h-9 flex items-center justify-center
-                                                bg-gray-50 hover:bg-gray-100
-                                                dark:bg-gray-700 dark:hover:bg-gray-600
-                                                text-gray-700 dark:text-gray-100 font-bold">
-                                            −
-                                        </button>
+                                    <!-- Price -->
+                                    <td data-price="{{ $item->price }}" class="px-5 py-4 font-semibold 
+                                            text-gray-900 dark:text-gray-100 whitespace-nowrap">
+                                        ৳{{ number_format($item->price, 0) }}/-
+                                    </td>
 
-                                        <!-- input qty -->
-                                        <input
-                                            id="qty-input-{{ $item->id }}"
-                                            data-old="{{ $item->quantity }}"
-                                            value="{{ $item->quantity }}"
-                                            inputmode="numeric"
-                                            class="w-14 h-9 text-center font-bold
-                                                bg-white dark:bg-gray-800
-                                                text-gray-800 dark:text-gray-100
-                                                outline-none
-                                                focus:ring-2 focus:ring-purple-200 dark:focus:ring-purple-900"
-                                            oninput="queueQtyUpdate({{ $item->id }})"
-                                            onfocus="this.select()"
-                                        />
+                                    <!-- Qty -->
+                                    <td class="px-5 py-4">
+                                        <div class="inline-flex items-center rounded-xl
+                                                    border border-gray-200 dark:border-gray-600
+                                                    bg-white dark:bg-gray-900
+                                                    shadow-sm dark:shadow-[inset_0_0_0_1px_rgba(255,255,255,0.04)]">
 
-                                        <!-- plus -->
-                                        <button type="button"
-                                            onclick="stepQty({{ $item->id }}, 1)"
-                                            class="w-9 h-9 flex items-center justify-center
-                                                bg-gray-50 hover:bg-gray-100
-                                                dark:bg-gray-700 dark:hover:bg-gray-600
-                                                text-gray-700 dark:text-gray-100 font-bold">
-                                            +
-                                        </button>
+                                            <!-- minus -->
+                                            <button type="button"
+                                                class="btn-minus w-10 h-10 flex items-center justify-center
+                                                    bg-gray-50 hover:bg-gray-100
+                                                    dark:bg-gray-800 dark:hover:bg-gray-700
+                                                    text-gray-800 dark:text-gray-100 font-bold transition"
+                                                data-id="{{ $item->id }}">
+                                                −
+                                            </button>
 
-                                    </div>
+                                            <!-- input -->
+                                            <input
+                                                type="text" class="qty-input w-16 h-10 text-center font-extrabold tabular-nums
+                                                    bg-white dark:bg-gray-900
+                                                    text-gray-900 dark:text-white
+                                                    border-x border-gray-200 dark:border-gray-700
+                                                    outline-none"
+                                                data-id="{{ $item->id }}" value="{{ $item->quantity }}"/>
 
-                                    <!-- optional tiny status text -->
-                                    <p id="qty-msg-{{ $item->id }}" class="mt-1 text-[11px] text-gray-500 dark:text-gray-400"></p>
-                                </td>
+                                            <!-- plus -->
+                                            <button type="button"
+                                                class="btn-plus w-10 h-10 flex items-center justify-center
+                                                    bg-gray-50 hover:bg-gray-100
+                                                    dark:bg-gray-800 dark:hover:bg-gray-700
+                                                    text-gray-800 dark:text-gray-100 font-bold transition"
+                                                data-id="{{ $item->id }}">
+                                                +
+                                            </button>
+                                        </div>
 
 
-                                <!-- Subtotal -->
-                                <td class="px-5 py-4 font-extrabold text-gray-900 dark:text-white">
-                                    ৳{{ number_format($item->price * $item->quantity, 0) }}/-
-                                </td>
+                                        <p id="qty-msg-{{ $item->id }}"
+                                        class="mt-1 text-[11px] leading-4
+                                                text-gray-500 dark:text-gray-400"></p>
+                                    </td>
 
-                                <!-- Remove -->
-                                <td class="px-5 py-4">
-                                    <a href="{{ route('cart.remove', [$item->product_id, $item->reg]) }}"
-                                    onclick="return confirm('Remove this item from cart?')"
-                                    class="inline-flex items-center justify-center w-9 h-9 rounded-xl
-                                            border border-red-200 text-red-600 hover:bg-red-50
-                                            dark:border-red-800 dark:text-red-300 dark:hover:bg-red-900/30
-                                            transition">
-                                        <i class="fas fa-trash text-sm"></i>
-                                    </a>
-                                </td>
-                            </tr>
-                        @endforeach
+                                    <!-- Subtotal -->
+                                    <td class="item-subtotal px-5 py-4 font-extrabold text-gray-900 dark:text-white whitespace-nowrap">
+                                        ৳{{ number_format($item->price * $item->quantity, 0) }}/-
+                                    </td>
 
-                    </tbody>
-                </table>
-            </div>
+                                    <!-- Remove -->
+                                    <td class="px-5 py-4">
+                                        <a href="{{ route('cart.remove', [$item->product_id, $item->reg]) }}"
+                                        onclick="return confirm('Remove this item from cart?')"
+                                        class="inline-flex items-center justify-center
+                                                w-10 h-10 rounded-xl text-red-600 hover:bg-red-50
+                                                dark:border-red-900/60 dark:text-red-300 dark:hover:bg-red-900/30
+                                                transition focus:outline-none focus:ring-2 focus:ring-red-400/40">
+                                            <i class="fas fa-trash text-sm"></i>
+                                        </a>
+                                    </td>
 
-            <!-- Footer Summary -->
-            <div class="px-5 py-4 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/30">
-                <div class="flex items-center justify-between">
-                    <p class="text-sm text-gray-600 dark:text-gray-300">Total</p>
-                    <p class="text-xl font-extrabold text-gray-900 dark:text-white">
-                        ৳{{ number_format($cart->sum(fn($i) => $i->price * $i->quantity), 0) }}/-
-                    </p>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
@@ -211,7 +222,7 @@
             Cart Summary
         </h4>
 
-        <form action="#" method="POST" id="myForm"
+        <form action="{{ route('order.confirm') }}" method="POST" id="myForm"
             class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-sm overflow-hidden">
             @csrf
 
@@ -231,13 +242,13 @@
                 </div>
 
                 <!-- Location -->
-                <!-- <div class="rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 p-4">
+                <div class="rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 p-4">
                     <h4 class="text-sm font-semibold text-gray-800 dark:text-gray-200 mb-2 flex items-center gap-2">
                         <i class="mdi mdi-map-marker text-gray-500 dark:text-gray-400"></i>
                         Location
                     </h4>
                     <p class="text-sm text-gray-600 dark:text-gray-300">{{$company->address}}</p>
-                </div> -->
+                </div>
 
                 <!-- Summary -->
                 <div class="rounded-xl border border-gray-200 dark:border-gray-700 p-4">
@@ -295,7 +306,7 @@
                                 text-gray-800 dark:text-gray-100
                                 placeholder-gray-400 dark:placeholder-gray-400
                                 focus:outline-none focus:ring-2 focus:ring-purple-200 dark:focus:ring-purple-900 focus:border-purple-500"
-                                id="num4" name="txtVAT" value="0" placeholder="VAT"
+                                id="num4" name="txtVAT" value="0" placeholder="VAT" step="0.01" inputmode="decimal"
                                 onkeyup="calculateAmount()" onchange="calculateAmount()" min="0">
                         </div>
                     </div>
@@ -312,7 +323,7 @@
                                 text-gray-800 dark:text-gray-100
                                 placeholder-gray-400 dark:placeholder-gray-400
                                 focus:outline-none focus:ring-2 focus:ring-purple-200 dark:focus:ring-purple-900 focus:border-purple-500"
-                                id="num3" name="txtDiscount" value="0" placeholder="Discount"
+                                id="num3" name="txtDiscount" value="0" placeholder="Discount" step="0.01" inputmode="decimal"
                                 onkeyup="calculateAmount()" onchange="calculateAmount()" min="0">
                         </div>
                     </div>
@@ -348,7 +359,7 @@
                                 text-gray-800 dark:text-gray-100
                                 placeholder-gray-400 dark:placeholder-gray-400
                                 focus:outline-none focus:ring-2 focus:ring-purple-200 dark:focus:ring-purple-900 focus:border-purple-500"
-                                id="num2" name="txtPay" placeholder="Pay"
+                                id="num2" name="txtPay" placeholder="Pay" step="0.01" inputmode="decimal"
                                 onkeyup="calculateAmount()" onchange="calculateAmount()" min="0">
                         </div>
                     </div>
@@ -386,8 +397,7 @@
 
                     <!-- Result -->
                     <div class="pt-2">
-                        <p id="result"
-                        class="text-base sm:text-lg font-extrabold text-red-600 dark:text-red-400">
+                        <p id="result" class="text-base sm:text-lg font-extrabold text-red-600 dark:text-red-400">
                             Amount: 00/-
                         </p>
                     </div>
@@ -405,7 +415,6 @@
 
             </div>
         </form>
-
 
     </div>
 </div>

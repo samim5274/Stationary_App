@@ -23,7 +23,7 @@ class CartController extends Controller
     function generateRegNum() {
         $userId = Auth::guard('admin')->user()->id;
         $order = Order::where('user_id', $userId)->count() + 1;
-        return Carbon::now()->format('Ymd') . str_pad($userId, 2, '0', STR_PAD_LEFT) . str_pad($order, 4, '0', STR_PAD_LEFT);
+        return '1' . str_pad($userId, 4, '0', STR_PAD_LEFT) . str_pad($order, 8, '0', STR_PAD_LEFT);
     }
 
     public function cart()
@@ -31,7 +31,7 @@ class CartController extends Controller
         $company = Company::first();
         $reg = $this->generateRegNum();
         $payMathod = PaymentMethod::all();
-        $cart = Cart::where('reg', $reg)->get();
+        $cart = Cart::with('product')->where('reg', $reg)->get();
         $count = Cart::where('reg', $reg)->count();
         return view('cart.cart-view', compact('company', 'reg', 'payMathod', 'cart', 'count'));
     }
@@ -60,9 +60,16 @@ class CartController extends Controller
             $reg = $this->generateRegNum();
             
             $findData = Cart::where('reg', $reg)->where('product_id', $product->id)->first();
+            $findStock = PdrStock::where('ref', $reg)->where('product_id', $product->id)->first();
             
             if($findData) {
-                return redirect()->back()->with('warning', 'Item already added. Try to another item. If you add more quentity then go to cart.');
+                $findData->quantity += 1;
+                $findData->update();
+                $findStock->qty += 1;
+                $findStock->update();
+                $product->stock -= 1;
+                $product->update();
+                return redirect()->back();
             }
 
             $cart->reg = $reg;

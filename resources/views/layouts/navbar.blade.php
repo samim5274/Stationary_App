@@ -68,7 +68,7 @@
                    class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150
                           {{ $activeSale ? 'text-gray-800 dark:text-gray-100' : 'text-gray-600 dark:text-gray-400' }}
                           hover:text-gray-800 dark:hover:text-gray-200">
-                    <i class="fa-solid fa-address-card w-5 text-center"></i>
+                    <i class="fa-solid fa-cart-plus w-5 text-center"></i>
                     <span class="ml-4">Sale / Cart</span>
                 </a>
             </li>
@@ -218,7 +218,7 @@
                    class="inline-flex items-center w-full text-sm font-semibold transition-colors duration-150
                           {{ $activeSale ? 'text-gray-800 dark:text-gray-100' : 'text-gray-600 dark:text-gray-400' }}
                           hover:text-gray-800 dark:hover:text-gray-200">
-                    <i class="fa-solid fa-address-card w-5 text-center"></i>
+                    <i class="fa-solid fa-cart-plus w-5 text-center"></i>
                     <span class="ml-4">Sale / Cart</span>
                 </a>
             </li>

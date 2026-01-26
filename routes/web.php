@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\Product\ProductController;
 use App\Http\Controllers\Cart\CartController;
+use App\Http\Controllers\Order\OrderController;
 
 
 
@@ -73,6 +74,9 @@ Route::group(['middleware' => ['admin']], function(){
         Route::get('/add-cart', [CartController::class, 'addCart'])->name('add.cart');
         Route::post('/cart/set-qty', [CartController::class, 'updateQty'])->name('cart.updateQty');
         Route::get('/remove-to-cart/{product_id}/{reg}', [CartController::class, 'removeToCart'])->name('cart.remove');
+
+        Route::post('/cart/checkout', [OrderController::class, 'checkout'])->name('order.confirm');
+        Route::get('/order/invoice/{reg}', [OrderController::class, 'invoicePrint'])->name('order-print');
     });
 
 });
