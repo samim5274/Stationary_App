@@ -8,6 +8,7 @@ use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\Product\ProductController;
 use App\Http\Controllers\Cart\CartController;
 use App\Http\Controllers\Order\OrderController;
+use App\Http\Controllers\Report\Sale\SaleReportController;
 
 
 
@@ -77,6 +78,11 @@ Route::group(['middleware' => ['admin']], function(){
 
         Route::post('/cart/checkout', [OrderController::class, 'checkout'])->name('order.confirm');
         Route::get('/order/invoice/{reg}', [OrderController::class, 'invoicePrint'])->name('order-print');
+    });
+
+    Route::prefix('sale/report')->group(function () {
+        Route::get('/daily', [SaleReportController::class, 'daily'])->name('sale.report.daily');
+        Route::get('/order-detials/{reg}', [SaleReportController::class, 'orderDetails'])->name('order.details.view');
     });
 
 });

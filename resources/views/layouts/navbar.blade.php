@@ -1,5 +1,4 @@
 @php
-    // Safe helper closures (no redeclare issue)
     $isActive = function ($patterns) {
         foreach ((array) $patterns as $p) {
             if (request()->routeIs($p) || request()->is($p)) return true;
@@ -7,17 +6,29 @@
         return false;
     };
 
-    // Active states
     $activeDashboard = $isActive(['dashboard', '/', 'home']);
-    $activeProfile   = $isActive(['profile*']);
-    $activeSale      = $isActive(['sale*']);
+
+    $activeProfile = $isActive(['profile*']);
+
+    $activeSale = $isActive([
+        'sale.cart',
+        'sale.cart.*',
+        'sale/cart*', 
+    ]);
+
     $activeCategory  = $isActive(['category*']);
     $activeSubCat    = $isActive(['subcategory*', 'sub-category*']);
     $activeProducts  = $isActive(['product.list', 'products*', 'product*']);
 
-    // Settings open if any submenu active
-    $settingsOpen = ($activeCategory || $activeSubCat || $activeProducts);
+    $activeDailyReport = $isActive([
+        'sale.report.*',
+        'sale/report*',
+    ]);
+
+    $settingsOpen   = ($activeCategory || $activeSubCat || $activeProducts);
+    $saleReportOpen = $activeDailyReport;
 @endphp
+
 
 <!-- Desktop sidebar -->
 <aside class="z-20 hidden w-64 overflow-y-auto bg-white dark:bg-gray-800 md:block flex-shrink-0">
@@ -71,6 +82,46 @@
                     <i class="fa-solid fa-cart-plus w-5 text-center"></i>
                     <span class="ml-4">Sale / Cart</span>
                 </a>
+            </li>
+
+            <!-- Sale Report Dropdown -->
+            <li class="relative px-6 py-3" x-data="{ open: {{ $saleReportOpen ? 'true' : 'false' }} }">
+                @if($saleReportOpen)
+                    <span class="absolute inset-y-0 left-0 w-1 bg-purple-600 rounded-tr-lg rounded-br-lg"></span>
+                @endif
+
+                <button
+                    @click="open = !open"
+                    class="inline-flex items-center justify-between w-full text-sm font-semibold transition-colors duration-150
+                        {{ $saleReportOpen ? 'text-gray-800 dark:text-gray-100' : 'text-gray-600 dark:text-gray-400' }}
+                        hover:text-gray-800 dark:hover:text-gray-200"
+                    aria-haspopup="true"
+                    :aria-expanded="open.toString()">
+
+                    <span class="inline-flex items-center">
+                        <i class="fa-solid fa-shop w-5 text-center"></i>
+                        <span class="ml-4">Sale Report</span>
+                    </span>
+
+                    <i class="fa-solid fa-chevron-down text-xs transition-transform"
+                    :class="open ? 'rotate-180' : ''"></i>
+                </button>
+
+                <ul
+                    x-show="open"
+                    x-transition
+                    x-cloak
+                    class="p-2 mt-2 space-y-2 overflow-hidden text-sm font-medium rounded-md shadow-inner
+                        bg-gray-50 text-gray-500 dark:text-gray-400 dark:bg-gray-900">
+
+                    <li class="px-2 py-1 rounded-md transition-colors duration-150
+                            {{ $activeDailyReport ? 'bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100' : '' }}
+                            hover:text-gray-800 dark:hover:text-gray-200">
+                        <a class="block w-full" href="{{ route('sale.report.daily') }}">
+                            Daily Sale Report
+                        </a>
+                    </li>
+                </ul>
             </li>
 
             <!-- Settings Dropdown -->
@@ -223,6 +274,55 @@
                 </a>
             </li>
 
+
+            <!-- Report Dropdown -->
+            <li class="relative px-6 py-3"
+                x-data="{ reportOpen: {{ $saleReportOpen ? 'true' : 'false' }} }">
+
+                @if($saleReportOpen)
+                    <span class="absolute inset-y-0 left-0 w-1 bg-purple-600 rounded-tr-lg rounded-br-lg" aria-hidden="true"></span>
+                @endif
+
+                <button
+                    class="inline-flex items-center justify-between w-full text-sm font-semibold transition-colors duration-150
+                        {{ $saleReportOpen ? 'text-gray-800 dark:text-gray-100' : 'text-gray-600 dark:text-gray-400' }}
+                        hover:text-gray-800 dark:hover:text-gray-200"
+                    @click="reportOpen = !reportOpen"
+                    aria-haspopup="true"
+                    :aria-expanded="reportOpen.toString()">
+
+                    <span class="inline-flex items-center">
+                        <i class="fa-solid fa-shop w-5 text-center"></i>
+                        <span class="ml-4">Sale Report</span>
+                    </span>
+
+                    <i class="fa-solid fa-chevron-down text-xs transition-transform"
+                    :class="reportOpen ? 'rotate-180' : ''"></i>
+                </button>
+
+                <ul
+                    x-show="reportOpen"
+                    x-transition:enter="transition-all ease-in-out duration-300"
+                    x-transition:enter-start="opacity-0 max-h-0"
+                    x-transition:enter-end="opacity-100 max-h-xl"
+                    x-transition:leave="transition-all ease-in-out duration-300"
+                    x-transition:leave-start="opacity-100 max-h-xl"
+                    x-transition:leave-end="opacity-0 max-h-0"
+                    x-cloak
+                    class="p-2 mt-2 space-y-2 overflow-hidden text-sm font-medium rounded-md shadow-inner
+                        bg-gray-50 text-gray-500 dark:text-gray-400 dark:bg-gray-900"
+                    aria-label="submenu">
+
+                    <li class="px-2 py-1 rounded-md transition-colors duration-150
+                            {{ $activeDailyReport ? 'bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100' : '' }}
+                            hover:text-gray-800 dark:hover:text-gray-200">
+                        <a class="w-full block" href="{{ route('sale.report.daily') }}">
+                            Daily Sale Report
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
             <!-- Settings Dropdown -->
             <li class="relative px-6 py-3">
                 @if($settingsOpen)
@@ -277,6 +377,7 @@
                     </li>
                 </ul>
             </li>
+
         </ul>
 
         <div class="px-6 my-6">

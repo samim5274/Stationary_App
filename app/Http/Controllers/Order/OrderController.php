@@ -76,8 +76,8 @@ class OrderController extends Controller
                 ]);
             }
 
-            // status: 2=paid, 3=due (as your comment)
-            $status = ($dueAmount > 0) ? 3 : 2;
+            // status: 0=pending,1=ordered,2=cancel etc
+            $status = 1;
 
             try {
                 
@@ -96,7 +96,7 @@ class OrderController extends Controller
 
                     $order->total           = $payable;
                     $order->status          = $status;
-                    $order->customerName    = $request->filled('txtCustomerName') ? $request->input('txtCustomerName') : 'Guest User';
+                    $order->customerName    = $request->filled('txtCustomerName') ? $request->input('txtCustomerName') : 'Guest';
                     $order->customerPhone   = $request->filled('txtCustomerPhone') ? $request->input('txtCustomerPhone') : '0';
 
                     $order->save();

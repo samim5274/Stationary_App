@@ -20,7 +20,7 @@ return new class extends Migration
             
             $table->unsignedBigInteger('reg')->unique();
             $table->decimal('total', 12, 2)->nullable();
-            $table->Integer('status')->default(0); // 0=pending,1=paid,2=cancel etc
+            $table->Integer('status')->default(0); // 0=pending,1=ordered,2=cancel etc
 
             $table->string('customerName')->default("Guest User");
             $table->string('customerPhone')->default(0);
