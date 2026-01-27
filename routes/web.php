@@ -83,6 +83,10 @@ Route::group(['middleware' => ['admin']], function(){
     Route::prefix('sale/report')->group(function () {
         Route::get('/daily', [SaleReportController::class, 'daily'])->name('sale.report.daily');
         Route::get('/order-detials/{reg}', [SaleReportController::class, 'orderDetails'])->name('order.details.view');
+        Route::get('/print-daily-report', [SaleReportController::class, 'printDailyReport'])->name('print-daily-sale');
+
+        Route::get('/date-wise-sale-report', [SaleReportController::class, 'dateWiseSaleReport'])->name('date.wise.sale.report');
+        Route::get('/filter-date-wise-sale-report', [SaleReportController::class, 'filteDateWiseSaleReport'])->name('filter-date-wise-sale-report');
     });
 
 });

@@ -24,7 +24,7 @@
                     <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between my-4">
                         {{-- LEFT : Title --}}
                         <h2 class="text-2xl font-semibold text-gray-700 dark:text-gray-200">
-                            Daily Sale Report
+                            Date wise Sale Report
                         </h2>
 
                         {{-- RIGHT : Action Button --}}
@@ -36,27 +36,78 @@
 
                     @include('layouts.message')
 
-                    <div class="grid gap-6 mb-8 md:grid-cols-2 xl:grid-cols-4">
-                        <div class="p-5 bg-white dark:bg-gray-800 rounded-xl shadow border dark:border-gray-700">
-                            <p class="text-sm text-gray-500 dark:text-gray-400">Today Orders</p>
-                            <p class="text-2xl font-bold text-gray-800 dark:text-gray-100"># {{ $summary['orders_count'] }}</p>
-                        </div>
+                    <form action="{{ route('filter-date-wise-sale-report') }}" method="GET">
+                        <div class="grid gap-6 mb-8 grid-cols-1 sm:grid-cols-2 xl:grid-cols-4">
 
-                        <div class="p-5 bg-white dark:bg-gray-800 rounded-xl shadow border dark:border-gray-700">
-                            <p class="text-sm text-gray-500 dark:text-gray-400">Total Sales</p>
-                            <p class="text-2xl font-bold text-gray-800 dark:text-gray-100">৳ {{ number_format($summary['total_sales'], 2) }}/-</p>
-                        </div>
+                            <!-- Start Date -->
+                            <div class="p-5 bg-white dark:bg-gray-800 rounded-xl shadow border dark:border-gray-700">
+                                <label class="flex items-center text-sm text-gray-500 dark:text-gray-400 mb-2">
+                                    <i class="fa-solid fa-calendar-days mr-2 text-purple-600"></i>
+                                    Start Date
+                                </label>
 
-                        <div class="p-5 bg-white dark:bg-gray-800 rounded-xl shadow border dark:border-gray-700">
-                            <p class="text-sm text-gray-500 dark:text-gray-400">Total Paid</p>
-                            <p class="text-2xl font-bold text-gray-800 dark:text-gray-100">৳ {{ number_format($summary['total_pay'], 2) }}/-</p>
-                        </div>
+                                <input type="date" name="start_date"
+                                    value="{{ request('start_date', now()->toDateString()) }}" max="{{ now()->toDateString() }}"
+                                    class="w-full px-3 py-2 rounded-lg border text-gray-800 dark:text-gray-100
+                                        bg-gray-50 dark:bg-gray-700
+                                        border-gray-300 dark:border-gray-600
+                                        focus:ring-2 focus:ring-purple-500 focus:outline-none">
+                            </div>
 
-                        <div class="p-5 bg-white dark:bg-gray-800 rounded-xl shadow border dark:border-gray-700">
-                            <p class="text-sm text-gray-500 dark:text-gray-400">Total Due</p>
-                            <p class="text-2xl font-bold text-gray-800 dark:text-gray-100">৳ {{ number_format($summary['total_due'], 2) }}/-</p>
+                            <!-- End Date -->
+                            <div class="p-5 bg-white dark:bg-gray-800 rounded-xl shadow border dark:border-gray-700">
+                                <label class="flex items-center text-sm text-gray-500 dark:text-gray-400 mb-2">
+                                    <i class="fa-solid fa-calendar-check mr-2 text-purple-600"></i>
+                                    End Date
+                                </label>
+
+                                <input type="date" name="end_date"
+                                    value="{{ request('end_date', now()->toDateString()) }}" max="{{ now()->toDateString() }}"
+                                    class="w-full px-3 py-2 rounded-lg border text-gray-800 dark:text-gray-100
+                                        bg-gray-50 dark:bg-gray-700
+                                        border-gray-300 dark:border-gray-600
+                                        focus:ring-2 focus:ring-purple-500 focus:outline-none">
+                            </div>
+
+                            <!-- Filter Button -->
+                            <div class="p-5 bg-white dark:bg-gray-800 rounded-xl shadow border dark:border-gray-700 flex flex-col justify-between">
+                                <p class="flex items-center text-sm text-gray-500 dark:text-gray-400 mb-3">
+                                    <i class="fa-solid fa-filter mr-2 text-blue-600"></i>
+                                    Apply Filter
+                                </p>
+
+                                <button type="submit"
+                                    class="w-full inline-flex items-center justify-center gap-2
+                                        px-4 py-2 rounded-lg font-semibold
+                                        bg-blue-600 text-white
+                                        hover:bg-blue-700 transition">
+                                    <i class="fa-solid fa-magnifying-glass"></i>
+                                    Filter
+                                </button>
+                            </div>
+
+                            <!-- Print Button -->
+                            <div class="p-5 bg-white dark:bg-gray-800 rounded-xl shadow border dark:border-gray-700 flex flex-col justify-between">
+                                <p class="flex items-center text-sm text-gray-500 dark:text-gray-400 mb-3">
+                                    <i class="fa-solid fa-print mr-2 text-green-600"></i>
+                                    Print Report
+                                </p>
+
+                                <button type="submit" formtarget="_blank"
+                                    name="print"
+                                    value="1"
+                                    class="w-full inline-flex items-center justify-center gap-2
+                                        px-4 py-2 rounded-lg font-semibold
+                                        bg-green-600 text-white
+                                        hover:bg-green-700 transition">
+                                    <i class="fa-solid fa-file-pdf"></i>
+                                    Print
+                                </button>
+                            </div>
+
                         </div>
-                    </div>
+                    </form>
+
 
                     <div class="bg-white dark:bg-gray-800 rounded-xl shadow border dark:border-gray-700 overflow-hidden">
                         <div class="p-5 border-b dark:border-gray-700 flex items-center justify-between gap-3 flex-wrap">
@@ -190,7 +241,6 @@
 
 
                     </div>
-
 
 
                 </div>

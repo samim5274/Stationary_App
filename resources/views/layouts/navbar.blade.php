@@ -20,13 +20,11 @@
     $activeSubCat    = $isActive(['subcategory*', 'sub-category*']);
     $activeProducts  = $isActive(['product.list', 'products*', 'product*']);
 
-    $activeDailyReport = $isActive([
-        'sale.report.*',
-        'sale/report*',
-    ]);
+    $activeDailyReport = $isActive(['sale.report.*']);
+    $activeDateWiseReport = $isActive(['date.wise.sale.report', 'date.wise.sale.report.*',]);
 
     $settingsOpen   = ($activeCategory || $activeSubCat || $activeProducts);
-    $saleReportOpen = $activeDailyReport;
+    $saleReportOpen = ($activeDailyReport || $activeDateWiseReport);
 @endphp
 
 
@@ -34,7 +32,7 @@
 <aside class="z-20 hidden w-64 overflow-y-auto bg-white dark:bg-gray-800 md:block flex-shrink-0">
     <div class="py-4 text-gray-500 dark:text-gray-400">
         <a class="ml-6 text-lg font-bold text-gray-800 dark:text-gray-200" href="{{ url('/') }}">
-            SAMIM-STATIONARY
+            {{ $company->name }}
         </a>
 
         <ul class="mt-6">
@@ -121,6 +119,15 @@
                             Daily Sale Report
                         </a>
                     </li>
+
+                    <li class="px-2 py-1 rounded-md transition-colors duration-150
+                            {{ $activeDateWiseReport ? 'bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100' : '' }}
+                            hover:text-gray-800 dark:hover:text-gray-200">
+                        <a class="block w-full" href="{{ route('date.wise.sale.report') }}">
+                            Date-wise Sales Report
+                        </a>
+                    </li>
+
                 </ul>
             </li>
 
@@ -197,6 +204,14 @@
     </div>
 </aside>
 
+
+
+
+
+
+
+
+
 <!-- Mobile sidebar Backdrop -->
 <div
     x-show="isSideMenuOpen"
@@ -208,6 +223,15 @@
     x-transition:leave-end="opacity-0"
     class="fixed inset-0 z-10 flex items-end bg-black bg-opacity-50 sm:items-center sm:justify-center">
 </div>
+
+
+
+
+
+
+
+
+
 
 <!-- Mobile sidebar -->
 <aside
@@ -320,6 +344,15 @@
                             Daily Sale Report
                         </a>
                     </li>
+
+                    <li class="px-2 py-1 rounded-md transition-colors duration-150
+                            {{ $activeDateWiseReport ? 'bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100' : '' }}
+                            hover:text-gray-800 dark:hover:text-gray-200">
+                        <a class="w-full block" href="{{ route('date.wise.sale.report') }}">
+                            Daily Sale Report
+                        </a>
+                    </li>
+
                 </ul>
             </li>
 

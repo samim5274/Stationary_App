@@ -43,12 +43,12 @@
                             </a>
 
                             {{-- If you have print route/button, you can use it. Otherwise keep this as simple JS print --}}
-                            <button onclick="window.print()"
+                            <a href="{{ route('order-print', $order->reg) }}" target="_blank"
                             class="inline-flex items-center gap-2 px-4 py-2 rounded-lg
                                     bg-purple-600 text-white hover:bg-purple-700 transition">
                                 <i class="fa-solid fa-print"></i>
                                 Print
-                            </button>
+                            </a>
                         </div>
                     </div>
 

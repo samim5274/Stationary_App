@@ -54,4 +54,54 @@ class SaleReportController extends Controller
 
         return view('report.sale.order-details', compact('company','order','payments','paySummary','cart'));
     }
+
+    public function printDailyReport(){
+        $company = Company::first();
+
+        $orders = Order::with('user')->whereDate('date', Carbon::today())->latest()->get();
+        $paymentDetails = PaymentDetail::with(['user','paymentMethod','order'])->whereDate('date', Carbon::today())->latest()->get();
+        
+        $summary = [
+            'orders_count' => $orders->count(),
+            'total_sales'  => $orders->sum('total'),
+            'total_pay'    => $paymentDetails->sum('pay'),
+            'total_due'    => $paymentDetails->sum('due'),
+        ];
+
+        return view('report.print.print-daily-report', compact('company', 'orders','paymentDetails','summary'));
+    }
+
+    public function dateWiseSaleReport(){
+        $company = Company::first();
+
+        $orders = Order::with('user')->whereDate('date', Carbon::today())->latest()->get();
+        $paymentDetails = PaymentDetail::with(['user','paymentMethod','order'])->whereDate('date', Carbon::today())->latest()->paginate(15);
+        
+        return view('report.sale.date-wise-report', compact('company', 'orders','paymentDetails'));
+    }
+
+    public function filteDateWiseSaleReport(Request $request){
+
+        $request->validate([
+            'start_date' => ['nullable', 'date', 'before_or_equal:today'],
+            'end_date'   => ['nullable', 'date', 'before_or_equal:today', 'after_or_equal:start_date'],
+        ]);
+
+        $company = Company::first();
+
+        $start = $request->start_date ? Carbon::parse($request->start_date)->startOfDay() : Carbon::today()->startOfDay();
+        $end   = $request->end_date   ? Carbon::parse($request->end_date)->endOfDay()   : Carbon::today()->endOfDay();
+
+        $orders = Order::with('user')->whereBetween('date', [$start, $end])->latest()->get();
+        $paymentDetailsQuery = PaymentDetail::with(['user','paymentMethod','order'])->whereBetween('date', [$start, $end])->latest();
+
+        if ($request->boolean('print')) {
+            $paymentDetails = $paymentDetailsQuery->get();   // ✅ print: get()
+            return view('report.print.print-date-wise-report', compact('company','orders','paymentDetails','start','end'));
+        } else {
+            $paymentDetails = $paymentDetailsQuery->paginate(15)->withQueryString();
+        }
+
+        return view('report.sale.date-wise-report', compact('company','orders','paymentDetails'));
+    }
 }

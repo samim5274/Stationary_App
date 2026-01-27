@@ -81,13 +81,11 @@
                             <div class="flex items-center justify-between">
                                 <label class="inline-flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
                                     <input
-                                        type="checkbox"
+                                        type="checkbox" checked
                                         name="remember"
                                         class="w-4 h-4 text-purple-600 border-gray-300 rounded
                                             focus:ring-2 focus:ring-purple-200
-                                            dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-purple-500/30"
-                                        {{ old('remember') ? 'checked' : '' }}
-                                    >
+                                            dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-purple-500/30">
                                     Remember me
                                 </label>
 
