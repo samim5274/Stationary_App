@@ -22,9 +22,11 @@
 
     $activeDailyReport = $isActive(['sale.report.*']);
     $activeDateWiseReport = $isActive(['date.wise.sale.report', 'date.wise.sale.report.*',]);
+    $activePaymentMethodSaleReport = $isActive(['payment.method.wise.sale.report', 'payment.method.wise.sale.report.*',]);
+    $activeUserSaleReport = $isActive(['user.wise.sale.report', 'user.wise.sale.report.*',]);
 
     $settingsOpen   = ($activeCategory || $activeSubCat || $activeProducts);
-    $saleReportOpen = ($activeDailyReport || $activeDateWiseReport);
+    $saleReportOpen = ($activeDailyReport || $activeDateWiseReport || $activePaymentMethodSaleReport || $activeUserSaleReport);
 @endphp
 
 
@@ -125,6 +127,22 @@
                             hover:text-gray-800 dark:hover:text-gray-200">
                         <a class="block w-full" href="{{ route('date.wise.sale.report') }}">
                             Date-wise Sales Report
+                        </a>
+                    </li>
+
+                    <li class="px-2 py-1 rounded-md transition-colors duration-150
+                            {{ $activePaymentMethodSaleReport ? 'bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100' : '' }}
+                            hover:text-gray-800 dark:hover:text-gray-200">
+                        <a class="block w-full" href="{{ route('payment.method.wise.sale.report') }}">
+                            Payment Method-wise Sale Report
+                        </a>
+                    </li>
+
+                    <li class="px-2 py-1 rounded-md transition-colors duration-150
+                            {{ $activeUserSaleReport ? 'bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100' : '' }}
+                            hover:text-gray-800 dark:hover:text-gray-200">
+                        <a class="block w-full" href="{{ route('user.wise.sale.report') }}">
+                            User-wise Sale Report
                         </a>
                     </li>
 
@@ -350,6 +368,22 @@
                             hover:text-gray-800 dark:hover:text-gray-200">
                         <a class="w-full block" href="{{ route('date.wise.sale.report') }}">
                             Daily Sale Report
+                        </a>
+                    </li>
+
+                    <li class="px-2 py-1 rounded-md transition-colors duration-150
+                            {{ $activePaymentMethodSaleReport ? 'bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100' : '' }}
+                            hover:text-gray-800 dark:hover:text-gray-200">
+                        <a class="w-full block" href="{{ route('payment.method.wise.sale.report') }}">
+                            Payment Method-wise Sale Report
+                        </a>
+                    </li>
+
+                    <li class="px-2 py-1 rounded-md transition-colors duration-150
+                            {{ $activeUserSaleReport ? 'bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100' : '' }}
+                            hover:text-gray-800 dark:hover:text-gray-200">
+                        <a class="w-full block" href="{{ route('user.wise.sale.report') }}">
+                            User-wise Sale Report
                         </a>
                     </li>
 

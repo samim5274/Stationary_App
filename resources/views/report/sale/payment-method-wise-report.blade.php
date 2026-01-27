@@ -24,7 +24,7 @@
                     <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between my-4">
                         {{-- LEFT : Title --}}
                         <h2 class="text-2xl font-semibold text-gray-700 dark:text-gray-200">
-                            Date wise Sale Report
+                            Payment Method wise Sale Report
                         </h2>
 
                         {{-- RIGHT : Action Button --}}
@@ -36,7 +36,7 @@
 
                     @include('layouts.message')
 
-                    <form action="{{ route('filter-date-wise-sale-report') }}" method="GET">
+                    <form action="{{ route('filter-payment-method-wise-sale-report') }}" method="GET">
                         <div class="grid gap-6 mb-8 grid-cols-1 sm:grid-cols-2 xl:grid-cols-4">
 
                             <!-- Start Date -->
@@ -67,6 +67,31 @@
                                         bg-gray-50 dark:bg-gray-700
                                         border-gray-300 dark:border-gray-600
                                         focus:ring-2 focus:ring-purple-500 focus:outline-none">
+                            </div>
+
+                            <!-- Payment Method-->
+                            <div class="p-5 bg-white dark:bg-gray-800 rounded-xl shadow border dark:border-gray-700">
+                                <label class="flex items-center text-sm text-gray-500 dark:text-gray-400 mb-2">
+                                    <i class="fa-solid fa-calendar-check mr-2 text-purple-600"></i>
+                                    Payment Method
+                                </label>
+
+                                <select name="payment_method"
+                                    class="w-full px-3 py-2 rounded-lg border text-gray-800 dark:text-gray-100
+                                        bg-gray-50 dark:bg-gray-700
+                                        border-gray-300 dark:border-gray-600
+                                        focus:ring-2 focus:ring-purple-500 focus:outline-none">
+
+                                    <option value="">-- All Payment Methods --</option>
+
+                                    @foreach($paymentMethods as $pm)
+                                        <option value="{{ $pm->id }}"
+                                            {{ request('payment_method') == $pm->id ? 'selected' : '' }}>
+                                            {{ $pm->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+
                             </div>
 
                             <!-- Filter Button -->

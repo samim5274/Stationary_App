@@ -84,9 +84,12 @@ Route::group(['middleware' => ['admin']], function(){
         Route::get('/daily', [SaleReportController::class, 'daily'])->name('sale.report.daily');
         Route::get('/order-detials/{reg}', [SaleReportController::class, 'orderDetails'])->name('order.details.view');
         Route::get('/print-daily-report', [SaleReportController::class, 'printDailyReport'])->name('print-daily-sale');
-
         Route::get('/date-wise-sale-report', [SaleReportController::class, 'dateWiseSaleReport'])->name('date.wise.sale.report');
         Route::get('/filter-date-wise-sale-report', [SaleReportController::class, 'filteDateWiseSaleReport'])->name('filter-date-wise-sale-report');
+        Route::get('/payment-method-wise-sale-report', [SaleReportController::class, 'paymentMethodWiseSaleReport'])->name('payment.method.wise.sale.report');
+        Route::get('/filter-payment-method-wise-sale-report', [SaleReportController::class, 'filterPaymentMethodWiseSaleReport'])->name('filter-payment-method-wise-sale-report');
+        Route::get('/user-wise-sale-report', [SaleReportController::class, 'userSaleReport'])->name('user.wise.sale.report');
+        Route::get('/filter-user-wise-sale-report', [SaleReportController::class, 'filterUserSaleReport'])->name('filter-user-wise-sale-report');
     });
 
 });
