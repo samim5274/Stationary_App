@@ -9,6 +9,7 @@ use App\Http\Controllers\Product\ProductController;
 use App\Http\Controllers\Cart\CartController;
 use App\Http\Controllers\Order\OrderController;
 use App\Http\Controllers\Report\Sale\SaleReportController;
+use App\Http\Controllers\Expenses\ExpensesController;
 
 
 
@@ -90,6 +91,15 @@ Route::group(['middleware' => ['admin']], function(){
         Route::get('/filter-payment-method-wise-sale-report', [SaleReportController::class, 'filterPaymentMethodWiseSaleReport'])->name('filter-payment-method-wise-sale-report');
         Route::get('/user-wise-sale-report', [SaleReportController::class, 'userSaleReport'])->name('user.wise.sale.report');
         Route::get('/filter-user-wise-sale-report', [SaleReportController::class, 'filterUserSaleReport'])->name('filter-user-wise-sale-report');
+    });
+
+    Route::prefix('expenses')->group(function () {
+        Route::get('/', [ExpensesController::class, 'index'])->name('expenses');
+        Route::get('/get-subcategories/{id}', [ExpensesController::class, 'getSubCategory'])->name('expenses.subcategories');
+        Route::post('/create', [ExpensesController::class, 'create'])->name('create.expenses');
+        Route::get('/view-detials/{id}', [ExpensesController::class, 'viewDetials'])->name('expenses-view-details');
+        Route::get('/delete/{id}', [ExpensesController::class, 'delete'])->name('expenses-delete');
+        Route::get('/expenses-print/{id}', [ExpensesController::class, 'printExpenses'])->name('expenses.print');
     });
 
 });

@@ -19,14 +19,17 @@
     $activeCategory  = $isActive(['category*']);
     $activeSubCat    = $isActive(['subcategory*', 'sub-category*']);
     $activeProducts  = $isActive(['product.list', 'products*', 'product*']);
+    $settingsOpen   = ($activeCategory || $activeSubCat || $activeProducts);
 
     $activeDailyReport = $isActive(['sale.report.*']);
     $activeDateWiseReport = $isActive(['date.wise.sale.report', 'date.wise.sale.report.*',]);
     $activePaymentMethodSaleReport = $isActive(['payment.method.wise.sale.report', 'payment.method.wise.sale.report.*',]);
     $activeUserSaleReport = $isActive(['user.wise.sale.report', 'user.wise.sale.report.*',]);
-
-    $settingsOpen   = ($activeCategory || $activeSubCat || $activeProducts);
     $saleReportOpen = ($activeDailyReport || $activeDateWiseReport || $activePaymentMethodSaleReport || $activeUserSaleReport);
+
+    $activeExpenses = $isActive(['expenses', 'expenses.*',]);
+    $expensesOpen = ($activeExpenses );
+
 @endphp
 
 
@@ -143,6 +146,47 @@
                             hover:text-gray-800 dark:hover:text-gray-200">
                         <a class="block w-full" href="{{ route('user.wise.sale.report') }}">
                             User-wise Sale Report
+                        </a>
+                    </li>
+
+                </ul>
+            </li>
+
+            <!-- Sale Report Dropdown -->
+            <li class="relative px-6 py-3" x-data="{ open: {{ $expensesOpen ? 'true' : 'false' }} }">
+                @if($expensesOpen)
+                    <span class="absolute inset-y-0 left-0 w-1 bg-purple-600 rounded-tr-lg rounded-br-lg"></span>
+                @endif
+
+                <button
+                    @click="open = !open"
+                    class="inline-flex items-center justify-between w-full text-sm font-semibold transition-colors duration-150
+                        {{ $expensesOpen ? 'text-gray-800 dark:text-gray-100' : 'text-gray-600 dark:text-gray-400' }}
+                        hover:text-gray-800 dark:hover:text-gray-200"
+                    aria-haspopup="true"
+                    :aria-expanded="open.toString()">
+
+                    <span class="inline-flex items-center">
+                        <i class="fa-solid fa-money-bill-transfer w-5 text-center"></i>
+                        <span class="ml-4">Expenses Details</span>
+                    </span>
+
+                    <i class="fa-solid fa-chevron-down text-xs transition-transform"
+                    :class="open ? 'rotate-180' : ''"></i>
+                </button>
+
+                <ul
+                    x-show="open"
+                    x-transition
+                    x-cloak
+                    class="p-2 mt-2 space-y-2 overflow-hidden text-sm font-medium rounded-md shadow-inner
+                        bg-gray-50 text-gray-500 dark:text-gray-400 dark:bg-gray-900">
+
+                    <li class="px-2 py-1 rounded-md transition-colors duration-150
+                            {{ $activeExpenses ? 'bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100' : '' }}
+                            hover:text-gray-800 dark:hover:text-gray-200">
+                        <a class="block w-full" href="{{ route('expenses') }}">
+                            Expenses
                         </a>
                     </li>
 
@@ -384,6 +428,55 @@
                             hover:text-gray-800 dark:hover:text-gray-200">
                         <a class="w-full block" href="{{ route('user.wise.sale.report') }}">
                             User-wise Sale Report
+                        </a>
+                    </li>
+
+                </ul>
+            </li>
+
+            <!-- Report Dropdown -->
+            <li class="relative px-6 py-3"
+                x-data="{ reportOpen: {{ $expensesOpen ? 'true' : 'false' }} }">
+
+                @if($expensesOpen)
+                    <span class="absolute inset-y-0 left-0 w-1 bg-purple-600 rounded-tr-lg rounded-br-lg" aria-hidden="true"></span>
+                @endif
+
+                <button
+                    class="inline-flex items-center justify-between w-full text-sm font-semibold transition-colors duration-150
+                        {{ $expensesOpen ? 'text-gray-800 dark:text-gray-100' : 'text-gray-600 dark:text-gray-400' }}
+                        hover:text-gray-800 dark:hover:text-gray-200"
+                    @click="reportOpen = !reportOpen"
+                    aria-haspopup="true"
+                    :aria-expanded="reportOpen.toString()">
+
+                    <span class="inline-flex items-center">
+                        <i class="fa-solid fa-money-bill-transfer w-5 text-center"></i>
+                        <span class="ml-4">Expenses Details</span>
+                    </span>
+
+                    <i class="fa-solid fa-chevron-down text-xs transition-transform"
+                    :class="reportOpen ? 'rotate-180' : ''"></i>
+                </button>
+
+                <ul
+                    x-show="reportOpen"
+                    x-transition:enter="transition-all ease-in-out duration-300"
+                    x-transition:enter-start="opacity-0 max-h-0"
+                    x-transition:enter-end="opacity-100 max-h-xl"
+                    x-transition:leave="transition-all ease-in-out duration-300"
+                    x-transition:leave-start="opacity-100 max-h-xl"
+                    x-transition:leave-end="opacity-0 max-h-0"
+                    x-cloak
+                    class="p-2 mt-2 space-y-2 overflow-hidden text-sm font-medium rounded-md shadow-inner
+                        bg-gray-50 text-gray-500 dark:text-gray-400 dark:bg-gray-900"
+                    aria-label="submenu">
+
+                    <li class="px-2 py-1 rounded-md transition-colors duration-150
+                            {{ $activeExpenses ? 'bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100' : '' }}
+                            hover:text-gray-800 dark:hover:text-gray-200">
+                        <a class="w-full block" href="{{ route('expenses') }}">
+                            Expenses
                         </a>
                     </li>
 

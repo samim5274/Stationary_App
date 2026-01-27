@@ -166,7 +166,7 @@
     </div>
 
     <p class="note">
-        <strong>Note:</strong> Developed by <strong>SAMIM-HosseN</strong>. Call: +88015 3302-1557
+        Developed by <strong>SAMIM-HosseN</strong>. Call: +88015 3302-1557
     </p>
 </div>
 
