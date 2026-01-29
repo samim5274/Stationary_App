@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jan 25, 2026 at 09:16 AM
+-- Generation Time: Jan 29, 2026 at 06:13 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -20,6 +20,24 @@ SET time_zone = "+00:00";
 --
 -- Database: `stationery_db`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `carts`
+--
+
+CREATE TABLE `carts` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `reg` bigint(20) UNSIGNED NOT NULL,
+  `date` date NOT NULL,
+  `user_id` bigint(20) UNSIGNED NOT NULL,
+  `product_id` bigint(20) UNSIGNED NOT NULL,
+  `quantity` decimal(12,2) NOT NULL DEFAULT 1.00,
+  `price` decimal(12,2) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -44,9 +62,129 @@ CREATE TABLE `companies` (
 --
 
 INSERT INTO `companies` (`id`, `name`, `address`, `email`, `phone`, `website`, `logo`, `created_at`, `updated_at`) VALUES
-(1, 'EasyShopX Ltd', 'House 12, Road 5, Uttara, Dhaka', 'info@easyshopx.com', '01711111111', 'https://easyshopx.com', 'companies/logo1.png', '2026-01-24 03:48:16', '2026-01-24 03:48:16'),
-(2, 'Smart Tech Solution', 'Mirpur 10, Dhaka', 'contact@smarttech.com', '01822222222', 'https://smarttech.com', 'companies/logo2.png', '2026-01-24 03:48:16', '2026-01-24 03:48:16'),
-(3, 'NextGen IT', 'Dhanmondi, Dhaka', 'hello@nextgenit.com', '01933333333', 'https://nextgenit.com', 'companies/logo3.png', '2026-01-24 03:48:16', '2026-01-24 03:48:16');
+(1, 'EasyShopX Ltd', 'House 12, Road 5, Uttara, Dhaka', 'info@easyshopx.com', '01711111111', 'https://easyshopx.com', 'companies/logo1.png', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(2, 'Smart Tech Solution', 'Mirpur 10, Dhaka', 'contact@smarttech.com', '01822222222', 'https://smarttech.com', 'companies/logo2.png', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(3, 'NextGen IT', 'Dhanmondi, Dhaka', 'hello@nextgenit.com', '01933333333', 'https://nextgenit.com', 'companies/logo3.png', '2026-01-28 22:18:30', '2026-01-28 22:18:30');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `excategories`
+--
+
+CREATE TABLE `excategories` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `excategories`
+--
+
+INSERT INTO `excategories` (`id`, `name`, `created_at`, `updated_at`) VALUES
+(1, 'Writing Instruments', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(2, 'Paper Products', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(3, 'Office Supplies', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(4, 'School Supplies', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(5, 'Art & Craft', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(6, 'Files & Folders', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(7, 'Electronics', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(8, 'Printing & Accessories', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(9, 'Others', '2026-01-28 22:18:30', '2026-01-28 22:18:30');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `expenses`
+--
+
+CREATE TABLE `expenses` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `category_id` bigint(20) UNSIGNED NOT NULL,
+  `subcategory_id` bigint(20) UNSIGNED NOT NULL,
+  `user_id` bigint(20) UNSIGNED NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `date` date NOT NULL,
+  `amount` decimal(12,2) NOT NULL,
+  `remark` text NOT NULL DEFAULT 'N/A',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `expenses`
+--
+
+INSERT INTO `expenses` (`id`, `category_id`, `subcategory_id`, `user_id`, `title`, `date`, `amount`, `remark`, `created_at`, `updated_at`) VALUES
+(1, 1, 4, 1, 'Sports Competition Notice', '2026-01-29', 1500.00, 'Surgon X3df#f', '2026-01-28 22:18:49', '2026-01-28 22:18:49'),
+(2, 3, 16, 1, 'Bazar', '2026-01-29', 1800.00, 'Surgon X3df#f', '2026-01-28 22:21:55', '2026-01-28 22:21:55');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `exsubcategories`
+--
+
+CREATE TABLE `exsubcategories` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `category_id` bigint(20) UNSIGNED NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `exsubcategories`
+--
+
+INSERT INTO `exsubcategories` (`id`, `category_id`, `name`, `created_at`, `updated_at`) VALUES
+(1, 1, 'Ball Pen', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(2, 1, 'Gel Pen', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(3, 1, 'Pencil', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(4, 1, 'Marker', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(5, 1, 'Highlighter', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(6, 1, 'Eraser', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(7, 1, 'Sharpener', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(8, 2, 'A4 Paper', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(9, 2, 'A3 Paper', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(10, 2, 'Notebook', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(11, 2, 'Diary', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(12, 2, 'Drawing Paper', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(13, 2, 'Carbon Paper', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(14, 3, 'Stapler', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(15, 3, 'Staple Pin', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(16, 3, 'Paper Clip', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(17, 3, 'Calculator', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(18, 3, 'Glue', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(19, 3, 'Tape', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(20, 3, 'Punch Machine', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(21, 4, 'School Bag', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(22, 4, 'Geometry Box', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(23, 4, 'Color Pencil', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(24, 4, 'Crayons', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(25, 4, 'Scale', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(26, 4, 'Exam Pad', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(27, 5, 'Paint Brush', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(28, 5, 'Poster Color', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(29, 5, 'Water Color', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(30, 5, 'Canvas', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(31, 5, 'Craft Paper', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(32, 6, 'File Folder', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(33, 6, 'Ring File', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(34, 6, 'Document File', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(35, 6, 'Envelope', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(36, 7, 'Calculator', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(37, 7, 'Pen Drive', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(38, 7, 'Mouse', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(39, 7, 'Keyboard', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(40, 8, 'Printer Ink', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(41, 8, 'Toner', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(42, 8, 'Lamination Sheet', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(43, 8, 'Binding Comb', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(44, 9, 'Gift Item', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(45, 9, 'Miscellaneous', '2026-01-28 22:18:30', '2026-01-28 22:18:30');
 
 -- --------------------------------------------------------
 
@@ -90,7 +228,14 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (7, '2026_01_24_092402_create_pdr_categories_table', 1),
 (8, '2026_01_24_092408_create_pdr_sub_categories_table', 1),
 (9, '2026_01_24_092416_create_products_table', 1),
-(10, '2026_01_24_092430_create_pdr_stocks_table', 1);
+(10, '2026_01_24_092430_create_pdr_stocks_table', 1),
+(11, '2026_01_25_100856_create_payment_methods_table', 1),
+(12, '2026_01_25_102637_create_carts_table', 1),
+(13, '2026_01_25_102644_create_orders_table', 1),
+(14, '2026_01_25_102655_create_payment_details_table', 1),
+(15, '2026_01_27_084852_create_excategories_table', 1),
+(16, '2026_01_27_084911_create_exsubcategories_table', 1),
+(17, '2026_01_27_084933_create_expenses_table', 1);
 
 -- --------------------------------------------------------
 
@@ -119,6 +264,25 @@ CREATE TABLE `model_has_roles` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `orders`
+--
+
+CREATE TABLE `orders` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `date` date NOT NULL,
+  `user_id` bigint(20) UNSIGNED NOT NULL,
+  `reg` bigint(20) UNSIGNED NOT NULL,
+  `total` decimal(12,2) DEFAULT NULL,
+  `status` int(11) NOT NULL DEFAULT 0,
+  `customerName` varchar(255) NOT NULL DEFAULT 'Guest User',
+  `customerPhone` varchar(255) NOT NULL DEFAULT '0',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `password_reset_tokens`
 --
 
@@ -127,6 +291,55 @@ CREATE TABLE `password_reset_tokens` (
   `token` varchar(255) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `payment_details`
+--
+
+CREATE TABLE `payment_details` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `date` date NOT NULL,
+  `user_id` bigint(20) UNSIGNED NOT NULL,
+  `order_id` bigint(20) UNSIGNED NOT NULL,
+  `reg` bigint(20) UNSIGNED NOT NULL,
+  `total` decimal(12,2) DEFAULT NULL,
+  `discount` decimal(12,2) DEFAULT NULL,
+  `vat` decimal(12,2) DEFAULT NULL,
+  `payable` decimal(12,2) DEFAULT NULL,
+  `pay` decimal(12,2) DEFAULT NULL,
+  `due` decimal(12,2) DEFAULT NULL,
+  `payment_method_id` bigint(20) UNSIGNED NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `payment_methods`
+--
+
+CREATE TABLE `payment_methods` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `payment_methods`
+--
+
+INSERT INTO `payment_methods` (`id`, `name`, `description`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'Cash', 'Cash Payment', 1, '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(2, 'Credit Card', 'Pay via credit/debit card', 1, '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(3, 'Bkash', 'Mobile banking payment', 1, '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(4, 'Nagad', 'Mobile banking payment', 1, '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(5, 'Rocket', 'Mobile banking payment', 1, '2026-01-28 22:18:30', '2026-01-28 22:18:30');
 
 -- --------------------------------------------------------
 
@@ -146,11 +359,11 @@ CREATE TABLE `pdr_categories` (
 --
 
 INSERT INTO `pdr_categories` (`id`, `name`, `created_at`, `updated_at`) VALUES
-(1, 'Grocery', '2026-01-24 03:48:16', '2026-01-25 02:16:26'),
-(2, 'Beverage', '2026-01-24 03:48:16', '2026-01-24 03:48:16'),
-(3, 'Dairy', '2026-01-24 03:48:16', '2026-01-24 03:48:16'),
-(4, 'Bakery', '2026-01-24 03:48:16', '2026-01-24 03:48:16'),
-(5, 'Snacks', '2026-01-24 03:48:16', '2026-01-24 03:48:16');
+(1, 'Grocery', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(2, 'Beverage', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(3, 'Dairy', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(4, 'Bakery', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(5, 'Snacks', '2026-01-28 22:18:30', '2026-01-28 22:18:30');
 
 -- --------------------------------------------------------
 
@@ -171,15 +384,6 @@ CREATE TABLE `pdr_stocks` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `pdr_stocks`
---
-
-INSERT INTO `pdr_stocks` (`id`, `product_id`, `ref`, `date`, `type`, `qty`, `remark`, `created_by`, `created_at`, `updated_at`) VALUES
-(1, 53, 'OPEN-20260125053649-TAZG', '2026-01-25', 'IN', 15, 'Opening stock added at product create', NULL, '2026-01-24 23:36:49', '2026-01-24 23:36:49'),
-(2, 54, 'OPEN-20260125053735-I5E4', '2026-01-25', 'IN', 15, 'Opening stock added at product create', '1', '2026-01-24 23:37:35', '2026-01-24 23:37:35'),
-(3, 53, 'ADJ-20260125064807-GOJQ', '2026-01-25', 'IN', 3, 'Stock adjusted from edit', '1', '2026-01-25 00:48:07', '2026-01-25 00:48:07');
-
 -- --------------------------------------------------------
 
 --
@@ -199,21 +403,21 @@ CREATE TABLE `pdr_sub_categories` (
 --
 
 INSERT INTO `pdr_sub_categories` (`id`, `category_id`, `name`, `created_at`, `updated_at`) VALUES
-(1, 1, 'Rice', '2026-01-24 03:48:16', '2026-01-24 03:48:16'),
-(2, 1, 'Oil', '2026-01-24 03:48:16', '2026-01-24 03:48:16'),
-(3, 1, 'Spices', '2026-01-24 03:48:16', '2026-01-24 03:48:16'),
-(4, 2, 'Soft Drink', '2026-01-24 03:48:16', '2026-01-24 03:48:16'),
-(5, 2, 'Juice', '2026-01-24 03:48:16', '2026-01-24 03:48:16'),
-(6, 2, 'Energy Drink', '2026-01-24 03:48:16', '2026-01-24 03:48:16'),
-(7, 3, 'Milk', '2026-01-24 03:48:16', '2026-01-24 03:48:16'),
-(8, 3, 'Butter', '2026-01-24 03:48:16', '2026-01-24 03:48:16'),
-(9, 3, 'Cheese', '2026-01-24 03:48:16', '2026-01-24 03:48:16'),
-(10, 4, 'Bread', '2026-01-24 03:48:16', '2026-01-24 03:48:16'),
-(11, 4, 'Cake', '2026-01-24 03:48:16', '2026-01-24 03:48:16'),
-(12, 4, 'Biscuit', '2026-01-24 03:48:16', '2026-01-24 03:48:16'),
-(13, 5, 'Chips', '2026-01-24 03:48:16', '2026-01-24 03:48:16'),
-(14, 5, 'Chocolate', '2026-01-24 03:48:16', '2026-01-24 03:48:16'),
-(15, 5, 'Noodles', '2026-01-24 03:48:16', '2026-01-24 03:48:16');
+(1, 1, 'Rice', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(2, 1, 'Oil', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(3, 1, 'Spices', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(4, 2, 'Soft Drink', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(5, 2, 'Juice', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(6, 2, 'Energy Drink', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(7, 3, 'Milk', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(8, 3, 'Butter', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(9, 3, 'Cheese', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(10, 4, 'Bread', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(11, 4, 'Cake', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(12, 4, 'Biscuit', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(13, 5, 'Chips', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(14, 5, 'Chocolate', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(15, 5, 'Noodles', '2026-01-28 22:18:30', '2026-01-28 22:18:30');
 
 -- --------------------------------------------------------
 
@@ -283,59 +487,56 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`id`, `name`, `slug`, `sku`, `category_id`, `subcategory_id`, `price`, `discount`, `cost_price`, `stock`, `min_stock`, `unit`, `size`, `image`, `availability`, `status`, `manufactured_at`, `expired_at`, `description`, `created_at`, `updated_at`) VALUES
-(1, 'Product 1', 'product-1-9h2n', 'SKU-TODPC6FS', 2, 4, 359.00, 7.00, 189.00, 53, 11, 'pcs', '585g', NULL, 1, 1, '2025-12-15', '2026-08-12', 'Seeder generated product', '2026-01-24 03:48:16', '2026-01-24 03:48:16'),
-(2, 'Product 2', 'product-2-ytjw', 'SKU-YWYUXK1M', 1, 3, 185.00, 39.00, 172.00, 142, 6, 'pcs', '764g', NULL, 1, 1, '2025-11-04', '2026-12-27', 'Seeder generated product', '2026-01-24 03:48:16', '2026-01-24 03:48:16'),
-(3, 'Product 3', 'product-3-zfiw', 'SKU-BWVGZYLT', 1, 1, 415.00, 21.00, 143.00, 43, 14, 'pcs', '891g', NULL, 1, 1, '2025-10-31', '2026-04-14', 'Seeder generated product', '2026-01-24 03:48:16', '2026-01-24 03:48:16'),
-(4, 'Product 4', 'product-4-971l', 'SKU-0DKA3MRR', 4, 10, 90.00, 23.00, 259.00, 64, 20, 'pcs', '371g', NULL, 1, 1, '2025-10-25', '2026-05-07', 'Seeder generated product', '2026-01-24 03:48:16', '2026-01-24 03:48:16'),
-(5, 'Product 5', 'product-5-i7wy', 'SKU-3HB26LXF', 4, 12, 136.00, 16.00, 181.00, 155, 10, 'pcs', '951g', NULL, 1, 1, '2025-11-19', '2026-03-30', 'Seeder generated product', '2026-01-24 03:48:16', '2026-01-24 03:48:16'),
-(6, 'Product 6', 'product-6-vnpn', 'SKU-TUUR8WOF', 5, 15, 326.00, 3.00, 279.00, 134, 18, 'pcs', '865g', NULL, 1, 1, '2025-12-26', '2026-05-27', 'Seeder generated product', '2026-01-24 03:48:16', '2026-01-24 03:48:16'),
-(7, 'Product 7', 'product-7-f8bq', 'SKU-4BZUKQH6', 5, 15, 371.00, 24.00, 122.00, 7, 14, 'pcs', '295g', NULL, 1, 1, '2025-10-20', '2026-05-12', 'Seeder generated product', '2026-01-24 03:48:16', '2026-01-24 03:48:16'),
-(8, 'Product 8', 'product-8-njk4', 'SKU-HWTAFARP', 4, 10, 364.00, 28.00, 240.00, 72, 7, 'pcs', '559g', NULL, 1, 1, '2026-01-12', '2026-10-06', 'Seeder generated product', '2026-01-24 03:48:16', '2026-01-24 03:48:16'),
-(9, 'Product 9', 'product-9-yyta', 'SKU-JPPMP8MZ', 1, 2, 149.00, 9.00, 362.00, 102, 20, 'pcs', '491g', NULL, 1, 1, '2025-12-11', '2026-09-05', 'Seeder generated product', '2026-01-24 03:48:16', '2026-01-24 03:48:16'),
-(10, 'Product 10', 'product-10-r0he', 'SKU-FHQXPBCO', 5, 15, 160.00, 9.00, 49.00, 86, 15, 'pcs', '711g', NULL, 1, 1, '2025-12-02', '2026-03-25', 'Seeder generated product', '2026-01-24 03:48:16', '2026-01-24 03:48:16'),
-(11, 'Product 11', 'product-11-4bqf', 'SKU-L4B0CPHJ', 1, 3, 270.00, 37.00, 39.00, 159, 13, 'pcs', '275g', NULL, 1, 1, '2025-11-06', '2026-11-04', 'Seeder generated product', '2026-01-24 03:48:16', '2026-01-24 03:48:16'),
-(12, 'Product 12', 'product-12-suho', 'SKU-FF4G2CBZ', 3, 8, 164.00, 14.00, 399.00, 143, 13, 'pcs', '281g', NULL, 1, 1, '2025-11-28', '2026-03-31', 'Seeder generated product', '2026-01-24 03:48:16', '2026-01-24 03:48:16'),
-(13, 'Product 13', 'product-13-p5pl', 'SKU-RH1SDIKC', 3, 8, 207.00, 20.00, 219.00, 184, 6, 'pcs', '488g', NULL, 1, 1, '2025-11-13', '2026-08-22', 'Seeder generated product', '2026-01-24 03:48:16', '2026-01-24 03:48:16'),
-(14, 'Product 14', 'product-14-c0xt', 'SKU-TQMS82WS', 2, 4, 362.00, 33.00, 58.00, 200, 13, 'pcs', '361g', NULL, 1, 1, '2025-11-19', '2026-03-28', 'Seeder generated product', '2026-01-24 03:48:16', '2026-01-24 03:48:16'),
-(15, 'Product 15', 'product-15-qxar', 'SKU-EVDXBFWP', 1, 1, 401.00, 10.00, 333.00, 81, 19, 'pcs', '884g', NULL, 1, 1, '2026-01-09', '2026-05-01', 'Seeder generated product', '2026-01-24 03:48:16', '2026-01-24 03:48:16'),
-(16, 'Product 16', 'product-16-2urz', 'SKU-SRSY282P', 4, 10, 169.00, 31.00, 252.00, 121, 13, 'pcs', '706g', NULL, 1, 1, '2025-10-22', '2026-05-22', 'Seeder generated product', '2026-01-24 03:48:16', '2026-01-24 03:48:16'),
-(17, 'Product 17', 'product-17-pnzw', 'SKU-HPQZTYBH', 1, 3, 208.00, 0.00, 174.00, 183, 12, 'pcs', '313g', NULL, 1, 1, '2025-11-28', '2026-10-07', 'Seeder generated product', '2026-01-24 03:48:16', '2026-01-24 03:48:16'),
-(18, 'Product 18', 'product-18-9zxu', 'SKU-XEX9TUXN', 5, 13, 342.00, 24.00, 154.00, 171, 7, 'pcs', '599g', NULL, 1, 1, '2025-10-26', '2026-12-05', 'Seeder generated product', '2026-01-24 03:48:16', '2026-01-24 03:48:16'),
-(19, 'Product 19', 'product-19-jok5', 'SKU-Y45QCI8R', 2, 4, 224.00, 30.00, 61.00, 42, 18, 'pcs', '281g', NULL, 1, 1, '2025-11-28', '2027-01-12', 'Seeder generated product', '2026-01-24 03:48:16', '2026-01-24 03:48:16'),
-(20, 'Product 20', 'product-20-vx4c', 'SKU-WGBEQEZ3', 1, 3, 357.00, 14.00, 385.00, 101, 10, 'pcs', '995g', NULL, 1, 1, '2025-10-26', '2026-03-28', 'Seeder generated product', '2026-01-24 03:48:16', '2026-01-24 03:48:16'),
-(21, 'Product 21', 'product-21-bhdc', 'SKU-YBVOR0EI', 5, 14, 167.00, 44.00, 179.00, 182, 18, 'pcs', '699g', NULL, 1, 1, '2025-12-03', '2026-05-20', 'Seeder generated product', '2026-01-24 03:48:16', '2026-01-24 03:48:16'),
-(22, 'Product 22', 'product-22-scgi', 'SKU-P05ARNRL', 1, 2, 118.00, 21.00, 217.00, 146, 17, 'pcs', '803g', NULL, 1, 1, '2025-10-17', '2027-01-14', 'Seeder generated product', '2026-01-24 03:48:16', '2026-01-24 03:48:16'),
-(23, 'Product 23', 'product-23-4bmd', 'SKU-VPYU2SSH', 2, 6, 246.00, 5.00, 187.00, 91, 6, 'pcs', '329g', NULL, 1, 1, '2025-10-28', '2026-07-12', 'Seeder generated product', '2026-01-24 03:48:16', '2026-01-24 03:48:16'),
-(24, 'Product 24', 'product-24-a335', 'SKU-MFNA6VV2', 5, 15, 143.00, 47.00, 45.00, 33, 15, 'pcs', '604g', NULL, 1, 1, '2025-11-08', '2026-10-14', 'Seeder generated product', '2026-01-24 03:48:16', '2026-01-24 03:48:16'),
-(25, 'Product 25', 'product-25-gehv', 'SKU-4ORE0OR1', 1, 2, 242.00, 45.00, 398.00, 47, 17, 'pcs', '262g', NULL, 1, 1, '2025-11-17', '2026-07-15', 'Seeder generated product', '2026-01-24 03:48:16', '2026-01-24 03:48:16'),
-(26, 'Product 26', 'product-26-xnyv', 'SKU-64MUSTWA', 5, 15, 118.00, 19.00, 212.00, 97, 11, 'pcs', '529g', NULL, 1, 1, '2025-11-16', '2027-01-07', 'Seeder generated product', '2026-01-24 03:48:16', '2026-01-24 03:48:16'),
-(27, 'Product 27', 'product-27-mh5h', 'SKU-IG9XC6PM', 2, 5, 285.00, 26.00, 52.00, 184, 13, 'pcs', '565g', NULL, 1, 1, '2025-10-25', '2026-09-21', 'Seeder generated product', '2026-01-24 03:48:16', '2026-01-24 03:48:16'),
-(28, 'Product 28', 'product-28-jj9j', 'SKU-F0GMBNSR', 3, 9, 123.00, 32.00, 164.00, 85, 7, 'pcs', '968g', NULL, 1, 1, '2025-12-07', '2026-05-12', 'Seeder generated product', '2026-01-24 03:48:16', '2026-01-24 03:48:16'),
-(29, 'Product 29', 'product-29-vigw', 'SKU-BABCQ9D8', 4, 10, 203.00, 18.00, 213.00, 102, 10, 'pcs', '812g', NULL, 1, 1, '2025-11-01', '2027-01-23', 'Seeder generated product', '2026-01-24 03:48:16', '2026-01-24 03:48:16'),
-(30, 'Product 30', 'product-30-jyob', 'SKU-TO1Y26FA', 5, 15, 498.00, 5.00, 212.00, 51, 16, 'pcs', '504g', NULL, 1, 1, '2025-10-28', '2026-04-04', 'Seeder generated product', '2026-01-24 03:48:16', '2026-01-24 03:48:16'),
-(31, 'Product 31', 'product-31-mmjf', 'SKU-DH9TAOTJ', 2, 5, 153.00, 9.00, 317.00, 145, 20, 'pcs', '498g', NULL, 1, 1, '2025-10-31', '2026-04-05', 'Seeder generated product', '2026-01-24 03:48:16', '2026-01-24 03:48:16'),
-(32, 'Product 32', 'product-32-x9qf', 'SKU-IHGKDNQR', 4, 11, 282.00, 48.00, 300.00, 94, 18, 'pcs', '385g', NULL, 1, 1, '2025-11-29', '2026-07-02', 'Seeder generated product', '2026-01-24 03:48:16', '2026-01-24 03:48:16'),
-(33, 'Product 33', 'product-33-3gca', 'SKU-DKQCGDEA', 2, 5, 411.00, 33.00, 305.00, 126, 7, 'pcs', '859g', NULL, 1, 1, '2025-12-14', '2026-04-15', 'Seeder generated product', '2026-01-24 03:48:16', '2026-01-24 03:48:16'),
-(34, 'Product 34', 'product-34-epok', 'SKU-IT6AIAYL', 3, 8, 195.00, 33.00, 282.00, 80, 10, 'pcs', '567g', NULL, 1, 1, '2025-12-19', '2026-06-23', 'Seeder generated product', '2026-01-24 03:48:16', '2026-01-24 03:48:16'),
-(35, 'Product 35', 'product-35-7v5t', 'SKU-EGJKGT3K', 1, 2, 94.00, 26.00, 109.00, 141, 6, 'pcs', '870g', NULL, 1, 1, '2025-11-09', '2026-06-28', 'Seeder generated product', '2026-01-24 03:48:16', '2026-01-24 03:48:16'),
-(36, 'Product 36', 'product-36-i9yy', 'SKU-0P16SUC9', 2, 4, 86.00, 17.00, 210.00, 138, 17, 'pcs', '971g', NULL, 1, 1, '2026-01-09', '2026-07-13', 'Seeder generated product', '2026-01-24 03:48:16', '2026-01-24 03:48:16'),
-(37, 'Product 37', 'product-37-6yuq', 'SKU-D5XXCCJW', 5, 14, 388.00, 23.00, 148.00, 79, 14, 'pcs', '870g', NULL, 1, 1, '2025-11-04', '2026-08-26', 'Seeder generated product', '2026-01-24 03:48:16', '2026-01-24 03:48:16'),
-(38, 'Product 38', 'product-38-6dvy', 'SKU-DCYUI0SV', 3, 9, 216.00, 3.00, 338.00, 42, 16, 'pcs', '906g', NULL, 1, 1, '2025-10-18', '2026-10-12', 'Seeder generated product', '2026-01-24 03:48:16', '2026-01-24 03:48:16'),
-(39, 'Product 39', 'product-39-lxs1', 'SKU-YJKCYG32', 5, 13, 71.00, 3.00, 246.00, 28, 16, 'pcs', '534g', NULL, 1, 1, '2026-01-04', '2026-05-27', 'Seeder generated product', '2026-01-24 03:48:16', '2026-01-24 03:48:16'),
-(40, 'Product 40', 'product-40-h6ub', 'SKU-IZQILDIF', 1, 2, 464.00, 12.00, 306.00, 22, 7, 'pcs', '784g', NULL, 1, 1, '2025-11-28', '2026-06-25', 'Seeder generated product', '2026-01-24 03:48:16', '2026-01-24 03:48:16'),
-(41, 'Product 41', 'product-41-xc3b', 'SKU-TXYPUJSO', 5, 15, 150.00, 2.00, 331.00, 1, 7, 'pcs', '260g', NULL, 1, 1, '2025-12-05', '2026-10-27', 'Seeder generated product', '2026-01-24 03:48:16', '2026-01-24 03:48:16'),
-(42, 'Product 42', 'product-42-zxzq', 'SKU-ETZJGFMO', 2, 5, 119.00, 26.00, 144.00, 101, 19, 'pcs', '878g', NULL, 1, 1, '2025-12-11', '2026-07-03', 'Seeder generated product', '2026-01-24 03:48:16', '2026-01-24 03:48:16'),
-(43, 'Product 43', 'product-43-a6sw', 'SKU-3QQCQHM2', 2, 4, 430.00, 6.00, 143.00, 191, 10, 'pcs', '656g', NULL, 1, 1, '2025-11-02', '2026-08-22', 'Seeder generated product', '2026-01-24 03:48:16', '2026-01-24 03:48:16'),
-(44, 'Product 44', 'product-44-lwwt', 'SKU-PEPWFBOF', 4, 12, 415.00, 32.00, 189.00, 132, 15, 'pcs', '820g', NULL, 1, 1, '2025-12-09', '2026-11-01', 'Seeder generated product', '2026-01-24 03:48:16', '2026-01-24 03:48:16'),
-(45, 'Product 45', 'product-45-uqi7', 'SKU-2FS8VYHJ', 3, 7, 454.00, 45.00, 349.00, 26, 8, 'pcs', '558g', NULL, 1, 1, '2025-11-04', '2026-07-25', 'Seeder generated product', '2026-01-24 03:48:16', '2026-01-24 03:48:16'),
-(46, 'Product 46', 'product-46-gbiu', 'SKU-A9QBSCHP', 4, 11, 184.00, 12.00, 200.00, 29, 5, 'pcs', '647g', NULL, 1, 1, '2025-12-04', '2026-10-12', 'Seeder generated product', '2026-01-24 03:48:16', '2026-01-24 03:48:16'),
-(47, 'Product 47', 'product-47-cad4', 'SKU-MWQW59IW', 1, 1, 403.00, 12.00, 169.00, 87, 7, 'pcs', '335g', NULL, 1, 1, '2025-11-19', '2026-07-12', 'Seeder generated product', '2026-01-24 03:48:16', '2026-01-24 03:48:16'),
-(48, 'Product 48', 'product-48-lojb', 'SKU-I6R5BGZK', 4, 12, 361.00, 39.00, 294.00, 104, 5, 'pcs', '362g', NULL, 1, 1, '2025-11-20', '2027-01-20', 'Seeder generated product', '2026-01-24 03:48:16', '2026-01-24 03:48:16'),
-(49, 'Product 49', 'product-49-fznk', 'SKU-WVDSTUPH', 4, 10, 279.00, 25.00, 237.00, 36, 6, 'pcs', '645g', NULL, 1, 1, '2025-11-07', '2027-01-14', 'Seeder generated product', '2026-01-24 03:48:16', '2026-01-24 03:48:16'),
-(50, 'Product 50', 'product-50-mf2w', 'SKU-0IEVFOMV', 4, 12, 110.00, 49.00, 330.00, 118, 14, 'pcs', '985g', NULL, 1, 1, '2025-12-29', '2026-06-14', 'Seeder generated product', '2026-01-24 03:48:16', '2026-01-24 03:48:16'),
-(53, 'A4 Paper 80gsm', 'a4-paper-80gsm-pzrc', 'A4PAPER8-5969', 1, 2, 450.00, 50.00, NULL, 3, 5, 'pcs', NULL, 'pdr_1769319409_GfPxr8x1.jpg', 1, 1, NULL, NULL, 'Printers in the 1500s scrambled the words from Cicero\'s \"De Finibus Bonorum et Malorum\'\' after mixing the words in each sentence. The familiar \"lorem ipsum dolor sit amet\" text emerged when 16th-century printers adapted Cicero\'s original work, beginning with the phrase \"dolor sit amet consectetur.\"', '2026-01-24 23:36:49', '2026-01-25 00:48:07'),
-(54, 'A4 Paper 80gsm', 'a4-paper-80gsm-tzik', 'A4PAPER8-3300', 2, 6, 450.00, 50.00, NULL, 0, 5, 'pcs', NULL, 'pdr_1769319455_1O2w8c8w.jpg', 1, 1, NULL, NULL, 'Printers in the 1500s scrambled the words from Cicero\'s \"De Finibus Bonorum et Malorum\'\' after mixing the words in each sentence. The familiar \"lorem ipsum dolor sit amet\" text emerged when 16th-century printers adapted Cicero\'s original work, beginning with the phrase \"dolor sit amet consectetur.\"', '2026-01-24 23:37:35', '2026-01-24 23:37:35'),
-(55, 'A4 Paper 80gsm', 'a4-paper-80gsm-dohq', 'a4pager', 2, 6, 450.00, 50.00, NULL, 15, 5, 'pcs', NULL, 'pdr_1769323392_gBXTEoWR.jpg', 1, 1, NULL, NULL, 'Printers in the 1500s scrambled the words from Cicero\'s \"De Finibus Bonorum et Malorum\'\' after mixing the words in each sentence. The familiar \"lorem ipsum dolor sit amet\" text emerged when 16th-century printers adapted Cicero\'s original work, beginning with the phrase \"dolor sit amet consectetur.\"', '2026-01-24 23:39:08', '2026-01-25 00:43:12');
+(1, 'Product 1', 'product-1-tnpu', 'SKU-EZZLX6L0', 2, 5, 109.00, 36.00, 388.00, 160, 14, 'pcs', '963g', NULL, 1, 1, '2025-11-18', '2026-06-11', 'Seeder generated product', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(2, 'Product 2', 'product-2-pdkq', 'SKU-PXS0KBJN', 1, 2, 198.00, 18.00, 295.00, 152, 13, 'pcs', '639g', NULL, 1, 1, '2025-12-15', '2026-05-03', 'Seeder generated product', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(3, 'Product 3', 'product-3-xic7', 'SKU-D61U2D8Y', 4, 11, 443.00, 11.00, 232.00, 145, 11, 'pcs', '424g', NULL, 1, 1, '2025-10-26', '2026-11-26', 'Seeder generated product', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(4, 'Product 4', 'product-4-3n43', 'SKU-IB41AGNY', 4, 10, 253.00, 18.00, 116.00, 119, 10, 'pcs', '331g', NULL, 1, 1, '2026-01-04', '2026-04-26', 'Seeder generated product', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(5, 'Product 5', 'product-5-waui', 'SKU-1P3XWW7Z', 1, 2, 190.00, 8.00, 369.00, 152, 9, 'pcs', '653g', NULL, 1, 1, '2025-12-27', '2026-12-05', 'Seeder generated product', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(6, 'Product 6', 'product-6-pcwo', 'SKU-OTBDUOYR', 4, 11, 143.00, 4.00, 362.00, 10, 11, 'pcs', '261g', NULL, 1, 1, '2025-11-04', '2026-07-09', 'Seeder generated product', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(7, 'Product 7', 'product-7-umyq', 'SKU-QI0CEAFF', 5, 15, 189.00, 45.00, 219.00, 95, 8, 'pcs', '553g', NULL, 1, 1, '2025-12-22', '2026-10-23', 'Seeder generated product', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(8, 'Product 8', 'product-8-dtop', 'SKU-4EGEQMP2', 5, 13, 298.00, 4.00, 59.00, 127, 9, 'pcs', '766g', NULL, 1, 1, '2025-11-15', '2026-08-06', 'Seeder generated product', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(9, 'Product 9', 'product-9-wtlu', 'SKU-3WFIOYWT', 4, 12, 490.00, 25.00, 57.00, 63, 12, 'pcs', '761g', NULL, 1, 1, '2025-10-26', '2026-11-20', 'Seeder generated product', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(10, 'Product 10', 'product-10-aluw', 'SKU-EOOIAZZM', 2, 5, 357.00, 29.00, 161.00, 98, 7, 'pcs', '439g', NULL, 1, 1, '2025-10-26', '2026-09-06', 'Seeder generated product', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(11, 'Product 11', 'product-11-gpdo', 'SKU-DTOG6CO3', 4, 10, 330.00, 16.00, 294.00, 147, 10, 'pcs', '454g', NULL, 1, 1, '2025-10-30', '2027-01-09', 'Seeder generated product', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(12, 'Product 12', 'product-12-nhfp', 'SKU-IJ79WIQ0', 2, 5, 493.00, 14.00, 186.00, 193, 17, 'pcs', '820g', NULL, 1, 1, '2025-11-17', '2026-12-16', 'Seeder generated product', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(13, 'Product 13', 'product-13-xuzk', 'SKU-WUZQFMUJ', 5, 14, 101.00, 3.00, 343.00, 36, 19, 'pcs', '322g', NULL, 1, 1, '2025-11-17', '2026-08-20', 'Seeder generated product', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(14, 'Product 14', 'product-14-mvku', 'SKU-DDB2XGCY', 5, 15, 248.00, 14.00, 275.00, 171, 5, 'pcs', '750g', NULL, 1, 1, '2026-01-05', '2026-11-02', 'Seeder generated product', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(15, 'Product 15', 'product-15-8mgc', 'SKU-UPTRT3BP', 1, 3, 153.00, 0.00, 294.00, 179, 15, 'pcs', '593g', NULL, 1, 1, '2025-12-03', '2026-06-04', 'Seeder generated product', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(16, 'Product 16', 'product-16-ko4v', 'SKU-KSVBMZ90', 3, 8, 208.00, 49.00, 276.00, 46, 15, 'pcs', '785g', NULL, 1, 1, '2025-11-04', '2026-05-15', 'Seeder generated product', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(17, 'Product 17', 'product-17-ajsb', 'SKU-XD5URNFA', 4, 10, 76.00, 11.00, 302.00, 198, 11, 'pcs', '403g', NULL, 1, 1, '2026-01-11', '2026-08-25', 'Seeder generated product', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(18, 'Product 18', 'product-18-ofze', 'SKU-PB9V5SJW', 4, 10, 73.00, 1.00, 92.00, 143, 17, 'pcs', '402g', NULL, 1, 1, '2025-11-19', '2026-03-05', 'Seeder generated product', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(19, 'Product 19', 'product-19-4rs4', 'SKU-7AK47POP', 3, 7, 371.00, 30.00, 133.00, 115, 12, 'pcs', '995g', NULL, 1, 1, '2025-12-14', '2026-07-13', 'Seeder generated product', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(20, 'Product 20', 'product-20-djsd', 'SKU-XRXJUYN9', 1, 3, 460.00, 5.00, 337.00, 75, 13, 'pcs', '428g', NULL, 1, 1, '2025-11-24', '2026-10-24', 'Seeder generated product', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(21, 'Product 21', 'product-21-vugf', 'SKU-AQ1FHCFG', 4, 10, 123.00, 24.00, 110.00, 80, 18, 'pcs', '357g', NULL, 1, 1, '2025-11-19', '2026-12-23', 'Seeder generated product', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(22, 'Product 22', 'product-22-j8cc', 'SKU-FPQ5I7BA', 3, 9, 433.00, 25.00, 236.00, 53, 15, 'pcs', '402g', NULL, 1, 1, '2025-12-06', '2026-09-30', 'Seeder generated product', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(23, 'Product 23', 'product-23-sxjz', 'SKU-PYHZM6IS', 2, 5, 168.00, 47.00, 76.00, 52, 17, 'pcs', '516g', NULL, 1, 1, '2026-01-15', '2026-11-08', 'Seeder generated product', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(24, 'Product 24', 'product-24-ekar', 'SKU-06GTAJBY', 4, 10, 106.00, 7.00, 311.00, 93, 6, 'pcs', '630g', NULL, 1, 1, '2026-01-07', '2027-01-05', 'Seeder generated product', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(25, 'Product 25', 'product-25-my59', 'SKU-OIBFDRZO', 4, 11, 81.00, 22.00, 400.00, 34, 17, 'pcs', '309g', NULL, 1, 1, '2025-11-19', '2026-05-08', 'Seeder generated product', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(26, 'Product 26', 'product-26-ekng', 'SKU-GNVEKWBD', 2, 6, 310.00, 5.00, 251.00, 48, 15, 'pcs', '391g', NULL, 1, 1, '2025-12-31', '2026-10-22', 'Seeder generated product', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(27, 'Product 27', 'product-27-b4kk', 'SKU-MSR42X5M', 2, 4, 206.00, 33.00, 228.00, 30, 17, 'pcs', '745g', NULL, 1, 1, '2025-12-03', '2026-03-29', 'Seeder generated product', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(28, 'Product 28', 'product-28-yynn', 'SKU-6D7V3K4N', 3, 7, 363.00, 36.00, 270.00, 146, 6, 'pcs', '385g', NULL, 1, 1, '2025-11-09', '2026-04-24', 'Seeder generated product', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(29, 'Product 29', 'product-29-2g58', 'SKU-8BBC7KXQ', 5, 13, 403.00, 27.00, 372.00, 165, 9, 'pcs', '406g', NULL, 1, 1, '2025-12-15', '2026-07-27', 'Seeder generated product', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(30, 'Product 30', 'product-30-nvf7', 'SKU-H1TKTWO1', 2, 5, 378.00, 5.00, 317.00, 187, 5, 'pcs', '513g', NULL, 1, 1, '2026-01-12', '2026-10-30', 'Seeder generated product', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(31, 'Product 31', 'product-31-1nnn', 'SKU-XAEVUBUQ', 5, 13, 250.00, 45.00, 327.00, 74, 20, 'pcs', '529g', NULL, 1, 1, '2026-01-14', '2027-01-26', 'Seeder generated product', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(32, 'Product 32', 'product-32-hf0g', 'SKU-V1CFPJHR', 3, 9, 460.00, 25.00, 162.00, 102, 12, 'pcs', '490g', NULL, 1, 1, '2025-11-30', '2026-07-12', 'Seeder generated product', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(33, 'Product 33', 'product-33-6ato', 'SKU-EYBAJQMR', 1, 3, 154.00, 4.00, 348.00, 33, 19, 'pcs', '908g', NULL, 1, 1, '2025-11-25', '2026-05-21', 'Seeder generated product', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(34, 'Product 34', 'product-34-cxuo', 'SKU-1EZT4AAT', 3, 7, 426.00, 27.00, 319.00, 150, 5, 'pcs', '680g', NULL, 1, 1, '2025-12-14', '2027-01-22', 'Seeder generated product', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(35, 'Product 35', 'product-35-5ge6', 'SKU-5ZFQHG1Q', 3, 8, 212.00, 8.00, 201.00, 10, 15, 'pcs', '835g', NULL, 1, 1, '2025-11-17', '2026-11-18', 'Seeder generated product', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(36, 'Product 36', 'product-36-gcqg', 'SKU-GEZ9CHPK', 3, 8, 406.00, 38.00, 141.00, 167, 11, 'pcs', '387g', NULL, 1, 1, '2025-11-21', '2026-10-31', 'Seeder generated product', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(37, 'Product 37', 'product-37-2rs6', 'SKU-5FGYR63F', 4, 12, 95.00, 29.00, 42.00, 24, 7, 'pcs', '781g', NULL, 1, 1, '2025-12-02', '2026-09-19', 'Seeder generated product', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(38, 'Product 38', 'product-38-vbdq', 'SKU-97ASDQ4C', 5, 14, 445.00, 37.00, 299.00, 89, 8, 'pcs', '724g', NULL, 1, 1, '2025-12-13', '2026-09-03', 'Seeder generated product', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(39, 'Product 39', 'product-39-gtbi', 'SKU-NUFPDABU', 5, 15, 226.00, 50.00, 355.00, 157, 17, 'pcs', '721g', NULL, 1, 1, '2025-12-05', '2026-07-17', 'Seeder generated product', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(40, 'Product 40', 'product-40-111c', 'SKU-W6K9ZOVR', 4, 10, 378.00, 6.00, 218.00, 62, 20, 'pcs', '903g', NULL, 1, 1, '2025-12-31', '2026-11-19', 'Seeder generated product', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(41, 'Product 41', 'product-41-wwel', 'SKU-2RP9P9RM', 4, 10, 122.00, 29.00, 331.00, 79, 17, 'pcs', '307g', NULL, 1, 1, '2025-12-25', '2026-05-13', 'Seeder generated product', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(42, 'Product 42', 'product-42-hffc', 'SKU-N1C4PCFS', 4, 11, 360.00, 7.00, 366.00, 14, 13, 'pcs', '323g', NULL, 1, 1, '2025-11-12', '2026-07-20', 'Seeder generated product', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(43, 'Product 43', 'product-43-oluq', 'SKU-S7IBXITP', 1, 3, 315.00, 31.00, 355.00, 156, 15, 'pcs', '818g', NULL, 1, 1, '2025-10-28', '2026-11-05', 'Seeder generated product', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(44, 'Product 44', 'product-44-d50n', 'SKU-ZYXUMNNT', 3, 8, 395.00, 7.00, 146.00, 87, 11, 'pcs', '360g', NULL, 1, 1, '2026-01-11', '2026-09-08', 'Seeder generated product', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(45, 'Product 45', 'product-45-ccrc', 'SKU-SEFHRIOI', 5, 15, 426.00, 31.00, 364.00, 103, 16, 'pcs', '911g', NULL, 1, 1, '2025-12-09', '2026-05-08', 'Seeder generated product', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(46, 'Product 46', 'product-46-p67g', 'SKU-ISX6QYNG', 4, 11, 88.00, 32.00, 54.00, 95, 7, 'pcs', '676g', NULL, 1, 1, '2025-12-01', '2026-12-04', 'Seeder generated product', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(47, 'Product 47', 'product-47-th0i', 'SKU-GRHWPJGS', 5, 15, 484.00, 47.00, 98.00, 47, 16, 'pcs', '811g', NULL, 1, 1, '2025-12-02', '2026-08-15', 'Seeder generated product', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(48, 'Product 48', 'product-48-u9tj', 'SKU-JBHXV9QW', 2, 4, 422.00, 0.00, 307.00, 115, 20, 'pcs', '366g', NULL, 1, 1, '2025-10-25', '2026-05-27', 'Seeder generated product', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(49, 'Product 49', 'product-49-khhc', 'SKU-XQNSNX1R', 2, 4, 144.00, 1.00, 306.00, 174, 19, 'pcs', '411g', NULL, 1, 1, '2026-01-12', '2026-04-18', 'Seeder generated product', '2026-01-28 22:18:30', '2026-01-28 22:18:30'),
+(50, 'Product 50', 'product-50-xsa5', 'SKU-UDJMACTS', 1, 2, 98.00, 26.00, 59.00, 26, 5, 'pcs', '575g', NULL, 1, 1, '2025-11-02', '2026-04-09', 'Seeder generated product', '2026-01-28 22:18:30', '2026-01-28 22:18:30');
 
 -- --------------------------------------------------------
 
@@ -410,20 +611,28 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `first_name`, `last_name`, `dob`, `gender`, `blood_group`, `religion`, `nationality`, `national_id`, `phone`, `email`, `password`, `present_address`, `parmanent_address`, `father_name`, `father_contact`, `mother_name`, `mother_contact`, `guardian_name`, `guardian_contact`, `role`, `status`, `joining_date`, `remark`, `photo`, `otp`, `otp_expires_at`, `email_verified_at`, `last_login_at`, `last_login_ip`, `is_profile_completed`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'Rahim', 'Uddin', '2000-05-12', 'Male', 'A+', 'Islam', 'Bangladeshi', '1998123456789', '01711111111', 'rahim@example.com', '$2y$12$U5rp1J1WT/Xbx589WinCxOSaU8VXAOnsWN5rD/DMAE.uoPGNZeFG6', 'Dhaka', 'Dhaka', 'Abdul Karim', '01722222222', 'Ayesha Begum', '01733333333', 'Abdul Karim', '01722222222', 'admin', 'active', '2024-01-24', 'Regular student', NULL, NULL, NULL, '2026-01-24 03:48:14', '2026-01-24 22:36:34', '127.0.0.1', 1, 'xCqQpar8P8wj6luVZoLvOUgpQg7NPgMFYB57rTf4XzLQj9FzOH3pneOfOg4d', NULL, '2026-01-24 22:36:34'),
-(2, 'User', 'No2', '2001-01-01', 'Female', 'O+', 'Islam', 'Bangladeshi', '199900000002', '01500000002', 'user2@example.com', '$2y$12$h.lzxmrfKZFSXrvgXXdc1OE6daB0BKkfQAYFnuYGbw8eC9anh70Za', 'Dhaka', 'Dhaka', 'Father 2', '01811111112', 'Mother 2', '01822222222', 'Guardian 2', '01833333332', 'admin', 'active', '2025-11-24', 'Seeder data', NULL, NULL, NULL, '2026-01-24 03:48:15', '2026-01-24 03:48:15', '127.0.0.1', 1, NULL, NULL, NULL),
-(3, 'User', 'No3', '2001-01-01', 'Male', 'O+', 'Islam', 'Bangladeshi', '199900000003', '01500000003', 'user3@example.com', '$2y$12$mi5HMMtz4WSZ/hqrmpK.p.9VzLIqLRSQHHyrKrTVIICsykS/iFqTS', 'Dhaka', 'Dhaka', 'Father 3', '01811111113', 'Mother 3', '01822222223', 'Guardian 3', '01833333333', 'admin', 'active', '2025-10-24', 'Seeder data', NULL, NULL, NULL, '2026-01-24 03:48:15', '2026-01-24 03:48:15', '127.0.0.1', 1, NULL, NULL, NULL),
-(4, 'User', 'No4', '2001-01-01', 'Female', 'O+', 'Islam', 'Bangladeshi', '199900000004', '01500000004', 'user4@example.com', '$2y$12$ueq2fyOdtRI0Bm2kiaUM0uCjwRNcWfRYbGg0pd.zyORl.u9XqJszm', 'Dhaka', 'Dhaka', 'Father 4', '01811111114', 'Mother 4', '01822222224', 'Guardian 4', '01833333334', 'admin', 'active', '2025-09-24', 'Seeder data', NULL, NULL, NULL, '2026-01-24 03:48:15', '2026-01-24 03:48:15', '127.0.0.1', 1, NULL, NULL, NULL),
-(5, 'User', 'No5', '2001-01-01', 'Male', 'O+', 'Islam', 'Bangladeshi', '199900000005', '01500000005', 'user5@example.com', '$2y$12$CgZNmPhvccqjj3qaqvrokObGeADqruyv7YhRRCYPeaNxcQdTCln5K', 'Dhaka', 'Dhaka', 'Father 5', '01811111115', 'Mother 5', '01822222225', 'Guardian 5', '01833333335', 'admin', 'active', '2025-08-24', 'Seeder data', NULL, NULL, NULL, '2026-01-24 03:48:15', '2026-01-24 03:48:15', '127.0.0.1', 1, NULL, NULL, NULL),
-(6, 'User', 'No6', '2001-01-01', 'Female', 'O+', 'Islam', 'Bangladeshi', '199900000006', '01500000006', 'user6@example.com', '$2y$12$l7YO3utnH42RUzmxpJtouuu8JcV08RHi5jLGEL6GD4zqvsAxoxt72', 'Dhaka', 'Dhaka', 'Father 6', '01811111116', 'Mother 6', '01822222226', 'Guardian 6', '01833333336', 'admin', 'active', '2025-07-24', 'Seeder data', NULL, NULL, NULL, '2026-01-24 03:48:15', '2026-01-24 03:48:15', '127.0.0.1', 1, NULL, NULL, NULL),
-(7, 'User', 'No7', '2001-01-01', 'Male', 'O+', 'Islam', 'Bangladeshi', '199900000007', '01500000007', 'user7@example.com', '$2y$12$ZCQDxsBnDll0XFgV7njWjOONttcWMdwMW3VUsynNddeOxc1OVnC.6', 'Dhaka', 'Dhaka', 'Father 7', '01811111117', 'Mother 7', '01822222227', 'Guardian 7', '01833333337', 'admin', 'active', '2025-06-24', 'Seeder data', NULL, NULL, NULL, '2026-01-24 03:48:16', '2026-01-24 03:48:16', '127.0.0.1', 1, NULL, NULL, NULL),
-(8, 'User', 'No8', '2001-01-01', 'Female', 'O+', 'Islam', 'Bangladeshi', '199900000008', '01500000008', 'user8@example.com', '$2y$12$wQEXZoGpt3LZd/TkRvkkged202hKCtzrcim3LQOdF5.lpOC2Ppc7.', 'Dhaka', 'Dhaka', 'Father 8', '01811111118', 'Mother 8', '01822222228', 'Guardian 8', '01833333338', 'admin', 'active', '2025-05-24', 'Seeder data', NULL, NULL, NULL, '2026-01-24 03:48:16', '2026-01-24 03:48:16', '127.0.0.1', 1, NULL, NULL, NULL),
-(9, 'User', 'No9', '2001-01-01', 'Male', 'O+', 'Islam', 'Bangladeshi', '199900000009', '01500000009', 'user9@example.com', '$2y$12$0DqvAdyiyEsbiXTcpQkbf.G9X4HE7IDUdzDKxLOfPjBlllBRxZ9DK', 'Dhaka', 'Dhaka', 'Father 9', '01811111119', 'Mother 9', '01822222229', 'Guardian 9', '01833333339', 'admin', 'active', '2025-04-24', 'Seeder data', NULL, NULL, NULL, '2026-01-24 03:48:16', '2026-01-24 03:48:16', '127.0.0.1', 1, NULL, NULL, NULL),
-(10, 'User', 'No10', '2001-01-01', 'Female', 'O+', 'Islam', 'Bangladeshi', '1999000000010', '015000000010', 'user10@example.com', '$2y$12$vitYeCCUTqpjfBMtjh/PlO2BZ3DIl3dz3VwCmrTtxq0OuKOrDR1qC', 'Dhaka', 'Dhaka', 'Father 10', '018111111110', 'Mother 10', '018222222210', 'Guardian 10', '018333333310', 'admin', 'active', '2025-03-24', 'Seeder data', NULL, NULL, NULL, '2026-01-24 03:48:16', '2026-01-24 03:48:16', '127.0.0.1', 1, NULL, NULL, NULL);
+(1, 'Rahim', 'Uddin', '2000-05-12', 'Male', 'A+', 'Islam', 'Bangladeshi', '1998123456789', '01711111111', 'rahim@example.com', '$2y$12$VSitdyi5ZJ8YffGJc/8a0ubnXLc0VvgJJhLojNl9KKAZHC4eJuzs.', 'Dhaka', 'Dhaka', 'Abdul Karim', '01722222222', 'Ayesha Begum', '01733333333', 'Abdul Karim', '01722222222', 'admin', 'active', '2024-01-29', 'Regular student', NULL, NULL, NULL, '2026-01-28 22:18:28', '2026-01-28 22:18:36', '127.0.0.1', 1, 'GPPXDS6CRxSCwRhS9f80BoZ1hTZwCtmZuUN240I50CT1tDFRCy1zhkIzfQJ0', NULL, '2026-01-28 22:18:36'),
+(2, 'User', 'No2', '2001-01-01', 'Female', 'O+', 'Islam', 'Bangladeshi', '199900000002', '01500000002', 'user2@example.com', '$2y$12$17PPmgQQVaIUjaU5oY.ohOLYUyG8H7mPuuKpHuFHjSNr5L8toDB7i', 'Dhaka', 'Dhaka', 'Father 2', '01811111112', 'Mother 2', '01822222222', 'Guardian 2', '01833333332', 'admin', 'active', '2025-11-29', 'Seeder data', NULL, NULL, NULL, '2026-01-28 22:18:28', '2026-01-28 22:18:28', '127.0.0.1', 1, NULL, NULL, NULL),
+(3, 'User', 'No3', '2001-01-01', 'Male', 'O+', 'Islam', 'Bangladeshi', '199900000003', '01500000003', 'user3@example.com', '$2y$12$ak.ubejoijJqXENnwM3o8u2X2Q3KqX8SFEtorWjpVKVvFSDNo5CMC', 'Dhaka', 'Dhaka', 'Father 3', '01811111113', 'Mother 3', '01822222223', 'Guardian 3', '01833333333', 'admin', 'active', '2025-10-29', 'Seeder data', NULL, NULL, NULL, '2026-01-28 22:18:29', '2026-01-28 22:18:29', '127.0.0.1', 1, NULL, NULL, NULL),
+(4, 'User', 'No4', '2001-01-01', 'Female', 'O+', 'Islam', 'Bangladeshi', '199900000004', '01500000004', 'user4@example.com', '$2y$12$dhQwaDQuvkg4odzzZa8f..FSH8BIRtO8ieWKfGbkjL4yI6f5/5BgK', 'Dhaka', 'Dhaka', 'Father 4', '01811111114', 'Mother 4', '01822222224', 'Guardian 4', '01833333334', 'admin', 'active', '2025-09-29', 'Seeder data', NULL, NULL, NULL, '2026-01-28 22:18:29', '2026-01-28 22:18:29', '127.0.0.1', 1, NULL, NULL, NULL),
+(5, 'User', 'No5', '2001-01-01', 'Male', 'O+', 'Islam', 'Bangladeshi', '199900000005', '01500000005', 'user5@example.com', '$2y$12$SFHaBVsTKMphhHvjr1r0C./SMPdObGW2lbc9LWHN7XmLcuJQjNw1e', 'Dhaka', 'Dhaka', 'Father 5', '01811111115', 'Mother 5', '01822222225', 'Guardian 5', '01833333335', 'admin', 'active', '2025-08-29', 'Seeder data', NULL, NULL, NULL, '2026-01-28 22:18:29', '2026-01-28 22:18:29', '127.0.0.1', 1, NULL, NULL, NULL),
+(6, 'User', 'No6', '2001-01-01', 'Female', 'O+', 'Islam', 'Bangladeshi', '199900000006', '01500000006', 'user6@example.com', '$2y$12$eaIUvpowzPrK2.Wx8cGq5eQWfcb55.1OUt5/eivKdk8/c5FP74aJm', 'Dhaka', 'Dhaka', 'Father 6', '01811111116', 'Mother 6', '01822222226', 'Guardian 6', '01833333336', 'admin', 'active', '2025-07-29', 'Seeder data', NULL, NULL, NULL, '2026-01-28 22:18:29', '2026-01-28 22:18:29', '127.0.0.1', 1, NULL, NULL, NULL),
+(7, 'User', 'No7', '2001-01-01', 'Male', 'O+', 'Islam', 'Bangladeshi', '199900000007', '01500000007', 'user7@example.com', '$2y$12$KDspf2SrTdKLt1.aza0uHObgzrkQlduMWb8M9N0G6ZYHElUUs3L6G', 'Dhaka', 'Dhaka', 'Father 7', '01811111117', 'Mother 7', '01822222227', 'Guardian 7', '01833333337', 'admin', 'active', '2025-06-29', 'Seeder data', NULL, NULL, NULL, '2026-01-28 22:18:29', '2026-01-28 22:18:29', '127.0.0.1', 1, NULL, NULL, NULL),
+(8, 'User', 'No8', '2001-01-01', 'Female', 'O+', 'Islam', 'Bangladeshi', '199900000008', '01500000008', 'user8@example.com', '$2y$12$yOwuCgW/STLmo7m6SWqYcuo5UTWpw1KnwX7KkKh37wAmqLJ8IUPN.', 'Dhaka', 'Dhaka', 'Father 8', '01811111118', 'Mother 8', '01822222228', 'Guardian 8', '01833333338', 'admin', 'active', '2025-05-29', 'Seeder data', NULL, NULL, NULL, '2026-01-28 22:18:29', '2026-01-28 22:18:29', '127.0.0.1', 1, NULL, NULL, NULL),
+(9, 'User', 'No9', '2001-01-01', 'Male', 'O+', 'Islam', 'Bangladeshi', '199900000009', '01500000009', 'user9@example.com', '$2y$12$PVGG/lrgUhT7yPNWa2p83uUZ5qcxoBLFJzaIxtPidRKRttGT3qrxW', 'Dhaka', 'Dhaka', 'Father 9', '01811111119', 'Mother 9', '01822222229', 'Guardian 9', '01833333339', 'admin', 'active', '2025-04-29', 'Seeder data', NULL, NULL, NULL, '2026-01-28 22:18:30', '2026-01-28 22:18:30', '127.0.0.1', 1, NULL, NULL, NULL),
+(10, 'User', 'No10', '2001-01-01', 'Female', 'O+', 'Islam', 'Bangladeshi', '1999000000010', '015000000010', 'user10@example.com', '$2y$12$J4Vi8Sh4QoKIcc.dKT2umucRSmG5DjmabYfY4MRgqe1gaEFj3wE/q', 'Dhaka', 'Dhaka', 'Father 10', '018111111110', 'Mother 10', '018222222210', 'Guardian 10', '018333333310', 'admin', 'active', '2025-03-29', 'Seeder data', NULL, NULL, NULL, '2026-01-28 22:18:30', '2026-01-28 22:18:30', '127.0.0.1', 1, NULL, NULL, NULL);
 
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `carts`
+--
+ALTER TABLE `carts`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `carts_user_id_foreign` (`user_id`),
+  ADD KEY `carts_product_id_foreign` (`product_id`);
 
 --
 -- Indexes for table `companies`
@@ -431,6 +640,28 @@ INSERT INTO `users` (`id`, `first_name`, `last_name`, `dob`, `gender`, `blood_gr
 ALTER TABLE `companies`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `companies_email_unique` (`email`);
+
+--
+-- Indexes for table `excategories`
+--
+ALTER TABLE `excategories`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `expenses`
+--
+ALTER TABLE `expenses`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `expenses_category_id_foreign` (`category_id`),
+  ADD KEY `expenses_subcategory_id_foreign` (`subcategory_id`),
+  ADD KEY `expenses_user_id_foreign` (`user_id`);
+
+--
+-- Indexes for table `exsubcategories`
+--
+ALTER TABLE `exsubcategories`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `exsubcategories_category_id_name_unique` (`category_id`,`name`);
 
 --
 -- Indexes for table `failed_jobs`
@@ -460,10 +691,37 @@ ALTER TABLE `model_has_roles`
   ADD KEY `model_has_roles_model_id_model_type_index` (`model_id`,`model_type`);
 
 --
+-- Indexes for table `orders`
+--
+ALTER TABLE `orders`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `orders_reg_unique` (`reg`),
+  ADD KEY `orders_user_id_foreign` (`user_id`),
+  ADD KEY `orders_date_user_id_index` (`date`,`user_id`);
+
+--
 -- Indexes for table `password_reset_tokens`
 --
 ALTER TABLE `password_reset_tokens`
   ADD PRIMARY KEY (`email`);
+
+--
+-- Indexes for table `payment_details`
+--
+ALTER TABLE `payment_details`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `payment_details_reg_unique` (`reg`),
+  ADD KEY `payment_details_user_id_foreign` (`user_id`),
+  ADD KEY `payment_details_order_id_foreign` (`order_id`),
+  ADD KEY `payment_details_payment_method_id_foreign` (`payment_method_id`),
+  ADD KEY `payment_details_date_user_id_order_id_index` (`date`,`user_id`,`order_id`);
+
+--
+-- Indexes for table `payment_methods`
+--
+ALTER TABLE `payment_methods`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `payment_methods_name_unique` (`name`);
 
 --
 -- Indexes for table `pdr_categories`
@@ -538,10 +796,34 @@ ALTER TABLE `users`
 --
 
 --
+-- AUTO_INCREMENT for table `carts`
+--
+ALTER TABLE `carts`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `companies`
 --
 ALTER TABLE `companies`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `excategories`
+--
+ALTER TABLE `excategories`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- AUTO_INCREMENT for table `expenses`
+--
+ALTER TABLE `expenses`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `exsubcategories`
+--
+ALTER TABLE `exsubcategories`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
 
 --
 -- AUTO_INCREMENT for table `failed_jobs`
@@ -553,19 +835,37 @@ ALTER TABLE `failed_jobs`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+
+--
+-- AUTO_INCREMENT for table `orders`
+--
+ALTER TABLE `orders`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `payment_details`
+--
+ALTER TABLE `payment_details`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `payment_methods`
+--
+ALTER TABLE `payment_methods`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `pdr_categories`
 --
 ALTER TABLE `pdr_categories`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `pdr_stocks`
 --
 ALTER TABLE `pdr_stocks`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `pdr_sub_categories`
@@ -589,7 +889,7 @@ ALTER TABLE `personal_access_tokens`
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
 
 --
 -- AUTO_INCREMENT for table `roles`
@@ -608,6 +908,27 @@ ALTER TABLE `users`
 --
 
 --
+-- Constraints for table `carts`
+--
+ALTER TABLE `carts`
+  ADD CONSTRAINT `carts_product_id_foreign` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`),
+  ADD CONSTRAINT `carts_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+
+--
+-- Constraints for table `expenses`
+--
+ALTER TABLE `expenses`
+  ADD CONSTRAINT `expenses_category_id_foreign` FOREIGN KEY (`category_id`) REFERENCES `excategories` (`id`),
+  ADD CONSTRAINT `expenses_subcategory_id_foreign` FOREIGN KEY (`subcategory_id`) REFERENCES `exsubcategories` (`id`),
+  ADD CONSTRAINT `expenses_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+
+--
+-- Constraints for table `exsubcategories`
+--
+ALTER TABLE `exsubcategories`
+  ADD CONSTRAINT `exsubcategories_category_id_foreign` FOREIGN KEY (`category_id`) REFERENCES `excategories` (`id`);
+
+--
 -- Constraints for table `model_has_permissions`
 --
 ALTER TABLE `model_has_permissions`
@@ -618,6 +939,20 @@ ALTER TABLE `model_has_permissions`
 --
 ALTER TABLE `model_has_roles`
   ADD CONSTRAINT `model_has_roles_role_id_foreign` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `orders`
+--
+ALTER TABLE `orders`
+  ADD CONSTRAINT `orders_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+
+--
+-- Constraints for table `payment_details`
+--
+ALTER TABLE `payment_details`
+  ADD CONSTRAINT `payment_details_order_id_foreign` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`),
+  ADD CONSTRAINT `payment_details_payment_method_id_foreign` FOREIGN KEY (`payment_method_id`) REFERENCES `payment_methods` (`id`),
+  ADD CONSTRAINT `payment_details_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
 
 --
 -- Constraints for table `pdr_stocks`

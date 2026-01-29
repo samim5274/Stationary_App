@@ -76,4 +76,60 @@ class ExpensesController extends Controller
         $expense = Expenses::findOrFail($id);
         return view('report.print.print-expenses', compact('company','expense'));
     }
+
+    public function setting(){
+        $company = Company::first();
+        $categories = Excategory::paginate(15);
+        $subcategories = Exsubcategory::paginate(15);
+        return view('expenses.expenses-setting', compact('company','categories', 'subcategories'));
+    }
+
+    public function createView(){
+        $company = Company::first();
+        return view('expenses.create-category', compact('company'));
+    }
+
+    public function createCategory(Request $request){
+        try{
+            $validated = $request->validate([
+                'name' => ['required', 'string', 'max:255', 'unique:excategories,name'],
+            ]);
+
+            Excategory::create([ 'name' => $validated['name'], ]);
+
+            return redirect()->route('expenses.setting')->with('success', 'Category created successfully!');
+        } catch (ModelNotFoundException $e) {
+            return redirect()->back()->with('error', 'Some this is wrong..!');
+        }
+    }
+
+    public function updateCategory($id){
+        $company = Company::first();
+        $excategory = Excategory::where('id',$id)->first();
+        return view('expenses.create-category', compact('company','excategory'));
+    }
+
+    public function modifyCategory(Request $request, $id)
+    {
+        $excategory = Excategory::findOrFail($id);
+
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255', 'unique:excategories,name,' . $excategory->id],
+        ]);
+
+        $excategory->update($validated);
+
+        return redirect()->route('expenses.setting')->with('success', 'Category updated successfully!');
+    }
+
+    public function deleteCategory($id){
+        try{
+            Excategory::where('id', $id)->delete();
+
+            return redirect()->route('expenses.setting')->with('success', 'Category deleted successfully!');
+        } catch (ModelNotFoundException $e) {
+            return redirect()->back()->with('error', 'Some this is wrong..!');
+        }
+    }
+
 }

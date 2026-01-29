@@ -99,7 +99,16 @@ Route::group(['middleware' => ['admin']], function(){
         Route::post('/create', [ExpensesController::class, 'create'])->name('create.expenses');
         Route::get('/view-detials/{id}', [ExpensesController::class, 'viewDetials'])->name('expenses-view-details');
         Route::get('/delete/{id}', [ExpensesController::class, 'delete'])->name('expenses-delete');
-        Route::get('/expenses-print/{id}', [ExpensesController::class, 'printExpenses'])->name('expenses.print');
+        Route::get('/print/{id}', [ExpensesController::class, 'printExpenses'])->name('expenses.print');
+
+        Route::get('/setting', [ExpensesController::class, 'setting'])->name('expenses.setting');
+        Route::get('/create-category', [ExpensesController::class, 'createView'])->name('create-category-view');
+        Route::post('/category-create', [ExpensesController::class, 'createCategory'])->name('excategories.store');
+        Route::get('/category-update/{id}', [ExpensesController::class, 'updateCategory'])->name('excategories.update.view');
+        Route::put('/modify-category/{id}', [ExpensesController::class, 'modifyCategory'])->name('excategories.update');
+        Route::delete('/delete-category/{id}', [ExpensesController::class, 'deleteCategory'])->name('expenses.category.delete');
+
+        Route::get('/create-sub-category', [ExpensesController::class, 'createSubView'])->name('create-sub-category-view');
     });
 
 });
