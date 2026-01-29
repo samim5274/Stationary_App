@@ -47,7 +47,7 @@
                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-6 mb-8">
 
                         {{-- Main Form Card --}}
-                        <div class="lg:col-span-2 rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800/60 shadow-sm overflow-hidden">
+                        <div class="lg:col-span-2 rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-sm overflow-hidden">
 
                             {{-- Header --}}
                             <div class="px-6 py-5 border-b border-gray-200 dark:border-gray-700 bg-gray-50/60 dark:bg-gray-900/30">
@@ -68,7 +68,7 @@
                                     </div>
 
                                     {{-- Status Badge --}}
-                                    <span class="inline-flex items-center px-3 py-4 rounded-full text-xs font-semibold
+                                    <span class="inline-flex items-center px-3 py-4 rounded-full text-xs font-semibold dark:text-gray-100
                                                 {{ isset($excategory) ? 'bg-amber-100 text-amber-700 dark:bg-amber-500/10 dark:text-amber-300' : 'bg-emerald-100 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-300' }}">
                                         {{ isset($excategory) ? 'Editing' : 'New' }}
                                     </span>
@@ -148,7 +148,7 @@
                         </div>
 
                         {{-- Side Info Panel --}}
-                        <div class="rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800/60 shadow-sm p-6">
+                        <div class="rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-sm p-6">
                             <h3 class="text-sm font-bold text-gray-800 dark:text-gray-100 flex items-center gap-2">
                                 <i class="fa-solid fa-circle-info text-blue-600 dark:text-blue-400"></i>
                                 Tips
@@ -169,7 +169,7 @@
                                 </li>
                             </ul>
 
-                            <div class="mt-6 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/20 p-4">
+                            <div class="mt-6 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 p-4">
                                 <p class="text-xs text-gray-600 dark:text-gray-300">
                                     <span class="font-semibold text-gray-800 dark:text-gray-100">Note:</span>
                                     If you are in edit mode, the old name will auto-fill.
