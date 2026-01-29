@@ -28,11 +28,14 @@ class ProductController extends Controller
         $products = Product::query()
             ->with(['category','subcategory'])
             ->when($q, function ($query) use ($q) {
-                $query->where('name', 'like', "%{$q}%")
+                $query->where(function($qq) use ($q){
+                    $qq->where('name', 'like', "%{$q}%")
                     ->orWhere('sku', 'like', "%{$q}%")
-                    ->orWhereHas('category', fn($qq) => $qq->where('name', 'like', "%{$q}%"))
-                    ->orWhereHas('subcategory', fn($qq) => $qq->where('name', 'like', "%{$q}%"));
+                    ->orWhereHas('category', fn($c) => $c->where('name', 'like', "%{$q}%"))
+                    ->orWhereHas('subcategory', fn($s) => $s->where('name', 'like', "%{$q}%"));
+                });
             })->latest()->paginate(15)->appends(['q' => $q]);
+
         return view('product.product-list', compact('products', 'company'));
     }
 
@@ -120,7 +123,9 @@ class ProductController extends Controller
                 $validated['image'] = $name;
             }
 
-            DB::transaction(function () use ($validated, &$product) {
+            $product = null;
+
+            DB::transaction(function () use ($validated, & $product) {
                 // Product create
                 $product = Product::create($validated);
 
@@ -152,10 +157,18 @@ class ProductController extends Controller
     public function delete($id){
         try {
             $product = Product::findOrFail($id);
+
+            if (PdrStock::where('product_id', $product->id)->exists()) {
+                return redirect()->route('product.list')
+                    ->with('error', 'This product has stock history. Delete not allowed.');
+            }
+
             if ($product->image && Storage::disk('public')->exists('products/'.$product->image)) {
                 Storage::disk('public')->delete('products/'.$product->image);
             }
+
             $product->delete();
+
             return redirect()->route('product.list')->with('success', 'Product deleted successfully!');
         } catch (ModelNotFoundException $e) {
             return redirect()->route('product.list')->with('error', 'Product not found.');
