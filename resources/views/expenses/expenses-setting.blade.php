@@ -183,17 +183,24 @@
                                                 <div class="flex items-center justify-center gap-3">
 
                                                     {{-- View --}}
-                                                    <a href="#"
+                                                    <a href="{{ route('exsubcategories.update', $val->id) }}"
                                                     class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300">
                                                         <i class="fa-solid fa-pen-to-square"></i>
                                                     </a>
 
                                                     {{-- Delete --}}
-                                                    <a href="#"
-                                                    class="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300"
-                                                    onclick="return confirm('Are you sure you want to delete this?')">
-                                                        <i class="fa-solid fa-trash"></i>
-                                                    </a>
+
+                                                    <form action="{{ route('exsubcategories.delete', $val->id) }}"
+                                                        method="POST"
+                                                        onsubmit="return confirm('Are you sure you want to delete this sub-category?')">
+                                                        @csrf
+                                                        @method('DELETE')
+
+                                                        <button type="submit"
+                                                                class="text-red-600 hover:text-red-800 text-sm font-semibold">
+                                                            <i class="fa-solid fa-trash mr-1"></i>
+                                                        </button>
+                                                    </form>
 
                                                 </div>
                                             </td>

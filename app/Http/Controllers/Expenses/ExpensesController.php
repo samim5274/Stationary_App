@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
+use Illuminate\Validation\Rule;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 use App\Models\Company;
 use App\Models\Excategory;
@@ -18,7 +20,7 @@ class ExpensesController extends Controller
 {
     public function index(){
         $company = Company::first();
-        $expensess = Expenses::where('date', Carbon::today())->paginate(5);
+        $expensess = Expenses::where('date', Carbon::today())->latest()->paginate(5);
         $categories = Excategory::get();
         $subcategories = Exsubcategory::get();
         return view('expenses.expenses-details', compact('company','expensess','categories', 'subcategories'));
@@ -50,7 +52,7 @@ class ExpensesController extends Controller
             $data->save();
 
             return redirect()->back()->with('success', 'Expense added successfully!');
-        } catch (ModelNotFoundException $e) {
+        } catch (\Throwable $e) {
             return redirect()->back()->with('error', 'Some thing is wrong..!');
         } 
     }
@@ -66,7 +68,7 @@ class ExpensesController extends Controller
             $expenses = Expenses::findOrFail($id);
             $expenses->delete();
             return redirect()->route('expenses')->with('success', 'Expenses delete successfully.');
-        } catch (ModelNotFoundException $e) {
+        } catch (\Throwable $e) {
             return redirect()->back()->with('error', 'Some thing is wrong..!');
         }
     }
@@ -79,8 +81,8 @@ class ExpensesController extends Controller
 
     public function setting(){
         $company = Company::first();
-        $categories = Excategory::paginate(15);
-        $subcategories = Exsubcategory::paginate(15);
+        $categories = Excategory::orderBy('name')->paginate(15, ['*'], 'cat_page');
+        $subcategories = Exsubcategory::with('category')->orderBy('name')->paginate(15, ['*'], 'sub_page');
         return view('expenses.expenses-setting', compact('company','categories', 'subcategories'));
     }
 
@@ -98,14 +100,14 @@ class ExpensesController extends Controller
             Excategory::create([ 'name' => $validated['name'], ]);
 
             return redirect()->route('expenses.setting')->with('success', 'Category created successfully!');
-        } catch (ModelNotFoundException $e) {
+        } catch (\Throwable $e) {
             return redirect()->back()->with('error', 'Some this is wrong..!');
         }
     }
 
     public function updateCategory($id){
         $company = Company::first();
-        $excategory = Excategory::where('id',$id)->first();
+        $excategory = Excategory::findOrFail($id);
         return view('expenses.create-category', compact('company','excategory'));
     }
 
@@ -124,10 +126,95 @@ class ExpensesController extends Controller
 
     public function deleteCategory($id){
         try{
-            Excategory::where('id', $id)->delete();
+            $cat = Excategory::withCount(['subcategories','expenses'])->findOrFail($id);
+
+            if ($cat->subcategories_count > 0 || $cat->expenses_count > 0) {
+                return back()->with('error', 'Cannot delete: category has subcategories/expenses.');
+            }
+
+            $cat->delete();
 
             return redirect()->route('expenses.setting')->with('success', 'Category deleted successfully!');
-        } catch (ModelNotFoundException $e) {
+        } catch (\Throwable $e) {
+            return redirect()->back()->with('error', 'Some this is wrong..!');
+        }
+    }
+
+    public function createSubView(){
+        $company = Company::first();
+        $categories = Excategory::get();
+        return view('expenses.create-sub-category', compact('company', 'categories'));
+    }
+
+    public function storeSubCategory(Request $request){
+        try{
+            $validated = $request->validate(
+                [
+                    'category_id' => ['required', 'integer', 'exists:excategories,id'],
+                    'name' => [
+                        'required',
+                        'string',
+                        'max:255',
+                        Rule::unique('exsubcategories', 'name')
+                            ->where(fn ($q) => $q->where('category_id', $request->category_id)),
+                    ],
+                ],
+                [
+                    'category_id.required' => 'Please select a category.',
+                    'category_id.exists'   => 'Selected category is invalid.',
+                    'name.required'        => 'Subcategory name is required.',
+                    'name.unique'          => 'This subcategory already exists under the selected category.',
+                ]
+            );
+
+            Exsubcategory::create($validated);
+
+            return redirect()->route('expenses.setting')->with('success', 'Subcategory created successfully!');
+        } catch(\Throwable $e) {
+            return redirect()->back()->with('error', 'Some this is wrong..!');
+        }
+    }
+
+    public function updateSubCategory($id){
+        $company = Company::first();
+        $categories = Excategory::get();
+        $exsubcategory = Exsubcategory::findOrFail($id);
+        return view('expenses.create-sub-category', compact('company', 'categories','exsubcategory'));
+    }
+
+    public function modifySubCategory(Request $request, $id){
+        try{
+            $exsubcategory = Exsubcategory::findOrFail($id);
+
+            $validated = $request->validate([
+                'category_id' => ['required', 'integer', 'exists:excategories,id'],
+                'name' => [
+                    'required','string','max:255',
+                    Rule::unique('exsubcategories', 'name')
+                        ->where(fn($q) => $q->where('category_id', $request->category_id))
+                        ->ignore($exsubcategory->id),
+                ],
+            ]);
+
+            $exsubcategory->update($validated);
+
+            return redirect()->route('expenses.setting')->with('success', 'Subcategory updated successfully!');
+        } catch(\Throwable $e) {
+            return redirect()->back()->with('error', 'Some this is wrong..!');
+        }
+    }
+
+    public function deleteSubCategory($id){
+        try{
+            $sub = Exsubcategory::withCount('expenses')->findOrFail($id);
+
+            if ($sub->expenses_count > 0) {
+                return back()->with('error', 'Cannot delete: subcategory has expenses.');
+            }
+
+            $sub->delete();
+            return redirect()->route('expenses.setting')->with('success', 'Sub-Category deleted successfully!');
+        } catch(\Throwable $e) {
             return redirect()->back()->with('error', 'Some this is wrong..!');
         }
     }

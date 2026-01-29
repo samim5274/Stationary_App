@@ -109,6 +109,10 @@ Route::group(['middleware' => ['admin']], function(){
         Route::delete('/delete-category/{id}', [ExpensesController::class, 'deleteCategory'])->name('expenses.category.delete');
 
         Route::get('/create-sub-category', [ExpensesController::class, 'createSubView'])->name('create-sub-category-view');
+        Route::post('/sub-category-store', [ExpensesController::class, 'storeSubCategory'])->name('exsubcategories.store');
+        Route::get('/update-sub-category/{id}', [ExpensesController::class, 'updateSubCategory'])->name('exsubcategories.update');
+        Route::put('/modify-sub-category/{id}', [ExpensesController::class, 'modifySubCategory'])->name('exsubcategories.modify');
+        Route::delete('/delete-sub-category/{id}', [ExpensesController::class, 'deleteSubCategory'])->name('exsubcategories.delete');
     });
 
 });
