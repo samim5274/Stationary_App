@@ -28,7 +28,8 @@
     $saleReportOpen = ($activeDailyReport || $activeDateWiseReport || $activePaymentMethodSaleReport || $activeUserSaleReport);
 
     $activeExpenses = $isActive(['expenses', 'expenses.*',]);
-    $expensesOpen = ($activeExpenses );
+    $activeIncome = $isActive(['incomes', 'incomes.*',]);
+    $financeAccountOpen = ($activeExpenses || $activeIncome);
 
 @endphp
 
@@ -153,22 +154,22 @@
             </li>
 
             <!-- Sale Report Dropdown -->
-            <li class="relative px-6 py-3" x-data="{ open: {{ $expensesOpen ? 'true' : 'false' }} }">
-                @if($expensesOpen)
+            <li class="relative px-6 py-3" x-data="{ open: {{ $financeAccountOpen ? 'true' : 'false' }} }">
+                @if($financeAccountOpen)
                     <span class="absolute inset-y-0 left-0 w-1 bg-purple-600 rounded-tr-lg rounded-br-lg"></span>
                 @endif
 
                 <button
                     @click="open = !open"
                     class="inline-flex items-center justify-between w-full text-sm font-semibold transition-colors duration-150
-                        {{ $expensesOpen ? 'text-gray-800 dark:text-gray-100' : 'text-gray-600 dark:text-gray-400' }}
+                        {{ $financeAccountOpen ? 'text-gray-800 dark:text-gray-100' : 'text-gray-600 dark:text-gray-400' }}
                         hover:text-gray-800 dark:hover:text-gray-200"
                     aria-haspopup="true"
                     :aria-expanded="open.toString()">
 
                     <span class="inline-flex items-center">
                         <i class="fa-solid fa-money-bill-transfer w-5 text-center"></i>
-                        <span class="ml-4">Expenses Details</span>
+                        <span class="ml-4">Finance Details</span>
                     </span>
 
                     <i class="fa-solid fa-chevron-down text-xs transition-transform"
@@ -187,6 +188,13 @@
                             hover:text-gray-800 dark:hover:text-gray-200">
                         <a class="block w-full" href="{{ route('expenses') }}">
                             Expenses
+                        </a>
+                    </li>
+                    <li class="px-2 py-1 rounded-md transition-colors duration-150
+                            {{ $activeIncome ? 'bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100' : '' }}
+                            hover:text-gray-800 dark:hover:text-gray-200">
+                        <a class="block w-full" href="{{ route('incomes') }}">
+                            Incomes
                         </a>
                     </li>
 
@@ -436,15 +444,15 @@
 
             <!-- Report Dropdown -->
             <li class="relative px-6 py-3"
-                x-data="{ reportOpen: {{ $expensesOpen ? 'true' : 'false' }} }">
+                x-data="{ reportOpen: {{ $financeAccountOpen ? 'true' : 'false' }} }">
 
-                @if($expensesOpen)
+                @if($financeAccountOpen)
                     <span class="absolute inset-y-0 left-0 w-1 bg-purple-600 rounded-tr-lg rounded-br-lg" aria-hidden="true"></span>
                 @endif
 
                 <button
                     class="inline-flex items-center justify-between w-full text-sm font-semibold transition-colors duration-150
-                        {{ $expensesOpen ? 'text-gray-800 dark:text-gray-100' : 'text-gray-600 dark:text-gray-400' }}
+                        {{ $financeAccountOpen ? 'text-gray-800 dark:text-gray-100' : 'text-gray-600 dark:text-gray-400' }}
                         hover:text-gray-800 dark:hover:text-gray-200"
                     @click="reportOpen = !reportOpen"
                     aria-haspopup="true"
@@ -452,7 +460,7 @@
 
                     <span class="inline-flex items-center">
                         <i class="fa-solid fa-money-bill-transfer w-5 text-center"></i>
-                        <span class="ml-4">Expenses Details</span>
+                        <span class="ml-4">Finance Details</span>
                     </span>
 
                     <i class="fa-solid fa-chevron-down text-xs transition-transform"
@@ -477,6 +485,13 @@
                             hover:text-gray-800 dark:hover:text-gray-200">
                         <a class="w-full block" href="{{ route('expenses') }}">
                             Expenses
+                        </a>
+                    </li>
+                    <li class="px-2 py-1 rounded-md transition-colors duration-150
+                            {{ $activeIncome ? 'bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100' : '' }}
+                            hover:text-gray-800 dark:hover:text-gray-200">
+                        <a class="w-full block" href="{{ route('incomes') }}">
+                            Incomes
                         </a>
                     </li>
 

@@ -30,15 +30,15 @@
                         <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                             <div>
                                 <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">
-                                    Expense Details
+                                    Income Details
                                 </h1>
                                 <p class="text-sm text-gray-500 dark:text-gray-300 mt-1">
-                                    View full details of this expense record.
+                                    View full details of this income record.
                                 </p>
                             </div>
 
                             <div class="flex items-center gap-2">
-                                <a href="{{ route('expenses') }}"
+                                <a href="{{ route('incomes') }}"
                                 class="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold
                                         bg-gray-100 hover:bg-gray-200 text-gray-700
                                         dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-100">
@@ -46,7 +46,7 @@
                                     Back
                                 </a>
 
-                                <a href="{{ route('expenses.print', $expenses->id) }}" target="_blank"
+                                <a href="{{ route('income.print', $incomes->id) }}" target="_blank"
                                 class="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold
                                         bg-blue-600 hover:bg-blue-700 text-white">
                                     <i class="fa-solid fa-print"></i>
@@ -64,14 +64,14 @@
                                     <div class="min-w-0">
                                         <p class="text-xs text-gray-500 dark:text-gray-300">Title</p>
                                         <p class="text-lg font-bold text-gray-900 dark:text-gray-100 truncate">
-                                            {{ $expenses->title }}
+                                            {{ $incomes->title }}
                                         </p>
                                     </div>
 
                                     <div class="shrink-0">
                                         <p class="text-xs text-gray-500 dark:text-gray-300 sm:text-right">Amount</p>
                                         <p class="text-2xl font-extrabold text-gray-900 dark:text-white sm:text-right">
-                                            ৳ {{ number_format($expenses->amount, 2) }}/-
+                                            ৳ {{ number_format($incomes->amount, 2) }}/-
                                         </p>
                                     </div>
                                 </div>
@@ -90,7 +90,7 @@
                                             <div class="min-w-0">
                                                 <p class="text-xs text-gray-500 dark:text-gray-300">Category</p>
                                                 <p class="text-sm font-semibold text-gray-900 dark:text-gray-100">
-                                                    {{ $expenses->category->name ?? 'N/A' }}
+                                                    {{ $incomes->category->name ?? 'N/A' }}
                                                 </p>
                                             </div>
                                         </div>
@@ -105,7 +105,7 @@
                                             <div class="min-w-0">
                                                 <p class="text-xs text-gray-500 dark:text-gray-300">Sub Category</p>
                                                 <p class="text-sm font-semibold text-gray-900 dark:text-gray-100">
-                                                    {{ $expenses->subcategory->name ?? 'N/A' }}
+                                                    {{ $incomes->subcategory->name ?? 'N/A' }}
                                                 </p>
                                             </div>
                                         </div>
@@ -120,7 +120,7 @@
                                             <div class="min-w-0">
                                                 <p class="text-xs text-gray-500 dark:text-gray-300">Date</p>
                                                 <p class="text-sm font-semibold text-gray-900 dark:text-gray-100">
-                                                    {{ \Carbon\Carbon::parse($expenses->date)->format('d M, Y') }}
+                                                    {{ \Carbon\Carbon::parse($incomes->date)->format('d M, Y') }}
                                                 </p>
                                             </div>
                                         </div>
@@ -135,10 +135,10 @@
                                             <div class="min-w-0">
                                                 <p class="text-xs text-gray-500 dark:text-gray-300">Added By</p>
                                                 <p class="text-sm font-semibold text-gray-900 dark:text-gray-100">
-                                                    {{ $expenses->user->first_name ?? 'N/A' }} {{ $expenses->user->last_name ?? 'N/A' }}
+                                                    {{ $incomes->user->first_name ?? 'N/A' }} {{ $incomes->user->last_name ?? 'N/A' }}
                                                 </p>
                                                 <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                                                    {{ optional($expenses->created_at)->format('d M, Y h:i A') ?? '' }}
+                                                    {{ optional($incomes->created_at)->format('d M, Y h:i A') ?? '' }}
                                                 </p>
                                             </div>
                                         </div>
@@ -154,7 +154,7 @@
                                     </div>
 
                                     <p class="text-sm text-gray-700 dark:text-gray-200 leading-relaxed whitespace-pre-line">
-                                        {{ $expenses->remark ?? 'N/A' }}
+                                        {{ $incomes->remark ?? 'N/A' }}
                                     </p>
                                 </div>
                             </div>

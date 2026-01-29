@@ -25,12 +25,12 @@
                     <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between my-4">
                         {{-- LEFT : Title --}}
                         <h2 class="text-2xl font-semibold text-gray-700 dark:text-gray-200">
-                           Expenses Category Setting
+                           Income Sub-Category Setting
                         </h2>
 
                         {{-- RIGHT : Action Button --}}
                         <div>
-                            <a href="{{ route('expenses.setting') }}" class="inline-flex items-center justify-center px-4 py-2 text-sm font-medium
+                            <a href="{{ route('income.setting') }}" class="inline-flex items-center justify-center px-4 py-2 text-sm font-medium
                                     text-white bg-blue-600 rounded-lg
                                     hover:bg-blue-700 transition
                                     focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2
@@ -50,45 +50,103 @@
                         <div class="lg:col-span-2 rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-sm overflow-hidden">
 
                             {{-- Header --}}
-                            <div class="px-6 py-5 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900">
-                                <div class="flex items-start justify-between gap-4">
-                                    <div class="flex items-start gap-3 py-4">
-                                        <div class="h-10 w-10 rounded-xl bg-blue-600/10 dark:bg-blue-500/10 flex items-center justify-center">
-                                            <i class="fa-solid {{ isset($excategory) ? 'fa-pen-to-square' : 'fa-layer-group' }} text-blue-600 dark:text-blue-400"></i>
+                            <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700
+                                    bg-gradient-to-r from-blue-50 to-white
+                                    dark:from-gray-900 dark:to-gray-800">
+                                <div class="flex items-center justify-between gap-4">
+
+                                    {{-- Left: Icon + Title --}}
+                                    <div class="flex items-center gap-4">
+
+                                        <div
+                                            class="h-11 w-11 flex items-center justify-center
+                                                rounded-2xl bg-blue-600/10 dark:bg-blue-500/10
+                                                shrink-0">
+                                            <i class="fa-solid {{ isset($incomesubcategory) ? 'fa-pen-to-square' : 'fa-sitemap' }}
+                                                    text-blue-600 dark:text-blue-400 text-lg"></i>
                                         </div>
 
-                                        <div>
-                                            <h2 class="text-lg font-bold text-gray-800 dark:text-gray-100">
-                                                {{ isset($excategory) ? 'Edit Expense Category' : 'Create Expense Category' }}
+                                        <div class="leading-tight">
+                                            <h2 class="text-lg font-extrabold text-gray-800 dark:text-gray-100">
+                                                {{ isset($incomesubcategory) ? 'Edit Expense Subcategory' : 'Create Expense Subcategory' }}
                                             </h2>
-                                            <p class="text-sm text-gray-500 dark:text-gray-300 mt-1">
-                                                Add/update categories for expense tracking.
+                                            <p class="text-sm text-gray-500 dark:text-gray-300 mt-0.5">
+                                                Select a category and add/update a subcategory for better expense reports.
                                             </p>
                                         </div>
                                     </div>
 
-                                    {{-- Status Badge --}}
-                                    <span class="inline-flex items-center px-3 py-4 rounded-full text-xs font-semibold dark:text-gray-100
-                                                {{ isset($excategory) ? 'bg-amber-100 text-amber-700 dark:bg-amber-500/10 dark:text-amber-300' : 'bg-emerald-100 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-300' }}">
-                                        {{ isset($excategory) ? 'Editing' : 'New' }}
+                                    {{-- Right: Status Badge --}}
+                                    @php($isEdit = isset($incomesubcategory))
+
+                                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full dark:text-gray-100
+                                            text-xs font-semibold shrink-0
+                                            {{ $isEdit
+                                                    ? 'bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:!text-amber-200'
+                                                    : 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:!text-emerald-200'
+                                            }}">
+                                        <i class="fa-solid {{ $isEdit ? 'fa-rotate' : 'fa-sparkles' }} text-xs"></i>
+                                        {{ $isEdit ? 'Editing' : 'New' }}
                                     </span>
+
                                 </div>
                             </div>
 
                             {{-- Form --}}
                             <form
-                                action="{{ isset($excategory) ? route('excategories.update', $excategory->id) : route('excategories.store') }}"
+                                action="{{ isset($incomesubcategory) 
+                                ? route('income-subcategories.modify', $incomesubcategory->id) 
+                                : route('income-subcategories.store') }}"
                                 method="POST"
-                                class="p-6 space-y-6">
+                                class="p-6 space-y-6" >
+                                
                                 @csrf
-                                @if(isset($excategory))
+                                @if(isset($incomesubcategory))
                                     @method('PUT')
                                 @endif
 
-                                {{-- Field --}}
+                                {{-- Category Select --}}
                                 <div class="space-y-2">
                                     <label class="block text-sm font-semibold text-gray-700 dark:text-gray-200">
-                                        Category Name <span class="text-red-500">*</span>
+                                        Select Category <span class="text-red-500">*</span>
+                                    </label>
+
+                                    <div class="relative">
+                                        <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
+                                            <i class="fa-solid fa-layer-group"></i>
+                                        </span>
+
+                                        <select
+                                            name="category_id"
+                                            class="block w-full rounded-xl border pl-10 pr-10 py-3 text-sm
+                                                bg-white dark:bg-gray-700
+                                                text-gray-800 dark:text-gray-100
+                                                border-gray-300 dark:border-gray-600
+                                                focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-100 dark:focus:ring-blue-900/40
+                                                @error('category_id') border-red-500 focus:border-red-500 focus:ring-red-100 dark:focus:ring-red-900/40 @enderror"
+                                            required >
+                                            <option value="" disabled {{ old('category_id', $incomesubcategory->category_id ?? '') ? '' : 'selected' }}>
+                                                -- Select Category --
+                                            </option>
+
+                                            @foreach($categories as $cat)
+                                                <option value="{{ $cat->id }}"
+                                                    @selected(old('category_id', $incomesubcategory->category_id ?? '') == $cat->id)>
+                                                    {{ $cat->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
+                                    <p class="text-xs text-gray-500 dark:text-gray-300">
+                                        Select the category under which the subcategory will be placed.
+                                    </p>
+                                </div>
+
+                                {{-- Subcategory Name --}}
+                                <div class="space-y-2">
+                                    <label class="block text-sm font-semibold text-gray-700 dark:text-gray-200">
+                                        Subcategory Name <span class="text-red-500">*</span>
                                     </label>
 
                                     <div class="relative">
@@ -99,8 +157,8 @@
                                         <input
                                             type="text"
                                             name="name"
-                                            value="{{ old('name', $excategory->name ?? '') }}"
-                                            placeholder="e.g. Office Expense"
+                                            value="{{ old('name', $incomesubcategory->name ?? '') }}"
+                                            placeholder="e.g. Lunch, Transport Fare"
                                             class="block w-full rounded-xl border pl-10 pr-4 py-3 text-sm
                                                 bg-white dark:bg-gray-700
                                                 text-gray-800 dark:text-gray-100
@@ -109,25 +167,17 @@
                                                 focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-100 dark:focus:ring-blue-900/40
                                                 @error('name') border-red-500 focus:border-red-500 focus:ring-red-100 dark:focus:ring-red-900/40 @enderror"
                                             required
-                                            autocomplete="off"
-                                        >
+                                            autocomplete="off">
                                     </div>
 
                                     <p class="text-xs text-gray-500 dark:text-gray-300">
-                                        Give a short & meaningful name (max 255 chars).
+                                        Example: Food → Lunch/Dinner, Transport → Bus/Rickshaw
                                     </p>
-
-                                    @error('name')
-                                        <p class="text-xs text-red-600 dark:text-red-300">
-                                            <i class="fa-solid fa-circle-exclamation mr-1"></i>
-                                            {{ $message }}
-                                        </p>
-                                    @enderror
                                 </div>
 
                                 {{-- Footer --}}
                                 <div class="pt-2 flex flex-wrap items-center justify-end gap-2">
-                                    <a href="{{ route('expenses.setting') }}"
+                                    <a href="{{ route('income.setting') }}"
                                     class="inline-flex items-center justify-center px-4 py-2.5 rounded-xl text-sm font-semibold
                                             border border-gray-300 dark:border-gray-600
                                             text-gray-700 dark:text-gray-200
@@ -140,10 +190,11 @@
                                             class="inline-flex items-center justify-center px-4 py-2.5 rounded-xl text-sm font-semibold
                                                 text-white bg-blue-600 hover:bg-blue-700 transition
                                                 focus:outline-none focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900/40">
-                                        <i class="fa-solid {{ isset($excategory) ? 'fa-pen-to-square' : 'fa-plus' }} mr-2"></i>
-                                        {{ isset($excategory) ? 'Update Category' : 'Create Category' }}
+                                        <i class="fa-solid {{ isset($incomesubcategory) ? 'fa-pen-to-square' : 'fa-plus' }} mr-2"></i>
+                                        {{ isset($incomesubcategory) ? 'Update Subcategory' : 'Create Subcategory' }}
                                     </button>
                                 </div>
+
                             </form>
                         </div>
 
@@ -157,27 +208,28 @@
                             <ul class="mt-4 space-y-3 text-sm text-gray-600 dark:text-gray-300">
                                 <li class="flex gap-2">
                                     <i class="fa-solid fa-check mt-1 text-emerald-600 dark:text-emerald-400"></i>
-                                    Keeping the category name unique keeps the report clean.
+                                    Keeping the subcategory name according to the category makes search/report easier.
                                 </li>
                                 <li class="flex gap-2">
                                     <i class="fa-solid fa-check mt-1 text-emerald-600 dark:text-emerald-400"></i>
-                                    “Transport”, “Office”, “Salary”—this is an advantage if you give broad names.
+                                    Keep category-wise unique to avoid duplicates (Food → Lunch once).
                                 </li>
                                 <li class="flex gap-2">
                                     <i class="fa-solid fa-check mt-1 text-emerald-600 dark:text-emerald-400"></i>
-                                    You can add a subcategory later (Food → Lunch/Dinner).
+                                    Selecting a subcategory in an expense entry clears the analytics.
                                 </li>
                             </ul>
 
                             <div class="mt-6 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 p-4">
                                 <p class="text-xs text-gray-600 dark:text-gray-300">
                                     <span class="font-semibold text-gray-800 dark:text-gray-100">Note:</span>
-                                    If you are in edit mode, the old name will auto-fill.
+                                    Changing the category will change the grouping/report.
                                 </p>
                             </div>
                         </div>
 
                     </div>
+
 
 
 

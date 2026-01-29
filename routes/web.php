@@ -10,6 +10,7 @@ use App\Http\Controllers\Cart\CartController;
 use App\Http\Controllers\Order\OrderController;
 use App\Http\Controllers\Report\Sale\SaleReportController;
 use App\Http\Controllers\Expenses\ExpensesController;
+use App\Http\Controllers\Income\IncomeController;
 
 
 
@@ -98,7 +99,7 @@ Route::group(['middleware' => ['admin']], function(){
         Route::get('/get-subcategories/{id}', [ExpensesController::class, 'getSubCategory'])->name('expenses.subcategories');
         Route::post('/create', [ExpensesController::class, 'create'])->name('create.expenses');
         Route::get('/view-detials/{id}', [ExpensesController::class, 'viewDetials'])->name('expenses-view-details');
-        Route::get('/delete/{id}', [ExpensesController::class, 'delete'])->name('expenses-delete');
+        Route::delete('/delete/{id}', [ExpensesController::class, 'delete'])->name('expenses-delete');
         Route::get('/print/{id}', [ExpensesController::class, 'printExpenses'])->name('expenses.print');
 
         Route::get('/setting', [ExpensesController::class, 'setting'])->name('expenses.setting');
@@ -113,6 +114,29 @@ Route::group(['middleware' => ['admin']], function(){
         Route::get('/update-sub-category/{id}', [ExpensesController::class, 'updateSubCategory'])->name('exsubcategories.update');
         Route::put('/modify-sub-category/{id}', [ExpensesController::class, 'modifySubCategory'])->name('exsubcategories.modify');
         Route::delete('/delete-sub-category/{id}', [ExpensesController::class, 'deleteSubCategory'])->name('exsubcategories.delete');
+    });
+
+    Route::prefix('incomes')->group(function () {
+        Route::get('/', [IncomeController::class, 'index'])->name('incomes');
+        Route::get('/get-incomes/{id}', [IncomeController::class, 'getSubCategory'])->name('incomes.subcategories');
+        Route::post('/create', [IncomeController::class, 'create'])->name('create-incomes');
+        Route::get('/view-details/{id}', [IncomeController::class, 'viewDetails'])->name('income.view.details');
+        Route::delete('/delete/{id}', [IncomeController::class, 'delete'])->name('income-delete');
+        Route::get('/print/{id}', [IncomeController::class, 'printIncome'])->name('income.print');
+
+        Route::get('/setting', [IncomeController::class, 'setting'])->name('income.setting');
+        Route::get('/create-category', [IncomeController::class, 'createView'])->name('income-create-category-view');
+        Route::post('/category-create', [IncomeController::class, 'createCategory'])->name('income-excategories.store');
+        Route::get('/category-update/{id}', [IncomeController::class, 'updateCategory'])->name('income-excategories.update.view');
+        Route::put('/modify-category/{id}', [IncomeController::class, 'modifyCategory'])->name('income.categories.update');
+        Route::delete('/delete-category/{id}', [IncomeController::class, 'deleteCategory'])->name('income-expenses.category.delete');
+        
+        Route::get('/create-sub-category', [IncomeController::class, 'createSubView'])->name('income-create-sub-category-view');
+        Route::post('/sub-category-store', [IncomeController::class, 'storeSubCategory'])->name('income-subcategories.store');
+        
+        Route::get('/update-sub-category/{id}', [IncomeController::class, 'updateSubCategory'])->name('income-subcategories.update');
+        Route::put('/modify-sub-category/{id}', [IncomeController::class, 'modifySubCategory'])->name('income-subcategories.modify');
+        Route::delete('/delete-sub-category/{id}', [IncomeController::class, 'deleteSubCategory'])->name('income-exsubcategories.delete');
     });
 
 });

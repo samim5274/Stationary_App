@@ -25,12 +25,12 @@
                     <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between my-4">
                         {{-- LEFT : Title --}}
                         <h2 class="text-2xl font-semibold text-gray-700 dark:text-gray-200">
-                           Expenses Category Setting
+                           Income Category Setting
                         </h2>
 
                         {{-- RIGHT : Action Button --}}
                         <div>
-                            <a href="{{ route('expenses.setting') }}" class="inline-flex items-center justify-center px-4 py-2 text-sm font-medium
+                            <a href="{{ route('income.setting') }}" class="inline-flex items-center justify-center px-4 py-2 text-sm font-medium
                                     text-white bg-blue-600 rounded-lg
                                     hover:bg-blue-700 transition
                                     focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2
@@ -54,34 +54,36 @@
                                 <div class="flex items-start justify-between gap-4">
                                     <div class="flex items-start gap-3 py-4">
                                         <div class="h-10 w-10 rounded-xl bg-blue-600/10 dark:bg-blue-500/10 flex items-center justify-center">
-                                            <i class="fa-solid {{ isset($excategory) ? 'fa-pen-to-square' : 'fa-layer-group' }} text-blue-600 dark:text-blue-400"></i>
+                                            <i class="fa-solid {{ isset($incomeCategory) ? 'fa-pen-to-square' : 'fa-layer-group' }} text-blue-600 dark:text-blue-400"></i>
                                         </div>
 
                                         <div>
                                             <h2 class="text-lg font-bold text-gray-800 dark:text-gray-100">
-                                                {{ isset($excategory) ? 'Edit Expense Category' : 'Create Expense Category' }}
+                                                {{ isset($incomeCategory) ? 'Edit Income Category' : 'Create Income Category' }}
                                             </h2>
                                             <p class="text-sm text-gray-500 dark:text-gray-300 mt-1">
-                                                Add/update categories for expense tracking.
+                                                Add/update categories for income tracking.
                                             </p>
                                         </div>
                                     </div>
 
                                     {{-- Status Badge --}}
                                     <span class="inline-flex items-center px-3 py-4 rounded-full text-xs font-semibold dark:text-gray-100
-                                                {{ isset($excategory) ? 'bg-amber-100 text-amber-700 dark:bg-amber-500/10 dark:text-amber-300' : 'bg-emerald-100 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-300' }}">
-                                        {{ isset($excategory) ? 'Editing' : 'New' }}
+                                        {{ isset($incomeCategory)
+                                            ? 'bg-amber-100 text-amber-700 dark:bg-amber-500/10 dark:text-amber-300'
+                                            : 'bg-emerald-100 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-300' }}">
+                                        {{ isset($incomeCategory) ? 'Editing' : 'New' }}
                                     </span>
                                 </div>
                             </div>
 
                             {{-- Form --}}
-                            <form
-                                action="{{ isset($excategory) ? route('excategories.update', $excategory->id) : route('excategories.store') }}"
-                                method="POST"
-                                class="p-6 space-y-6">
+                            <form action="{{ isset($incomeCategory)
+                                    ? route('income.categories.update', $incomeCategory->id)
+                                    : route('income-excategories.store') }}" method="POST" class="p-6 space-y-6">
+
                                 @csrf
-                                @if(isset($excategory))
+                                @if(isset($incomeCategory))
                                     @method('PUT')
                                 @endif
 
@@ -99,8 +101,8 @@
                                         <input
                                             type="text"
                                             name="name"
-                                            value="{{ old('name', $excategory->name ?? '') }}"
-                                            placeholder="e.g. Office Expense"
+                                            value="{{ old('name', $incomeCategory->name ?? '') }}"
+                                            placeholder="e.g. Printing & Photocopy"
                                             class="block w-full rounded-xl border pl-10 pr-4 py-3 text-sm
                                                 bg-white dark:bg-gray-700
                                                 text-gray-800 dark:text-gray-100
@@ -127,7 +129,7 @@
 
                                 {{-- Footer --}}
                                 <div class="pt-2 flex flex-wrap items-center justify-end gap-2">
-                                    <a href="{{ route('expenses.setting') }}"
+                                    <a href="{{ route('income.setting') }}"
                                     class="inline-flex items-center justify-center px-4 py-2.5 rounded-xl text-sm font-semibold
                                             border border-gray-300 dark:border-gray-600
                                             text-gray-700 dark:text-gray-200
@@ -137,15 +139,17 @@
                                     </a>
 
                                     <button type="submit"
-                                            class="inline-flex items-center justify-center px-4 py-2.5 rounded-xl text-sm font-semibold
-                                                text-white bg-blue-600 hover:bg-blue-700 transition
-                                                focus:outline-none focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900/40">
-                                        <i class="fa-solid {{ isset($excategory) ? 'fa-pen-to-square' : 'fa-plus' }} mr-2"></i>
-                                        {{ isset($excategory) ? 'Update Category' : 'Create Category' }}
+                                        class="inline-flex items-center justify-center px-4 py-2.5 rounded-xl text-sm font-semibold
+                                            text-white bg-blue-600 hover:bg-blue-700 transition
+                                            focus:outline-none focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900/40">
+                                        <i class="fa-solid {{ isset($incomeCategory) ? 'fa-pen-to-square' : 'fa-plus' }} mr-2"></i>
+                                        {{ isset($incomeCategory) ? 'Update Category' : 'Create Category' }}
                                     </button>
                                 </div>
+
                             </form>
                         </div>
+
 
                         {{-- Side Info Panel --}}
                         <div class="rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-sm p-6">

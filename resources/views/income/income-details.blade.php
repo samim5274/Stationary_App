@@ -25,11 +25,11 @@
                     <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between my-4">
                         {{-- LEFT : Title --}}
                         <h2 class="text-2xl font-semibold text-gray-700 dark:text-gray-200">
-                           Expenses Details - <small>Total: ৳ {{ $expensess->sum('amount') }}/-</small>
+                           Income Details - <small>Total: ৳ {{ $incomes->sum('amount') }}/-</small>
                         </h2>
 
                         {{-- RIGHT : Action Button --}}
-                        <a href="{{ route('expenses.setting') }}"
+                        <a href="{{ route('income.setting') }}"
                         class="inline-flex items-center justify-center px-4 py-2 text-sm font-medium
                                 text-white bg-blue-600 rounded-lg
                                 hover:bg-blue-700 transition
@@ -45,7 +45,7 @@
 
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 mb-8">
 
-                        <form action="{{ route('create.expenses') }}" method="POST" class="px-6 py-6 bg-white dark:bg-gray-800 rounded-xl shadow-md space-y-5">
+                        <form action="{{ route('create-incomes') }}" method="POST" class="px-6 py-6 bg-white dark:bg-gray-800 rounded-xl shadow-md space-y-5">
                             @csrf
 
                             <div>
@@ -119,10 +119,10 @@
 
                             {{-- Submit --}}
                             <div>
-                                <button type="submit"
+                                <button type="submit" onclick="return confirm('Are you sure want create income?')"
                                         class="w-full bg-[#3F4D67] text-white py-2.5 rounded-lg text-sm font-semibold
                                             hover:bg-[#6d85b1] transition duration-200 shadow">
-                                    Save Expense
+                                    Save Income
                                 </button>
                             </div>
 
@@ -141,7 +141,7 @@
                                 </thead>
 
                                 <tbody class="divide-y divide-gray-200 dark:divide-gray-700 bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200">
-                                    @forelse($expensess as $i => $val)
+                                    @forelse($incomes as $i => $val)
                                         <tr class="transition-colors duration-150
                                                 bg-white dark:bg-gray-900
                                                 hover:bg-gray-50 dark:hover:bg-gray-800">
@@ -151,7 +151,7 @@
                                             </td>
 
                                             <td class="px-4 py-3 text-sm font-medium text-gray-900 dark:text-gray-100 hover:underline">
-                                                <a href="{{ route('expenses-view-details', $val->id) }}">
+                                                <a href="{{ route('income.view.details', $val->id) }}">
                                                     {{ $val->title }} <br> 
                                                     <small>{{ $val->category->name ?? 'N/A' }}</small> -  
                                                     <small>{{ $val->subcategory->name ?? 'N/A' }}</small> <br>
@@ -168,32 +168,28 @@
                                                 <div class="flex items-center justify-center gap-3">
 
                                                     {{-- View --}}
-                                                    <a href="{{ route('expenses-view-details', $val->id) }}"
+                                                    <a href="{{ route('income.view.details', $val->id) }}"
                                                     class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300">
                                                         <i class="fa-solid fa-eye"></i>
                                                     </a>
 
                                                     {{-- Print --}}
-                                                    <a href="{{ route('expenses.print', $val->id) }}" target="_blank"
+                                                    <a href="{{ route('income.print', $val->id) }}" target="_blank"
                                                     class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300">
                                                         <i class="fa-solid fa-print"></i>
                                                     </a>
 
                                                     {{-- Delete --}}
-                                                    <form action="{{ route('expenses-delete', $val->id) }}"
-                                                        method="POST"
-                                                        class="inline"
+                                                    <form action="{{ route('income-delete', $val->id) }}"
+                                                        method="POST" class="inline"
                                                         onsubmit="return confirm('Are you sure you want to delete this Income?')">
-
                                                         @csrf
                                                         @method('DELETE')
-
                                                         <button type="submit"
                                                             class="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300">
                                                             <i class="fa-solid fa-trash"></i>
                                                         </button>
                                                     </form>
-
 
                                                 </div>
                                             </td>
@@ -209,16 +205,16 @@
 
                             </table>
                             {{-- Pagination (if used) --}}
-                            @if(method_exists($expensess, 'links'))
+                            @if(method_exists($incomes, 'links'))
                             <div class="px-4 py-3 text-xs font-semibold tracking-wide text-gray-500 border-t dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
                                 <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
 
                                     {{-- LEFT --}}
                                     <div class="flex-1 min-w-0 flex items-center justify-start">
                                         @php
-                                            $from  = $expensess->firstItem() ?? 0;
-                                            $to    = $expensess->lastItem() ?? 0;
-                                            $total = $expensess->total();
+                                            $from  = $incomes->firstItem() ?? 0;
+                                            $to    = $incomes->lastItem() ?? 0;
+                                            $total = $incomes->total();
                                         @endphp
                                         <span class="truncate">
                                             Showing
@@ -232,7 +228,7 @@
 
                                     {{-- RIGHT (Keep your smart pagination here if needed) --}}
                                     <div class="shrink-0 flex items-center justify-end">
-                                        {{ $expensess->appends(request()->query())->links() }}
+                                        {{ $incomes->appends(request()->query())->links() }}
                                     </div>
 
                                 </div>
@@ -264,7 +260,7 @@
 
                 if (categoryId) {
                     $.ajax({
-                        url: '/expenses/get-subcategories/' + categoryId,
+                        url: '/incomes/get-incomes/' + categoryId,
                         type: 'GET',
                         dataType: 'json',
                         success: function(data) {
