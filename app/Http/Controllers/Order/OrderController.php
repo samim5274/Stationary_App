@@ -86,6 +86,9 @@ class OrderController extends Controller
                     $total, $discount, $newVat, $payable,
                     $payMethod, $payAmount, $dueAmount, $status
                 ) {
+                    if (Order::where('reg', $reg)->lockForUpdate()->exists()) {
+                        throw new \Exception('This order already taken. Please try again.');
+                    }
                     // =========================
                     // 1) SAVE ORDER
                     // =========================
@@ -94,7 +97,7 @@ class OrderController extends Controller
                     $order->user_id         = $user->id;
                     $order->reg             = $reg;
 
-                    $order->total           = $payable;
+                    $order->total           = $total;
                     $order->status          = $status;
                     $order->customerName    = $request->filled('txtCustomerName') ? $request->input('txtCustomerName') : 'Guest';
                     $order->customerPhone   = $request->filled('txtCustomerPhone') ? $request->input('txtCustomerPhone') : '0';
@@ -126,7 +129,6 @@ class OrderController extends Controller
                 throw new \Exception('Transaction failed: ' . $e->getMessage());
             }            
         }  catch (\Exception $e) {            
-            DB::rollBack();
             return redirect()->back()->with('error', 'An error occurred while processing your order. '. $e->getMessage());
         }
     }
@@ -136,13 +138,19 @@ class OrderController extends Controller
         $company = Company::first();
 
         $order = Order::where('reg', $reg)->first();
+        if (!$order) return back()->with('error','Invalid order.');
+
+        
+        $user = Auth::guard('admin')->user() ?? Auth::user();
+        if (!$user) return back()->with('error','Unauthorized.');
+        
         $paymentDetail = PaymentDetail::where('reg', $reg)->first();
 
         // eager load product + user
         $cartItems = Cart::with(['product', 'user'])->where('reg', $reg)->get();
 
-        if (!$order || !$paymentDetail || $cartItems->isEmpty()) {
-            return redirect()->back()->with('error', 'Invalid order details for invoice.');
+        if (!$paymentDetail || $cartItems->isEmpty()) {
+            return back()->with('error', 'Invalid order details for invoice.');
         }
 
         // bill officer (Cart user) - first item user
