@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Str;
 
 use App\Models\User;
 use App\Models\Company;
@@ -36,15 +37,22 @@ class UserController extends Controller
         // Validate input
         $credentials = $request->validate([
             'email'    => ['required', 'email'],
-            'password' => ['required', 'string', 'min:8'],
+            'password' => ['required', 'string', 'min:8'], // use Illuminate\Validation\Rules\Password; Password::min(10)->mixedCase()->numbers()->symbols(),
         ]);
 
         $key = strtolower($credentials['email']).'|'.$request->ip();
 
-        if (RateLimiter::tooManyAttempts($key, 5)) {
-            $seconds = RateLimiter::availableIn($key);
+        $email = Str::lower(trim($credentials['email']));
+
+        $emailKey = 'login:email:' . $email;
+        $ipKey    = 'login:ip:' . $request->ip();
+
+        if (
+            RateLimiter::tooManyAttempts($emailKey, 3) ||
+            RateLimiter::tooManyAttempts($ipKey, 20)
+        ) {
             throw ValidationException::withMessages([
-                'email' => "Too many attempts. Try again in {$seconds} seconds.",
+                'email' => 'Too many login attempts. Please try again later.',
             ]);
         }
 
@@ -52,8 +60,12 @@ class UserController extends Controller
 
         // Attempt login with remember me
         if (Auth::guard('admin')->attempt($credentials, $remember)) {
-            RateLimiter::clear($key);
+            // clear limits
+            RateLimiter::clear($emailKey);
+            RateLimiter::clear($ipKey);
 
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
             $request->session()->regenerate();
 
             $admin = Auth::guard('admin')->user();
@@ -65,10 +77,11 @@ class UserController extends Controller
         }
 
         // Login failed
-        RateLimiter::hit($key, 60); // decay 60 seconds
+        RateLimiter::hit($emailKey, 60);
+        RateLimiter::hit($ipKey, 60);
 
         throw ValidationException::withMessages([
-            'email' => 'Credentials do not match our records.',
+            'email' => 'Invalid login credentials.',
         ]);
 
     }
