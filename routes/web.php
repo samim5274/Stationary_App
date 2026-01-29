@@ -26,7 +26,7 @@ Route::get('/clear', function(){
 Route::prefix('auth')->group(function () {        
     Route::get('/login', [UserController::class, 'login'])->name('login');
     Route::get('/logout', [UserController::class, 'logout'])->name('logout');
-    Route::post('/login', [UserController::class, 'loginPost'])->name('user.login');
+    Route::post('/login', [UserController::class, 'loginPost'])->name('user.login')->middleware('throttle:5,1');;
 });
 
 
