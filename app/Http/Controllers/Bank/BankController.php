@@ -62,10 +62,52 @@ class BankController extends Controller
         return view('bank.withdraw-view', compact('company','banks','transections'));
     }
 
+    public function bankWithdraw(Request $request){
+        try{
+            // Validation
+            $request->validate([
+                'from_bank_id'  => 'required|exists:bank_details,id',
+                'amount'        => 'required|numeric|min:0.01',
+                'remarks'       => 'nullable|string|max:255',
+            ]);
+
+            $userId = Auth::guard('admin')->id();
+
+            // Get Current Bank Balance
+            $fromBankBalance = BankTransectionDetail::where('bank_id', $request->from_bank_id)
+                ->selectRaw("
+                    COALESCE(SUM(CASE WHEN status='Deposit' THEN amount ELSE 0 END),0) -
+                    COALESCE(SUM(CASE WHEN status='Withdraw' THEN amount ELSE 0 END),0)
+                    AS balance
+                ")->value('balance');
+
+            $fromBankBalance = $fromBankBalance ?? 0;
+
+            // Check If Enough Balance
+            if ($request->amount > $fromBankBalance) {
+                return back()->with('error', 'Insufficient balance! Available balance: ৳ ' . number_format($fromBankBalance, 2));
+            }
+
+            // Insert Withdraw Record
+            $withdraw = new BankTransectionDetail();
+            $withdraw->bank_id   = $request->from_bank_id;
+            $withdraw->user_id   = $userId; // Adjust guard if needed
+            $withdraw->amount    = $request->amount;
+            $withdraw->date      = Carbon::now()->format('Y-m-d');
+            $withdraw->status    = 'Withdraw';
+            $withdraw->remarks   = $request->remarks ?? 'N/A';
+            $withdraw->save();
+
+            return back()->with('success', 'Amount withdrawn successfully.');
+        } catch (\Throwable $e) {
+            return redirect()->back()->with('error', 'Some thing is wrong..!');
+        }
+    }
+
     public function dipositDelete($id){
         try{
             $transections = BankTransectionDetail::findOrFail($id);
-            $transections->delete();
+            // $transections->delete();
             return redirect()->back()->with('success', 'Diposit transection deleted successfully.');
         } catch (\Throwable $e) {
             return redirect()->back()->with('error', 'Some thing is wrong..!');

@@ -46,7 +46,7 @@
 
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 mb-8">
                         
-                        <form action="#" method="POST" class="px-6 py-6 bg-white dark:bg-gray-800 rounded-xl shadow-md space-y-5">
+                        <form action="{{ route('bank.withdraw') }}" method="POST" class="px-6 py-6 bg-white dark:bg-gray-800 rounded-xl shadow-md space-y-5">
                             @csrf
 
                             @php
