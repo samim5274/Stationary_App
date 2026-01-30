@@ -20,7 +20,7 @@ class ExpensesController extends Controller
 {
     public function index(){
         $company = Company::first();
-        $expensess = Expenses::where('date', Carbon::today())->latest()->paginate(5);
+        $expensess = Expenses::with(['category','subcategory','user'])->where('date', Carbon::today())->latest()->paginate(5);
         $categories = Excategory::get();
         $subcategories = Exsubcategory::get();
         return view('expenses.expenses-details', compact('company','expensess','categories', 'subcategories'));

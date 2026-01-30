@@ -19,7 +19,7 @@ class IncomeController extends Controller
 {
     public function index(){
         $company = Company::first();
-        $incomes = Income::with(['category','subcategory','user'])->get();
+        $incomes = Income::with(['category','subcategory','user'])->where('income_date', Carbon::today())->get();
         $categories = IncomeCategory::get();
         $subcategories = IncomeSubCategory::get();
         return view('income.income-details', compact(
