@@ -11,6 +11,7 @@ use App\Http\Controllers\Order\OrderController;
 use App\Http\Controllers\Report\Sale\SaleReportController;
 use App\Http\Controllers\Expenses\ExpensesController;
 use App\Http\Controllers\Income\IncomeController;
+use App\Http\Controllers\Bank\BankController;
 
 
 
@@ -137,6 +138,19 @@ Route::group(['middleware' => ['admin']], function(){
         Route::get('/update-sub-category/{id}', [IncomeController::class, 'updateSubCategory'])->name('income-subcategories.update');
         Route::put('/modify-sub-category/{id}', [IncomeController::class, 'modifySubCategory'])->name('income-subcategories.modify');
         Route::delete('/delete-sub-category/{id}', [IncomeController::class, 'deleteSubCategory'])->name('income-exsubcategories.delete');
+    });
+
+    Route::prefix('bank')->group(function() {
+        Route::get('/', [BankController::class, 'index'])->name('bank.transection');
+        Route::get('/diposit', [BankController::class, 'bankDipositView'])->name('bank.diposit.view');
+        Route::post('/diposit', [BankController::class, 'bankDiposit'])->name('bank.diposit');
+        Route::delete('/diposit-delete/{id}', [BankController::class, 'dipositDelete'])->name('delete.diposit');
+        Route::get('/transection-view/{id}', [BankController::class, 'viewDipsoti'])->name('bank.transection.view');
+        
+        Route::get('/withdraw', [BankController::class, 'bankWithdrawView'])->name('bank.withdraw.view');
+
+        Route::get('/-to-bank', [BankController::class, 'bankToBankView'])->name('bank.to.bank.view');
+        Route::post('/-to-bank', [BankController::class, 'bankToBank'])->name('bank.to.bank.transection');
     });
 
 });

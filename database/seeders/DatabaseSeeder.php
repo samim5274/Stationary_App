@@ -26,6 +26,8 @@ class DatabaseSeeder extends Seeder
             ExsubcategorySeeder::class,
 
             IncomeCategorySeeder::class,
+
+            BankDetailSeeder::class,
         ]);
     }
 }

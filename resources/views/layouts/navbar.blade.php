@@ -29,7 +29,8 @@
 
     $activeExpenses = $isActive(['expenses', 'expenses.*',]);
     $activeIncome = $isActive(['incomes', 'incomes.*',]);
-    $financeAccountOpen = ($activeExpenses || $activeIncome);
+    $activeBank = $isActive(['bank', 'bank.*',]);
+    $financeAccountOpen = ($activeExpenses || $activeIncome || $activeBank);
 
 @endphp
 
@@ -195,6 +196,14 @@
                             hover:text-gray-800 dark:hover:text-gray-200">
                         <a class="block w-full" href="{{ route('incomes') }}">
                             Incomes
+                        </a>
+                    </li>
+
+                    <li class="px-2 py-1 rounded-md transition-colors duration-150
+                            {{ $activeBank ? 'bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100' : '' }}
+                            hover:text-gray-800 dark:hover:text-gray-200">
+                        <a class="block w-full" href="{{ route('bank.transection') }}">
+                            Bank Transection
                         </a>
                     </li>
 
@@ -492,6 +501,13 @@
                             hover:text-gray-800 dark:hover:text-gray-200">
                         <a class="w-full block" href="{{ route('incomes') }}">
                             Incomes
+                        </a>
+                    </li>
+                    <li class="px-2 py-1 rounded-md transition-colors duration-150
+                            {{ $activeBank ? 'bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100' : '' }}
+                            hover:text-gray-800 dark:hover:text-gray-200">
+                        <a class="w-full block" href="{{ route('bank.transection') }}">
+                            Bank Transection
                         </a>
                     </li>
 
