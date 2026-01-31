@@ -145,14 +145,13 @@ Route::group(['middleware' => ['admin']], function(){
         Route::get('/diposit', [BankController::class, 'bankDipositView'])->name('bank.diposit.view');
         Route::post('/diposit', [BankController::class, 'bankDiposit'])->name('bank.diposit');
         Route::delete('/diposit-delete/{id}', [BankController::class, 'dipositDelete'])->name('delete.diposit');
-        Route::get('/transection-view/{id}', [BankController::class, 'viewDipsoti'])->name('bank.transection.view');
-        
         Route::get('/withdraw', [BankController::class, 'bankWithdrawView'])->name('bank.withdraw.view');
         Route::post('/withdraw', [BankController::class, 'bankwithdraw'])->name('bank.withdraw');
         Route::delete('/withdraw-delete/{id}', [BankController::class, 'withdrawDelete'])->name('delete.withdraw'); // working in progress
-
+        Route::get('/transection-view/{id}', [BankController::class, 'transectionDipsoti'])->name('bank.transection.view');
         Route::get('/-to-bank', [BankController::class, 'bankToBankView'])->name('bank.to.bank.view');
         Route::post('/-to-bank', [BankController::class, 'bankToBank'])->name('bank.to.bank.transection');
+        Route::delete('/delete-transection/{id}', [BankController::class, 'deleteTransection'])->name('delete.transection');
     });
 
 });

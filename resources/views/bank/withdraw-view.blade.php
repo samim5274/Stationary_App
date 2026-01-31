@@ -190,7 +190,7 @@
                                                     </a>
 
                                                     {{-- Delete --}}
-                                                    <form action="#"
+                                                    <form action="{{ route('delete.withdraw', $val->id) }}"
                                                         method="POST"
                                                         onsubmit="return confirm('Are you sure?')">
                                                         @csrf

@@ -25,7 +25,7 @@
                     <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between my-4">
                         {{-- LEFT : Title --}}
                         <h2 class="text-2xl font-semibold text-gray-700 dark:text-gray-200">
-                           Bank Transection Details - <small>Total: ৳ {{ $transections->sum('amount') }}/-</small>
+                           Bank Transection Details
                         </h2>
 
                         {{-- RIGHT : Action Button --}}
@@ -67,6 +67,64 @@
 
 
                     @include('layouts.message')
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6 mb-4">
+                        {{-- Deposit --}}
+                        <div class="rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-sm hover:shadow-md transition overflow-hidden">
+                            <div class="p-5 flex items-start justify-between gap-4">
+                                <div>
+                                    <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Deposit</p>
+                                    <h3 class="mt-2 text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100 leading-tight">
+                                        ৳ {{ number_format($totalDeposit ?? 0, 2) }}
+                                    </h3>
+                                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Today total deposit</p>
+                                </div>
+
+                                <div class="h-12 w-12 rounded-2xl bg-emerald-50 dark:bg-emerald-500 flex items-center justify-center dark:text-gray-100">
+                                    <i class="fa-solid fa-arrow-turn-down"></i>
+                                </div>
+                            </div>
+                            <div class="h-1 w-full bg-emerald-500/80"></div>
+                        </div>
+
+                        {{-- Withdraw --}}
+                        <div class="rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-sm hover:shadow-md transition overflow-hidden">
+                            <div class="p-5 flex items-start justify-between gap-4">
+                                <div>
+                                    <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Withdraw</p>
+                                    <h3 class="mt-2 text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100 leading-tight">
+                                        ৳ {{ number_format($totalWithdraw ?? 0, 2) }}
+                                    </h3>
+                                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Today total withdraw</p>
+                                </div>
+
+                                <div class="h-12 w-12 rounded-2xl bg-rose-50 dark:bg-rose-500 flex items-center justify-center dark:text-gray-100">
+                                    <i class="fa-solid fa-arrow-turn-up"></i>
+                                </div>
+                            </div>
+                            <div class="h-1 w-full bg-rose-500/80"></div>
+                        </div>
+
+                        {{-- Balance --}}
+                        <div class="rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-sm hover:shadow-md transition overflow-hidden sm:col-span-2 lg:col-span-1">
+                            <div class="p-5 flex items-start justify-between gap-4">
+                                <div>
+                                    <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Balance</p>
+                                    <h3 class="mt-2 text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100 leading-tight">
+                                        ৳ {{ number_format($balance ?? 0, 2) }}
+                                    </h3>
+                                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Deposit - Withdraw</p>
+                                </div>
+
+                                <div class="h-12 w-12 rounded-2xl bg-rose-50 text-xl dark:bg-rose-500 flex items-center justify-center dark:text-gray-100">
+                                    <i class="fa-solid fa-money-check-dollar"></i>
+                                </div>
+                            </div>
+
+                            <div class="h-1 w-full bg-indigo-500/80"></div>
+                        </div>
+                    </div>
+
 
                     <div class="grid grid-cols-1 lg:grid-cols-1 gap-4 lg:gap-6 mb-8">                       
 
@@ -144,9 +202,9 @@
                                                     </a>
 
                                                     {{-- Delete --}}
-                                                    <form action="#"
+                                                    <form action="{{ route('delete.transection', $val->id) }}"
                                                         method="POST"
-                                                        onsubmit="return confirm('Are you sure?')">
+                                                        onsubmit="return confirm('Are you sure you want to delete this transection?')">
                                                         @csrf
                                                         @method('DELETE')
 

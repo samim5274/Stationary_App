@@ -20,7 +20,19 @@ class BankController extends Controller
         $company = Company::first();
         $banks = BankDetail::get();
         $transections = BankTransectionDetail::with(['bank','user'])->where('date', Carbon::today())->paginate(15);
-        return view('bank.bank-transection', compact('company','banks','transections'));
+        $totals = BankTransectionDetail::whereDate('date', Carbon::today())->selectRaw("status, SUM(amount) as total")
+                                        ->groupBy('status')->pluck('total', 'status');
+
+        $totalDeposit  = $totals['Deposit'] ?? 0;
+        $totalWithdraw = $totals['Withdraw'] ?? 0;
+
+        $balance = $totalDeposit - $totalWithdraw;
+
+        return view('bank.bank-transection', compact(
+            'company','banks','transections',
+            'totalDeposit','totalWithdraw',
+            'balance',
+        ));
     }
 
     public function bankDipositView(){
@@ -114,7 +126,17 @@ class BankController extends Controller
         }
     }
 
-    public function viewDipsoti($id){
+    public function withdrawDelete($id){
+        try{
+            $transections = BankTransectionDetail::findOrFail($id);
+            // $transections->delete();
+            return redirect()->back()->with('success', 'Withdraw transection deleted successfully.');
+        } catch (\Throwable $e) {
+            return redirect()->back()->with('error', 'Some thing is wrong..!');
+        }
+    }
+
+    public function transectionDipsoti($id){
         try{
             $company = Company::first();
             $transection = BankTransectionDetail::with(['bank','user'])->findOrFail($id);            
@@ -184,6 +206,16 @@ class BankController extends Controller
             $deposit->save();
 
             return redirect()->route('bank.transection')->with('success', 'Bank to Bank transfer successful!');
+        } catch (\Throwable $e) {
+            return redirect()->back()->with('error', 'Some thing is wrong..!');
+        }
+    }
+
+    public function deleteTransection($id){
+        try{
+            $transections = BankTransectionDetail::findOrFail($id);
+            // $transections->delete();
+            return redirect()->back()->with('success', 'Transection deleted successfully.');
         } catch (\Throwable $e) {
             return redirect()->back()->with('error', 'Some thing is wrong..!');
         }
