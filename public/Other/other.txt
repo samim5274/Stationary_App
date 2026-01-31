@@ -160,3 +160,21 @@ try {
 } catch (\Throwable $e) {
     return redirect()->route('product.list')->with('error', 'Something went wrong while deleting the product.');
 }
+
+git clone https://github.com/yourname/project.git .
+cp .env.example .env
+php artisan key:generate
+chmod -R 775 storage bootstrap/cache
+
+git pull origin main
+composer install --no-dev --optimize-autoloader
+php artisan optimize:clear
+
+// front end change hole
+php artisan view:clear
+php artisan route:clear
+php artisan config:cache
+
+// pull korar age 
+git restore public/Other/Al\ Faruk\ Academy\ Info.txt public/Other/other.txt
+git pull origin main
