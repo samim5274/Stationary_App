@@ -81,7 +81,7 @@
                                 </span>
 
                                 {{-- Print (optional route) --}}
-                                <a href="#" target="_blank"
+                                <a href="{{ route('print.transection', $transection->id) }}" target="_blank"
                                 class="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold
                                         text-white bg-blue-600 hover:bg-blue-700 transition">
                                     <i class="fa-solid fa-print"></i>
@@ -139,7 +139,8 @@
                                         <div class="flex items-start justify-between gap-6">
                                             <dt class="text-gray-500 dark:text-gray-400 font-medium w-32 shrink-0">Handled By</dt>
                                             <dd class="text-gray-800 dark:text-gray-100 text-right">
-                                                {{ $transection->user->name ?? 'N/A' }}
+                                                {{ $transection->user->first_name ?? 'N/A' }}
+                                                {{ $transection->user->last_name ?? 'N/A' }}
                                             </dd>
                                         </div>
 

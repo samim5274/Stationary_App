@@ -220,4 +220,18 @@ class BankController extends Controller
             return redirect()->back()->with('error', 'Some thing is wrong..!');
         }
     }
+
+    public function printTransection($id){
+
+        $company = Company::first();
+        $transection = BankTransectionDetail::with('bank')->findOrFail($id);
+        return view('report.print.print-bank-transection', compact('company','transection'));
+        
+
+        try{
+            //
+        } catch (\Throwable $e) {
+            return redirect()->back()->with('error', 'Some thing is wrong..!');
+        }
+    }
 }

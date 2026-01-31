@@ -152,6 +152,7 @@ Route::group(['middleware' => ['admin']], function(){
         Route::get('/-to-bank', [BankController::class, 'bankToBankView'])->name('bank.to.bank.view');
         Route::post('/-to-bank', [BankController::class, 'bankToBank'])->name('bank.to.bank.transection');
         Route::delete('/delete-transection/{id}', [BankController::class, 'deleteTransection'])->name('delete.transection');
+        Route::get('/print-transection/{id}', [BankController::class, 'printTransection'])->name('print.transection');
     });
 
 });
