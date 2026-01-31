@@ -68,6 +68,22 @@ class ProductController extends Controller
         return $sku;
     }
 
+    private function uploadPhoto($file, $folder)
+    {
+        $maxSize = 2 * 1024 * 1024; // 2MB
+
+        if ($file->getSize() > $maxSize) {
+            return false; // controller handle message
+        }
+
+        $name = 'pdr_' . time() . '_' . Str::random(8) . '.' . $file->getClientOriginalExtension();
+
+        // storage/app/public/products
+        $file->storeAs($folder, $name, 'public');
+
+        return $name;
+    }
+
     public function create(Request $request){
         try {
             // Validation and creation logic here
@@ -114,14 +130,16 @@ class ProductController extends Controller
 
             // image upload
             if ($request->hasFile('image')) {
-                $file = $request->file('image');
-                $name = 'pdr_' . time() . '_' . Str::random(8) . '.' . $file->getClientOriginalExtension();
 
-                // public/products
-                $file->move(public_path('products'), $name);
+                $image = $this->uploadPhoto($request->file('image'), 'products');
 
-                $validated['image'] = $name;
+                if (!$image) {
+                    return back()->with('warning', 'Image size must not exceed 2MB.');
+                }
+
+                $validated['image'] = $image;
             }
+
 
             $product = null;
 

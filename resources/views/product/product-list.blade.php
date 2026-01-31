@@ -172,16 +172,10 @@
                                                     <div class="relative hidden w-10 h-10 mr-3 md:flex items-center justify-center">
                                                         @if(!empty($p->image))
                                                             <div class="w-10 h-10 overflow-hidden rounded-lg bg-gray-100 dark:bg-gray-700">
-                                                                <img
-                                                                    src="{{ asset('/products/'.$p->image) }}"
-                                                                    alt="{{ $p->name }}"
-                                                                    class="object-cover w-full h-full"
-                                                                    loading="lazy"
-                                                                />
+                                                                <img src="{{ asset('storage/products/'.$p->image) }}" alt="{{ $p->name }}" class="object-cover w-full h-full" loading="lazy" />
                                                             </div>
                                                         @else
-                                                            <div
-                                                                class="w-10 h-10 rounded-full flex items-center justify-center
+                                                            <div class="w-10 h-10 rounded-full flex items-center justify-center
                                                                     bg-purple-100 text-purple-700 font-extrabold uppercase
                                                                     dark:bg-purple-700 dark:text-purple-100">
                                                                 {{ strtoupper(substr($p->name ?? 'P', 0, 1)) }}
