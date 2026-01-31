@@ -120,7 +120,7 @@ class ProductController extends Controller
                 // storage/app/public/products
                 $file->storeAs('public/products', $name);
 
-                $validated['image'] = $name;
+                $validated['image'] = 'products/'.$name;
             }
 
             $product = null;
