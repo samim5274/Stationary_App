@@ -173,7 +173,7 @@
                                                         @if(!empty($p->image))
                                                             <div class="w-10 h-10 overflow-hidden rounded-lg bg-gray-100 dark:bg-gray-700">
                                                                 <img
-                                                                    src="{{ asset('storage/products/'.$p->image) }}"
+                                                                    src="{{ Storage::url('products/'.$p->image) }}"
                                                                     alt="{{ $p->name }}"
                                                                     class="object-cover w-full h-full"
                                                                     loading="lazy"
