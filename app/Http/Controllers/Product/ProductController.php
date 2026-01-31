@@ -118,9 +118,9 @@ class ProductController extends Controller
                 $name = 'pdr_' . time() . '_' . Str::random(8) . '.' . $file->getClientOriginalExtension();
 
                 // storage/app/public/products
-                $path = $file->store('products', 'public');
+                $file->storeAs('public/products', $name);
 
-                $validated['image'] = $path;
+                $validated['image'] = $name;
             }
 
             $product = null;
